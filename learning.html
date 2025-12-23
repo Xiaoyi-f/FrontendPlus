@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="这个html文件是用来学习前端的一个页面">
+  <meta name="author" content="XiaoYi">
+  <meta name="keywords" content="HTML,CSS,JavaScript">
+  <!-- vscode插件：Chinese CSSPeek ErrorLens ESLint Prettier MarkdownAllinOne MarkdownPreviewEnhanced
+  vscode插件：HTMLCSSSupport HTMLHint LiveServer Lingma -->
+  <meta name="generator" content="vscode">
+  <meta property="og:title" content="Learning">
+  <meta
+  property="og:image"
+  content="https://developer.mozilla.org/mdn-social-share.png">
+  <meta
+    property="og:description"
+    content="The Mozilla Developer Network (MDN) provides
+    information about Open Web technologies including HTML, CSS, and APIs for both websites
+    and HTML Apps.">
+  <meta property="og:title" content="Mozilla Developer Network">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link
+    rel="apple-touch-icon"
+    sizes="167x167"
+    href="/apple-touch-icon-167x167.png" />
+  <title>Learning</title>
+  <!-- 本该顺序解析，但加了defer会延迟执行，会异步下载，等待html解析完就立马执行 -->
+  <!-- 解析到async的js脚本时会异步下载和解析html，一旦下载完js就会立马执行 -->
+  <link rel="stylesheet" href="#">
+  <script src="my-js-file.js" defer></script>
+  <script async>
+    console.log('异步解析，下载完就立马执行')
+  </script>
+  <script defer>
+    console.log('延迟解析，下载完就等待html解析完才执行')
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    /* pre {
+      font-size: 16px;
+      font-family: 'Courier New', monospace;
+    } */
+  </style>
+</head>
+<body>
+  <h2>一般业界默认规定h1在一个页面只使用一次，<mark>我们一开始学习写得页面像一坨...但是又有什么关系呢？我们先掌握基本的语法！</mark></h2>
+  h1,p,div是块级元素,span是行内元素<br>
+  一整个文字行其实就像是一个由四行小行组成的一个大行，字母按照大写占中间两格行，小写看情况占用某些格行，就类比为五线四格
+  <h1>Learning</h1>
+  <p lang="en-US">Some part of text can use the lang attribute too</p>
+  <p>YES</p>
+  <h2>I am a title</h2>
+  <p>I am a paragraph</p>
+  <p style="color: red">从这里开始下面是一个大盒子</p>
+  <div>
+    <span>我是一个行内元素</span>&nbsp<span>我也是</span>
+    <p><strong>十分重要</strong>&nbsp那就使用strong标签，其实b标签<b>(me,但是我不够语义化)</b>也可以有强调的样式</p>
+    <p>类似的还有如下</p>
+    <p><i>(斜体，不够语义化)</i><em>语义化斜体</em>我是什么类元素呢</p>
+    <p><u>下划线</u><ins>下划线</ins>我是什么类元素呢</p>
+    <p><s>删除线</s><del>删除线</del>我是什么类元素呢</p>
+    <p><small>小</small>我是什么类元素呢</p>
+    <p><mark>高亮</mark>我是什么类元素呢</p>
+    <pre>
+甚至连不顶格都一样，对啦，我是块级元素哦！
+      这个pre标签会格式化输出啦，非常方便，源代码换行，显示就也直接换行啦
+      你看我直接就换行啦
+      但是我用等宽字体，更小点，p标签都是用的默认某种字体族，但是我也可以配置啊...
+    </pre>
+  </div>
+  <p style="color: red">从这里开始，大盒子结束</p>
+  
+</body>
+</html>
