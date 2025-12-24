@@ -1,79 +1,911 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="这个html文件是用来学习前端的一个页面">
-  <meta name="author" content="XiaoYi">
-  <meta name="keywords" content="HTML,CSS,JavaScript">
+<!DOCTYPE html> <!-- 声明文档类型为HTML5，告诉浏览器使用HTML5标准解析页面 -->
+<html lang="zh-CN"> <!-- html根元素，lang属性指定页面主要语言为中文 -->
+
+<head> <!-- head元素包含页面元数据，不会在页面中显示 -->
+  <meta charset="UTF-8"> <!-- 指定文档字符编码为UTF-8，确保正确显示中文等字符 -->
+  <!-- 表示过六秒钟就跳转，当然也可以不写url属性，就会自动每隔6秒刷新一下自己的网页 -->
+  <!-- <meta http-equiv="refresh" content="6;url=http://www.baidu.com"/> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 设置视口，确保响应式设计 -->
+  <meta name="description" content="这个html文件是用来学习前端的一个页面"> <!-- 页面描述，用于SEO -->
+  <meta name="author" content="XiaoYi"> <!-- 指定页面作者 -->
+  <meta name="keywords" content="HTML,CSS,JavaScript"> <!-- 页面关键词，用于SEO -->
+  <meta name="copyright" content="本站所有教程均为原创，版权所有，禁止转载。否则必将追究法律责任" />
   <!-- vscode插件：Chinese CSSPeek ErrorLens ESLint Prettier MarkdownAllinOne MarkdownPreviewEnhanced
   vscode插件：HTMLCSSSupport HTMLHint LiveServer Lingma -->
-  <meta name="generator" content="vscode">
-  <meta property="og:title" content="Learning">
-  <meta
-  property="og:image"
-  content="https://developer.mozilla.org/mdn-social-share.png">
-  <meta
-    property="og:description"
-    content="The Mozilla Developer Network (MDN) provides
+  <meta name="generator" content="vscode"> <!-- 指明创建页面的工具 -->
+  <meta property="og:title" content="Learning"> <!-- Facebook等社交平台分享标题 -->
+  <meta property="og:image" content="https://developer.mozilla.org/mdn-social-share.png"> <!-- 社交平台分享图片 -->
+  <meta property="og:description" content="The Mozilla Developer Network (MDN) provides
     information about Open Web technologies including HTML, CSS, and APIs for both websites
-    and HTML Apps.">
-  <meta property="og:title" content="Mozilla Developer Network">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link
-    rel="apple-touch-icon"
-    sizes="167x167"
-    href="/apple-touch-icon-167x167.png" />
-  <title>Learning</title>
+    and HTML Apps."> <!-- 社交平台分享描述 -->
+  <meta property="og:title" content="Mozilla Developer Network"> <!-- 重复定义，会被上面的覆盖 -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon"> <!-- 设置网站图标 -->
+  <link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167x167.png" /> <!-- 苹果设备的触摸图标 -->
+  <title>Learning</title> <!-- 页面标题，显示在浏览器标签页上 -->
   <!-- 本该顺序解析，但加了defer会延迟执行，会异步下载，等待html解析完就立马执行 -->
   <!-- 解析到async的js脚本时会异步下载和解析html，一旦下载完js就会立马执行 -->
-  <link rel="stylesheet" href="#">
-  <script src="my-js-file.js" defer></script>
-  <script async>
+  <link rel="stylesheet" href="learning.css"> <!-- 引入外部CSS样式文件 -->
+  <link rel="stylesheet" href="learning_supplement.css"> <!-- 引入补充CSS样式文件 -->
+  <link rel="stylesheet" href="#"> <!-- 临时样式链接，#表示无链接 -->
+  <script src="my-js-file.js" defer></script> <!-- 引入外部JS文件，defer属性让脚本在HTML解析完成后执行 -->
+  <script async>  <!-- async属性让脚本异步下载，下载完立即执行 -->
     console.log('异步解析，下载完就立马执行')
   </script>
-  <script defer>
+  <script defer>  <!-- defer属性让脚本延迟执行，HTML解析完后执行 -->
     console.log('延迟解析，下载完就等待html解析完才执行')
   </script>
 
+  <!-- 多问ai默认属性，了解一个标签，积累... -->
   <style>
-    * {
+    /* * {
       margin: 0;
       padding: 0;
-    }
+    } */
     /* pre {
       font-size: 16px;
       font-family: 'Courier New', monospace;
     } */
   </style>
 </head>
-<body>
+
+<body> <!-- body元素包含页面可见内容 -->
+  <!-- h2标签用于二级标题 -->
   <h2>一般业界默认规定h1在一个页面只使用一次，<mark>我们一开始学习写得页面像一坨...但是又有什么关系呢？我们先掌握基本的语法！</mark></h2>
-  h1,p,div是块级元素,span是行内元素<br>
-  一整个文字行其实就像是一个由四行小行组成的一个大行，字母按照大写占中间两格行，小写看情况占用某些格行，就类比为五线四格
-  <h1>Learning</h1>
-  <p lang="en-US">Some part of text can use the lang attribute too</p>
-  <p>YES</p>
-  <h2>I am a title</h2>
-  <p>I am a paragraph</p>
-  <p style="color: red">从这里开始下面是一个大盒子</p>
-  <div>
-    <span>我是一个行内元素</span>&nbsp<span>我也是</span>
-    <p><strong>十分重要</strong>&nbsp那就使用strong标签，其实b标签<b>(me,但是我不够语义化)</b>也可以有强调的样式</p>
+  <!-- h1,p,div是块级元素,span是行内元素<br> 标签说明 -->
+  <!-- 一整个文字行其实就像是一个由四行小行组成的一个大行，字母按照大写占中间两格行，小写看情况占用某些格行，就类比为五线四格 -->
+  <!-- <h1>Learning</h1> h1标签用于一级标题，通常一个页面只用一次 -->
+  <p lang="en-US">Some part of text can use the lang attribute too</p> <!-- p标签表示段落，lang属性指定语言 -->
+  <p>YES</p> <!-- p标签表示段落 -->
+  <h2>I am a title</h2> <!-- h2标签用于二级标题 -->
+  <p>I am a paragraph</p> <!-- p标签表示段落 -->
+  <p style="color: red">从这里开始下面是一个大盒子</p> <!-- style属性用于内联样式，设置文字为红色 -->
+  <div> <!-- div标签是块级容器，用于分组其他元素 -->
+    <span>我是一个行内元素</span>&nbsp<span>我也是</span> <!-- span标签是行内容器，&nbsp表示不间断空格 -->
+    <p><strong>十分重要</strong>&nbsp那就使用strong标签，其实b标签<b>(me,但是我不够语义化)</b>也可以有强调的样式</p> <!-- strong标签表示重要文本，b标签只是加粗 -->
     <p>类似的还有如下</p>
-    <p><i>(斜体，不够语义化)</i><em>语义化斜体</em>我是什么类元素呢</p>
-    <p><u>下划线</u><ins>下划线</ins>我是什么类元素呢</p>
-    <p><s>删除线</s><del>删除线</del>我是什么类元素呢</p>
-    <p><small>小</small>我是什么类元素呢</p>
-    <p><mark>高亮</mark>我是什么类元素呢</p>
-    <pre>
-甚至连不顶格都一样，对啦，我是块级元素哦！
+    <p><i>(斜体，不够语义化)</i><em>语义化斜体</em>我是什么类元素呢</p> <!-- i标签只是样式斜体，em标签表示强调 -->
+    <p><u>下划线</u><ins>下划线</ins>我是什么类元素呢</p> <!-- u标签是样式下划线，ins标签表示插入的文本 -->
+    <p><s>删除线</s><del>删除线</del>我是什么类元素呢</p> <!-- s标签是样式删除线，del标签表示删除的文本 -->
+    <p><small>小</small>我是什么类元素呢</p> <!-- small标签表示次要信息，如版权信息 -->
+    <p><mark>高亮</mark>我是什么类元素呢</p> <!-- mark标签用于高亮显示文本 -->
+    <pre>  <!-- pre标签保留格式，用于显示代码等预格式化文本 -->
+连连不顶格都一样，对啦，我是块级元素哦！
       这个pre标签会格式化输出啦，非常方便，源代码换行，显示就也直接换行啦
       你看我直接就换行啦
       但是我用等宽字体，更小点，p标签都是用的默认某种字体族，但是我也可以配置啊...
     </pre>
   </div>
   <p style="color: red">从这里开始，大盒子结束</p>
-  
+  默认ul左侧有缩进padding，四周有margin，前面有小黑圈(list-style-type)
+  <ul> <!-- ul标签表示无序列表 -->
+    li的默认属性是display: list-item; 和
+    ist-style-position: outside
+    list-style-type: 继承自父元素
+    list-style-image: none (默认)
+    <li>milk</li> <!-- li标签表示列表项 -->
+    <li>eggs</li>
+    <li>bread</li>
+    <li>hummus</li>
+  </ul>
+  <ol> <!-- ol标签表示有序列表 -->
+    有序列表类似无序列表
+    <li>first</li>
+    <li>second</li>
+    <li>third</li>
+    <li>fourth</li>
+    <li>fifth</li>
+  </ol>
+  <dl> <!-- dl标签表示定义列表 -->
+    margin: 1em 0 (上下外边距)<br>
+    padding: 通常为 0
+    <dt>描述标题</dt> display: block font-weight: 通常为 bold (浏览器默认加粗) <!-- dt标签表示定义术语 -->
+    <dd>描述数据1</dd> display: block margin-left: 40px (左外边距，形成缩进) <!-- dd标签表示定义描述 -->
+    <dd>描述数据2</dd>
+    <dd>描述数据3</dd>
+  </dl>
+  <code>  <!-- code标签表示代码片段 -->
+      here is a code block
+  </code>
+  <!-- &lt;表示<  &gt;表示> -->
+  <code>code是行内元素&lt;blockquote&gt;</code>
+  <blockquote cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/blockquote">
+    <!-- blockquote标签表示长引用 -->
+    <p>
+      The <strong>HTML <code>&lt;blockquote&gt;</code> Element</strong> (or
+      <em>HTML Block Quotation Element</em>) indicates that the enclosed text is
+      an extended quotation.
+    </p>
+    <p>
+      The quote element — <code>&lt;q&gt;</code> — is
+      <q cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/q"> <!-- q标签表示短引用 -->
+        intended for short quotations that don't require paragraph breaks.
+      </q>
+    </p>
+  </blockquote>
+  <a href="#MDN"> <!-- a标签表示超链接 -->
+    cite是行内元素
+    <cite>MDN blockquote page</cite> <!-- cite标签表示引用作品的标题 -->
+  </a>
+  <q cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/q">
+    intended for short quotations that don't require paragraph breaks.
+    q是内联样式的
+  </q>
+  简写词
+  <abbr title="Artificial Intelligence">AI</abbr> <!-- abbr标签表示缩写，title属性提供完整内容 -->
+  <address> <!-- address标签表示联系信息 -->
+    <a href="mailto:#"></a>
+    地址
+  </address>
+  <p>
+    Caffeine's chemical formula is
+    C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub>. <!-- sub标签表示下标 -->
+  </p>
+  <p>If x<sup>2</sup> is 9, x must equal 3 or -3.</p> <!-- sup标签表示上标 -->
+  <pre><code>const para = document.querySelector('p');  <!-- 预格式化代码块 -->
+
+para.onclick = function() {
+  alert('Owww, stop poking me!');
+}</code></pre>
+
+  <p>
+    You shouldn't use presentational elements like <code>&lt;font&gt;</code> and
+    <code>&lt;center&gt;</code>.
+  </p>
+
+  <p>
+    In the above JavaScript example, <var>para</var> represents a paragraph <!-- var标签表示变量 -->
+    element.
+  </p>
+
+  <p>Select all the text with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>A</kbd>.</p> <!-- kbd标签表示键盘输入 -->
+
+  <pre>$ <kbd>ping mozilla.org</kbd>  <!-- 命令行示例 -->
+<samp>PING mozilla.org (63.245.215.20): 56 data bytes
+64 bytes from 63.245.215.20: icmp_seq=0 ttl=40 time=158.233 ms</samp></pre> <!-- samp标签表示程序输出 -->
+  <time datetime="2016-01-20">20 January 2016</time> <!-- time标签表示日期时间 -->
+  <div>
+    语义化标签<br> <!-- br标签表示换行 -->
+    <hr> <!-- hr标签表示水平分隔线 -->
+    <header> <!-- header标签表示页面或章节的头部 -->
+      header
+    </header>
+    <nav> <!-- nav标签表示导航链接 -->
+      nav
+    </nav>
+    <main> <!-- main标签表示页面主要内容 -->
+      main
+      <article> <!-- article标签表示独立的内容 -->
+        article
+      </article>
+      <aside> <!-- aside标签表示与主要内容相关但独立的内容，如侧边栏 -->
+        aside
+      </aside>
+    </main>
+    <footer> <!-- footer标签表示页面或章节的底部 -->
+      footer
+    </footer>
+  </div>
+  <!-- 除了_blank还有_self _parent _top -->
+  <a href="#" target="_blank"><img src="#" alt="img"></a> <!-- target="_blank"在新窗口打开链接 -->
+  <a href="#" download="#"></a> <!-- download属性用于下载文件 -->
+  <img src="#" alt="demo">img是内联元素 <!-- img标签用于插入图片，alt属性提供替代文本 -->
+  <video src="#" controls> <!-- video标签用于嵌入视频，controls显示播放控件 -->
+    <p>
+      Your browser doesn't support HTML video. Here is a
+      <a href="#">link to the video</a> instead.
+    </p>
+  </video>
+  <video controls> <!-- 视频标签示例 -->
+    <source src="rabbit320.mp4" type="video/mp4" /> <!-- source标签提供多种视频格式 -->
+    <source src="rabbit320.webm" type="video/webm" />
+    <p>
+      Your browser doesn't support this video. Here is a
+      <a href="rabbit320.mp4">link to the video</a> instead.
+    </p>
+  </video>
+  <video controls width="400" height="400" autoplay loop muted preload="auto" poster="poster.png"> <!-- 带有更多属性的视频标签 -->
+    <source src="rabbit320.mp4" type="video/mp4" />
+    <source src="rabbit320.webm" type="video/webm" />
+    <p>
+      Your browser doesn't support this video. Here is a
+      <a href="rabbit320.mp4">link to the video</a> instead.
+    </p>
+  </video>
+  <video controls width="400" height="400" autoplay loop muted preload="auto" poster="poster.png"> <!-- 另一个视频示例 -->
+    <source src="rabbit320.mp4" type="video/mp4" />
+    <source src="rabbit320.webm" type="video/webm" />
+    <p>
+      Your browser doesn't support this video. Here is a
+      <a href="rabbit320.mp4">link to the video</a> instead.
+    </p>
+  </video>
+  <audio controls> <!-- audio标签用于嵌入音频 -->
+    <source src="viper.mp3" type="audio/mp3" />
+    <source src="viper.ogg" type="audio/ogg" />
+    <p>
+      Your browser doesn't support this audio file. Here is a
+      <a href="viper.mp3">link to the audio</a> instead.
+    </p>
+  </audio>
+  <video controls> <!-- 视频带字幕示例 -->
+    <source src="example.mp4" type="video/mp4" />
+    <source src="example.webm" type="video/webm" />
+    track为媒体元素提供文本轨道 支持字幕、章节等
+    <track kind="subtitles" src="subtitles_es.vtt" srclang="es" label="Spanish" /> <!-- track标签提供字幕等文本轨道 -->
+  </video>
+  <table> <!-- table标签表示表格 -->
+    <caption>Schedule</caption> <!-- caption标签表示表格标题 -->
+    <!-- 没有行的相关此类配置，但是可以利用语义化标签实现行管理 -->
+    <colgroup> <!-- colgroup标签对表格列进行分组 -->
+      <col span="2" />
+      <col class="column-background" />
+      <col class="column-fixed-width" />
+      <col class="column-background" />
+      <col class="column-background-border" />
+      <col span="2" class="column-fixed-width" />
+    </colgroup>
+    <thead> <!-- thead标签表示表格头部 -->
+      <tr> <!-- tr标签表示表格行 -->
+        <td scope="row">&nbsp;</td> <!-- td标签表示表格单元格，scope属性定义单元格与行/列的关系 -->
+        <th>Mon</th> <!-- th标签表示表格标题单元格 -->
+        <th>Tues</th>
+        <th>Wed</th>
+        <th>Thurs</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+      </tr>
+    </thead>
+    <tbody> <!-- tbody标签表示表格主体 -->
+      <tr>
+        <th scope="col">1st period</th> <!-- scope="col"表示此标题对应列 -->
+        <td>English</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <th>2nd period</th>
+        <td>English</td>
+        <td>English</td>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <th>3rd period</th>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>&nbsp;</td>
+        <td>German</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <th>4th period</th>
+        <td>&nbsp;</td>
+        <td>English</td>
+        <td>&nbsp;</td>
+        <td>English</td>
+        <td>Dutch</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+    <tfoot> <!-- tfoot标签表示表格底部 -->
+      <tr>
+        <th>Total</th>
+        <td>2</td>
+        <td>2</td>
+        <td>1</td>
+        <td>3</td>
+        <td>3</td>
+        <td>1</td>
+        <td>1</td>
+      </tr>
+    </tfoot>
+  </table>
+  <thead> <!-- 表格头部示例 -->
+    <tr>
+      <th id="clothes" colspan="3">衣物</th> <!-- colspan属性使单元格跨越多列 -->
+    </tr>
+    <tr>
+      <th id="trousers" headers="clothes">长裤</th> <!-- headers属性关联单元格与表头 -->
+      <th id="skirts" headers="clothes">裙子</th>
+      <th id="dresses" headers="clothes">连衣裙</th>
+    </tr>
+  </thead>
+  <tbody> <!-- 表格主体示例 -->
+    <tr>
+      <th id="belgium" rowspan="3">比利时</th> <!-- rowspan属性使单元格跨越多行 -->
+      <th id="antwerp" headers="belgium">安特卫普</th>
+      <td headers="antwerp belgium clothes trousers">56</td>
+      <td headers="antwerp belgium clothes skirts">22</td>
+      <td headers="antwerp belgium clothes dresses">43</td>
+    </tr>
+  </tbody>
+  <form action="./payment_page" method="get"> <!-- form标签表示表单，action指定提交地址，method指定提交方法 -->
+    <h2>报名参见见面会</h2>
+    <fieldset> <!-- fieldset标签对表单元素进行分组 -->
+      <legend>选择酒店房型：</legend> <!-- legend标签为fieldset提供标题 -->
+      <div>
+        <input type="radio" id="hotelChoice1" name="hotel" value="economy" checked /> <!-- radio单选框，checked表示默认选中 -->
+        <label for="hotelChoice1">经济型（+$0）</label> <!-- label标签与input关联，点击label可选中input -->
+
+        <input type="radio" id="hotelChoice2" name="hotel" value="superior" />
+        <label for="hotelChoice2">高级型（+$50）</label>
+
+        <input type="radio" id="hotelChoice3" name="hotel" value="penthouse" disabled /> <!-- disabled属性使元素不可用 -->
+        <label for="hotelChoice3">顶级套房（+$150）</label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>要参加的课程：</legend>
+      <div>
+        <input type="checkbox" id="yoga" name="yoga" /> <!-- checkbox复选框 -->
+        <label for="yoga">瑜伽（+$10）</label>
+
+        <input type="checkbox" id="coffee" name="coffee" />
+        <label for="coffee">咖啡烘焙（+$20）</label>
+
+        <input type="checkbox" id="balloon" name="balloon" />
+        <label for="balloon">气球动物艺术（+$5）</label>
+      </div>
+    </fieldset>
+    <p>
+      <label for="transport">出行方式：</label>
+      <select name="transport" id="transport"> <!-- select标签创建下拉选择框 -->
+        <option value="">--请选择一项--</option> <!-- option标签表示选择项 -->
+        <option value="plane">乘坐飞机</option>
+        <option value="bike">骑自行车</option>
+        <option value="walk">徒步</option>
+        <option value="bus">乘坐公交</option>
+        <option value="train">搭乘火车</option>
+        <option value="jetPack">使用喷气背包</option>
+      </select>
+    </p>
+    <p>
+      <label for="comments">其他备注：</label>
+      <textarea id="comments" name="comments" rows="5" cols="33"></textarea> <!-- textarea标签创建多行文本输入框 -->
+    </p>
+    <p>
+      <button>去结账</button> <!-- button标签创建按钮 -->
+    </p>
+  </form>
+  <svg version="1.1" baseProfile="full" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+    <!-- svg标签嵌入矢量图形 -->
+    <rect width="100%" height="100%" fill="black" /> <!-- rect标签绘制矩形 -->
+    <circle cx="150" cy="100" r="90" fill="blue" /> <!-- circle标签绘制圆形 -->
+  </svg>
+  <svg width="300" height="200"> <!-- 另一个SVG示例 -->
+    <rect width="100%" height="100%" fill="green" />
+  </svg>
+  <iframe src="triangle.svg" width="500" height="500" sandbox> <!-- iframe嵌入外部页面，sandbox提供安全限制 -->
+    <img src="triangle.png" alt="Triangle with three unequal sides" />
+  </iframe>
+  <iframe src="https://developer.mozilla.org/zh-CN/docs/Glossary" width="100%" height="500" allowfullscreen sandbox>
+    <!-- 带全屏功能的iframe -->
+    <p>
+      <a href="/zh-CN/docs/Glossary">
+        为不支持 iframe 的浏览器预留的后备链接
+      </a>
+    </p>
+  </iframe>
+  iframe是行内元素但是在显示上有自己独特的形式
+  <iframe src="https://developer.mozilla.org/zh-CN/docs/Glossary" width="100%" height="500" allowfullscreen sandbox>
+    <p>
+      <a href="/zh-CN/docs/Glossary">
+        为不支持 iframe 的浏览器预留的后备链接
+      </a>
+    </p>
+  </iframe>
+  <object data="my-pdf.pdf" type="application/pdf" width="800" height="1200"> <!-- object标签嵌入外部资源 -->
+    <p>
+      You don't have a PDF plugin, but you can
+      <a href="my-pdf.pdf">download the PDF file. </a>
+    </p>
+  </object>
+  <!-- 基础静态单位 -->
+  <div class="static-units">基础静态单位演示（px/pt/cm/mm/in）</div>
+  <div class="print-only">仅打印时生效的样式</div>
+
+  <!-- 基于父元素的相对单位 -->
+  <div class="parent-container">
+    父容器（width:500px; font-size:20px）
+    <div class="child-relative">
+      子元素（%/em单位演示）
+      <div class="grandchild-em">孙元素（em嵌套累积放大演示）</div>
+    </div>
+  </div>
+
+  <!-- 基于根元素的rem单位 -->
+  <div class="rem-demo">rem单位演示（基于html font-size，不受父元素影响）</div>
+
+  <!-- 视口单位 -->
+  <div class="viewport-units">视口单位演示（vw/vh/dvh/svh/lvh）</div>
+  <div class="responsive-circle">vmin/vmax横竖屏适配圆形</div>
+
+  <!-- 字符单位 -->
+  <input type="text" class="text-units" placeholder="20ch宽度的输入框">
+  <div class="icon-text">带图标对齐的文本（ex单位）</div>
+
+  <!-- 行高相关单位 -->
+  <p class="line-height-units">段落1：lh/rlh单位演示，margin-bottom跟随行高，排版更统一</p>
+  <p class="line-height-units">段落2：lh/rlh单位演示，margin-bottom跟随行高，排版更统一</p>
+
+  <!-- 动效/变换单位 -->
+  <div class="animation-units">动效单位演示（hover查看变化）</div>
+  <div class="rotate-animation">turn单位旋转动画</div>
+
+  <!-- 书写模式单位 -->
+  <div class="writing-mode-demo">中文竖排演示（vi/vb单位）：床前明月光，疑是地上霜</div>
+  <!-- 主题切换按钮：点击切换色相，全站色彩变化 -->
+  <button onclick="document.body.className='theme-red'">切换红色主题</button>
+  <button onclick="document.body.className='theme-green'">切换绿色主题</button>
+  <button onclick="document.body.className=''">默认蓝色主题</button>
+
+  <h2>HSL 核心用法演示</h2>
+  <div class="hsl-basic">HSL 基础纯色相</div>
+  <div class="hsl-saturation">HSL 高饱和色彩</div>
+  <div class="hsl-saturation low-saturation">HSL 低饱和色彩</div>
+  <div class="hsl-saturation no-saturation">HSL 无饱和（纯灰）</div>
+  <div class="hsl-lightness">HSL 亮色调</div>
+  <div class="hsl-lightness dark">HSL 深色调</div>
+  <div class="hsl-lightness white">HSL 纯白色</div>
+  <div class="hsl-lightness black">HSL 纯黑色</div>
+  <div class="hsl-alpha">HSL 带透明度（50%透明）</div>
+  <button class="hsl-animation">HSL 色彩过渡按钮（hover/active查看效果）</button>
+
+  <h2>HWB 核心用法演示</h2>
+  <div class="hwb-basic">HWB 基础纯色相</div>
+  <div class="hwb-whiteness">HWB 加20%白（浅色调）</div>
+  <div class="hwb-whiteness more-white">HWB 加40%白（更浅色调）</div>
+  <div class="hwb-blackness">HWB 加20%黑（深色调）</div>
+  <div class="hwb-blackness more-black">HWB 加40%黑（更深色调）</div>
+  <div class="hwb-mixed">HWB 加15%白+25%黑（灰调）</div>
+  <div class="hwb-mixed gray">HWB 纯灰色（50%白+50%黑）</div>
+  <div class="hwb-alpha">HWB 带透明度（50%透明）</div>
+  <div class="hwb-button-group">
+    <button class="hwb-btn primary">HWB 主按钮</button>
+    <button class="hwb-btn light">HWB 浅色按钮</button>
+    <button class="hwb-btn dark">HWB 深色按钮</button>
+    <button class="hwb-btn disabled">HWB 禁用按钮</button>
+  </div>
+
+  <h2>HSL 与 HWB 等价对比</h2>
+  <div class="color-comparison">
+    <div class="hsl-compare">HSL 浅蓝<br>hsl(240, 100%, 70%)</div>
+    <div class="hwb-compare">HWB 浅蓝<br>hwb(240, 20%, 0%)</div>
+  </div>
+
+  <h2>高级实战：渐变应用</h2>
+  <div class="hsl-gradient">HSL 多色相渐变（彩虹效果）</div>
+  <div class="hwb-gradient">HWB 同色系渐变（浅蓝过渡）</div>
+  <!-- <h1>background-attachment 属性完整演示（scroll / fixed / local）</h1> -->
+
+  <!-- 1. background-attachment: scroll 演示 -->
+  <h2>1. background-attachment: scroll（默认值）</h2>
+  <p class="explain-text">
+    特性：背景固定在页面，不随元素内容滚动；随页面滚动而滚动
+  </p>
+  <div class="demo-container attachment-scroll">
+    <div class="demo-content">
+      background-attachment: scroll 演示内容<br>
+      1. 请滚动「元素内部」（本区域），观察背景图是否移动（不会移动）<br>
+      2. 请滚动「整个页面」，观察背景图是否移动（会跟随页面滚动）<br>
+      3. 背景图参考系：页面<br>
+      <br>
+      占位文本：Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat.
+    </div>
+  </div>
+
+  <!-- 2. background-attachment: fixed 演示 -->
+  <h2>2. background-attachment: fixed</h2>
+  <p class="explain-text">
+    特性：背景固定在视口，不随页面滚动或元素内容滚动而移动
+  </p>
+  <div class="demo-container attachment-fixed">
+    <div class="demo-content">
+      background-attachment: fixed 演示内容<br>
+      1. 请滚动「元素内部」（本区域），观察背景图是否移动（不会移动）<br>
+      2. 请滚动「整个页面」，观察背景图是否移动（不会移动，始终固定在屏幕）<br>
+      3. 背景图参考系：浏览器视口<br>
+      4. 背景图仅在元素范围内可见，超出部分被裁剪<br>
+      <br>
+      占位文本：Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat.
+    </div>
+  </div>
+
+  <!-- 3. background-attachment: local 演示 -->
+  <h2>3. background-attachment: local</h2>
+  <p class="explain-text">
+    特性：背景固定在元素，随元素内容滚动而滚动；随页面滚动而滚动
+  </p>
+  <div class="demo-container attachment-local">
+    <div class="demo-content">
+      background-attachment: local 演示内容<br>
+      1. 请滚动「元素内部」（本区域），观察背景图是否移动（会跟随内容一起滚动）<br>
+      2. 请滚动「整个页面」，观察背景图是否移动（会跟随元素一起滚动）<br>
+      3. 背景图参考系：元素的内容区域<br>
+      4. 背景与元素内容绑定，同步移动<br>
+      <br>
+      占位文本：Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
+      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat.
+    </div>
+    <ol start="4">
+      <li>Toast pita, leave to cool, then slice down the edge.</li>
+      <li>
+        Fry the halloumi in a shallow, non-stick pan, until browned on both sides.
+      </li>
+      <li>Wash and chop the salad.</li>
+      <li>Fill pita with salad, hummus, and fried halloumi.</li>
+    </ol>
+    <ol start="4" reversed>
+      <li>Toast pita, leave to cool, then slice down the edge.</li>
+      <li>
+        Fry the halloumi in a shallow, non-stick pan, until browned on both sides.
+      </li>
+      <li>Wash and chop the salad.</li>
+      <li>Fill pita with salad, hummus, and fried halloumi.</li>
+    </ol>
+    <ol>
+      <li value="2">Toast pita, leave to cool, then slice down the edge.</li>
+      <li value="4">
+        Fry the halloumi in a shallow, non-stick pan, until browned on both sides.
+      </li>
+      <li value="6">Wash and chop the salad.</li>
+      <li value="8">Fill pita with salad, hummus, and fried halloumi.</li>
+    </ol>
+  </div>
+
+  <!-- 补充HTML语法示例 -->
+  <h2>补充的HTML语法示例</h2>
+
+  <!-- 表单元素补充 -->
+  <h3>高级表单元素</h3>
+  <form>
+    <p>
+      <label for="search-field">搜索框：</label>
+      <input type="search" id="search-field" name="search-field" placeholder="输入搜索关键词">
+    </p>
+    <p>
+      <label for="tel-field">电话号码：</label>
+      <input type="tel" id="tel-field" name="tel-field" placeholder="输入电话号码">
+    </p>
+    <p>
+      <label for="email-field">邮箱地址：</label>
+      <input type="email" id="email-field" name="email-field" placeholder="输入邮箱地址">
+    </p>
+    <p>
+      <label for="url-field">网站URL：</label>
+      <input type="url" id="url-field" name="url-field" placeholder="https://example.com">
+    </p>
+    <p>
+      <label for="time-field">时间选择：</label>
+      <input type="time" id="time-field" name="time-field">
+    </p>
+    <p>
+      <label for="week-field">周选择：</label>
+      <input type="week" id="week-field" name="week-field">
+    </p>
+    <p>
+      <label for="month-field">月份选择：</label>
+      <input type="month" id="month-field" name="month-field">
+    </p>
+  </form>
+
+  <!-- 语义化标签补充 -->
+  <h3>语义化标签</h3>
+  <main>
+    <p>main标签用于包含页面的主要内容</p>
+  </main>
+
+  <figure>
+    <img src="https://mdn.github.io/shared-assets/images/examples/firefox-logo.svg" alt="Firefox Logo">
+    <figcaption>figure和figcaption标签用于包含图片和说明文字</figcaption>
+  </figure>
+
+  <h3>交互元素</h3>
+  <h4>dialog标签（对话框）</h4>
+  <button id="open-dialog">打开对话框</button>
+  <dialog id="my-dialog">
+    <p>这是一个对话框</p>
+    <button id="close-dialog">关闭</button>
+  </dialog>
+
+  <h3>文本级语义标签</h3>
+  <p>使用<code>code标签</code>显示代码片段，<samp>samp标签</samp>显示程序输出，<kbd>kbd标签</kbd>表示键盘输入</p>
+  <p>还有<var>var标签</var>表示变量，<time datetime="2025-01-01">time标签</time>表示时间</p>
+
+  <h3>引用标签</h3>
+  <blockquote cite="https://example.com">
+    blockquote标签用于长引用，cite属性提供引用来源
+    <p>这是引用的内容</p>
+  </blockquote>
+  <p>短引用使用<cite>cite标签</cite>表示作品标题</p>
+
+  <h3>分组内容标签</h3>
+  <pre><code>// pre标签保留格式，常与code标签结合使用
+function hello() {
+  console.log("Hello, world!");
+}
+</code></pre>
+
+  <h3>表格高级功能</h3>
+  <table>
+    <caption>表格标题：使用caption标签</caption>
+    <colgroup>
+      <col span="2" style="background-color: #f0f0f0"> <!-- 前两列使用相同样式 -->
+      <col style="background-color: #e0e0e0"> <!-- 第三列使用不同样式 -->
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">表头1</th>
+        <th scope="col">表头2</th>
+        <th scope="col">表头3</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>数据1</td>
+        <td>数据2</td>
+        <td>数据3</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>底部1</td>
+        <td>底部2</td>
+        <td>底部3</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- 多媒体标签补充 -->
+  <h3>视频和音频标签</h3>
+  <h4>视频示例（带字幕）</h4>
+  <video width="400" controls poster="https://example.com/poster.jpg">
+    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.webm" type="video/webm">
+    <track kind="subtitles" src="subtitles_zh.vtt" srclang="zh" label="中文">
+    您的浏览器不支持video标签。
+  </video>
+
+  <h4>音频示例</h4>
+  <audio controls>
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/mpeg">
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.ogg" type="audio/ogg">
+    您的浏览器不支持audio标签。
+  </audio>
+
+  <!-- Canvas和SVG -->
+  <h3>图形绘制</h3>
+  <h4>Canvas绘图</h4>
+  <canvas id="myCanvas" width="200" height="100" style="border: 1px solid #000;">
+    您的浏览器不支持canvas标签。
+  </canvas>
+
+  <h4>SVG矢量图</h4>
+  <svg width="100" height="100">
+    <circle cx="50" cy="50" r="40" fill="red" />
+  </svg>
+
+  <!-- Web Components 相关标签 -->
+  <h3>Web Components相关</h3>
+  <template id="my-template">
+    <p>template标签定义可复用的模板内容</p>
+  </template>
+
+  <h3>国际化相关</h3>
+  <p>使用bdo标签控制文本方向：<bdo dir="rtl">从右到左显示</bdo></p>
+
+  <!-- 补充的全局属性示例 -->
+  <h3>全局属性示例</h3>
+  <div contenteditable="true" title="这是一个可编辑的区域，有标题提示">这个区域可以编辑（如果浏览器支持）</div>
+  <p hidden>hidden属性可以隐藏元素</p>
+  <div data-category="example" data-value="42">使用data-*属性存储自定义数据</div>
+
+  <!-- script标签的其他用法 -->
+  <script type="application/json" id="json-data">
+    {
+      "name": "example",
+      "value": 123
+    }
+  </script>
+
+  <!-- 无障碍相关 -->
+  <h3>无障碍支持</h3>
+  <div role="banner" aria-label="页面头部">
+    <p>使用role和aria-*属性增强无障碍支持</p>
+  </div>
+
+  <p>当前元素有<label for="aria-input">标签</label>
+    <input id="aria-input" type="text" aria-describedby="input-help">
+    <span id="input-help">这是输入框的帮助信息</span>
+  </p>
+
+  <script>
+    // 简单的对话框交互脚本
+    document.getElementById('open-dialog').addEventListener('click', function () {
+      document.getElementById('my-dialog').showModal();
+    });
+
+    document.getElementById('close-dialog').addEventListener('click', function () {
+      document.getElementById('my-dialog').close();
+    });
+
+    // Canvas绘图示例
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#3498db';
+    ctx.fillRect(0, 0, 200, 100);
+    ctx.fillStyle = '#e74c3c';
+    ctx.font = '20px Arial';
+    ctx.fillText('Canvas示例', 50, 50);
+  </script>
+
+  <!-- ========== 更多HTML语法补充 ========== -->
+  <h2>更多HTML语法补充</h2>
+
+  <h3>列表类型补充</h3>
+  <h4>描述列表补充</h4>
+  <dl>
+    <dt>CSS</dt>
+    <dd>Cascading Style Sheets - 用于描述HTML文档的呈现方式</dd>
+    <dt>JS</dt>
+    <dd>JavaScript - 用于网页交互的脚本语言</dd>
+  </dl>
+
+  <h4>有序列表属性示例</h4>
+  <ol type="I" start="5" reversed>
+    <li>倒数第一个项目</li>
+    <li>倒数第二个项目</li>
+    <li>倒数第三个项目</li>
+  </ol>
+
+  <h3>表单元素补充</h3>
+  <form>
+    <p>
+      <label for="output-field">输出示例：</label>
+      <input type="range" id="range-input" name="range" min="0" max="100" value="50">
+      <output name="output-field" for="range-input" id="output-display">50</output>
+    </p>
+    <p>
+      <label for="datalist-input">带建议值的输入框：</label>
+      <input list="browsers" id="datalist-input" name="browser">
+      <datalist id="browsers">
+        <option value="Chrome"></option>
+        <option value="Firefox"></option>
+        <option value="Safari"></option>
+        <option value="Edge"></option>
+        <option value="Opera"></option>
+      </datalist>
+    </p>
+    <p>
+      <label for="textarea-field">文本域：</label>
+      <textarea id="textarea-field" name="message" rows="4" cols="50" placeholder="请输入您的消息..."></textarea>
+    </p>
+    <p>
+      <label for="select-field">下拉选择：</label>
+      <select id="select-field" name="car" multiple>
+        <optgroup label="欧洲品牌">
+          <option value="volvo">Volvo</option>
+          <option value="audi">Audi</option>
+        </optgroup>
+        <optgroup label="亚洲品牌">
+          <option value="toyota">Toyota</option>
+          <option value="honda">Honda</option>
+        </optgroup>
+      </select>
+    </p>
+  </form>
+
+  <h3>iframe和嵌入内容</h3>
+  <h4>iframe示例</h4>
+  <iframe src="https://example.com" title="示例网站" width="600" height="400"
+    sandbox="allow-scripts allow-same-origin"></iframe>
+
+  <h4>object和embed标签</h4>
+  <object data="https://mdn.github.io/shared-assets/images/examples/firefox-logo.svg" type="image/svg+xml" width="200"
+    height="100">
+    <p>您的浏览器无法显示object内容，使用备用embed标签</p>
+    <embed src="https://mdn.github.io/shared-assets/images/examples/firefox-logo.svg" type="image/svg+xml">
+  </object>
+
+  <h3>链接和导航补充</h3>
+  <h4>链接关系属性示例</h4>
+  <nav>
+    <ul>
+      <li><a href="https://example.com" rel="nofollow noopener">外部链接</a></li>
+      <li><a href="https://example.com" rel="external">外部资源</a></li>
+      <li><a href="https://example.com" rel="prev">上一页</a></li>
+      <li><a href="https://example.com" rel="next">下一页</a></li>
+    </ul>
+  </nav>
+
+  <h3>文本级别语义补充</h3>
+  <p>使用<mark>mark标签</mark>标记重要文本，<wbr>允许浏览器在适当位置换行<wbr>以避免溢出。</p>
+  <p>使用<bdi>bidirectional isolation</bdi>标签隔离不同方向的文本，<bdo dir="rtl">从右到左的文本</bdo>使用bdo标签控制方向。</p>
+
+  <h3>分组内容补充</h3>
+  <address>
+    联系信息：<br>
+    邮箱: <a href="mailto:example@example.com">example@example.com</a><br>
+    电话: <a href="tel:+1234567890">+1234567890</a>
+  </address>
+
+  <h3>全局属性补充</h3>
+  <div id="example-element" class="example-class" style="color: blue;" data-info="示例数据" title="提示信息" lang="zh-CN"
+    tabindex="0" contenteditable="true" draggable="true" translate="yes">
+    这个div展示了多种全局属性
+  </div>
+
+  <h3>无障碍和国际化补充</h3>
+  <div aria-live="polite" aria-atomic="true">
+    <p>实时区域示例：此内容变化时会通知屏幕阅读器</p>
+  </div>
+
+  <h3>结构标签补充</h3>
+  <section>
+    <header>
+      <h4>章节头部</h4>
+    </header>
+    <p>section标签用于表示文档中的一个区段</p>
+    <footer>
+      <p>章节底部</p>
+    </footer>
+  </section>
+
+  <h3>数学和科学内容</h3>
+  <p>爱因斯坦的质能方程: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML">
+      <mi>E</mi>
+      <mo>=</mo>
+      <mi>m</mi>
+      <msup>
+        <mi>c</mi>
+        <mn>2</mn>
+      </msup>
+    </math></p>
+
+  <h3>其他补充标签</h3>
+  <p>使用<slot name="slot-name">Web Components槽位</slot>标签（需要JavaScript支持）</p>
+  <p>使用<content>已废弃的标签</content>（不再推荐使用）</p>
+
+  <!-- 服务器发送事件和WebSockets的script标签用法 -->
+  <script id="template-data" type="text/x-template">
+    <div class="template-item">
+      <h4>模板内容</h4>
+      <p>这是通过script标签定义的模板</p>
+    </div>
+  </script>
+
+  <noscript>
+    <p>您的浏览器不支持JavaScript或已禁用JavaScript，部分功能可能无法使用。</p>
+  </noscript>
+
 </body>
+
 </html>
