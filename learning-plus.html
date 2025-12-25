@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="999;url=#">
+  <meta name="author" content="XiaoYi">
+  <meta name="description" content="这个网站是用来快速教学前端HTML CSS JS的">
+  <meta name="keywords" content="HTML CSS JS">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="copyright" content="本站所有资源归站主版权所有，禁止转载，否则必将追究法律责任">
+  <title>Frontend Teach</title>
+  <link rel="stylesheet" href="learning-plus.css">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta property="og:title" content="你的网页标题">
+  <meta property="og:description" content="简短有力的描述，最好不超过 200 字符">
+  <meta property="og:image" content="https://yoursite.com/share-image.jpg">
+  <meta property="og:url" content="https://yoursite.com/page-url">
+
+  <!-- 可选项 -->
+  <meta property="og:type" content="website"> <!-- 页面类型：website/article/video 等 -->
+  <meta property="og:site_name" content="网站名称">
+  <!-- <script src="learning-plus.js" defer async></script> -->
+  <!-- defer优先级更高于async -->
+</head>
+
+<body>
+  <header>
+    <h1><mark>HTML CSS JS</mark></h1>
+    <p lang="en-US" style="color: skyblue">Some part of text can use the lang attribute too</p>
+  </header>
+  <nav>
+
+  </nav>
+  <main>
+    <article>
+      <div>
+        <span>我是一个行内元素</span>&nbsp;<span>me too</span>
+        <p>
+          <strong>important text</strong>
+          <em>italic text</em>
+          <ins>ins text</ins>
+          <del>del text</del>
+          <small>small text</small>
+        <pre>
+          <b>b text</b>
+          <i>i text</i>
+          <u>u text</u>
+          <s>s text</s>
+        </pre>
+        </p>
+      </div>
+      <div>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JS</li>
+        </ul>
+        <ol>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JS</li>
+        </ol>
+        <br>
+      </div>
+      <div>
+        <h2>媒体相关</h2>
+        <a href="#" target="_self">
+          <img src="#" alt="demoHeadImg"><br>
+          <video src="#" controls autoplay loop muted poster preload width height playsinline>
+            <source src="#" type="video/mp4">
+            <source src="#" type="video/webm">
+            <p>
+              Your browser doesn't support HTML video. Here is a link(放不出视频就显示)
+              <a href="#">link to the video</a> instead.
+            </p>
+          </video>
+          <img src="#" alt="demoTailImg">
+        </a>
+        <br>
+        <audio src="#" controls autoplay loop muted preload>
+          <source src="viper.mp3" type="audio/mp3">
+          <source src="viper.ogg" type="audio/ogg">
+          <p>
+            Your browser doesn't support this audio file. Here is a link
+            <a href="viper.mp3">link to the audio</a> instead.
+          </p>
+        </audio>
+      </div>
+      <div>
+        <h2>表格</h2>
+        <table border="1" summary="这是一个展示HTML表格完整语法的示例">
+          <!-- 表格标题 -->
+          <caption>前端技术学习进度表</caption>
+
+          <!-- 列分组定义 -->
+          <!-- 优先级声明：单元格内部的属性声明优先级大于列控制组的属性声明 -->
+          <!-- 提示：合并某些单元格之后，会以那个有写的单元格作为依据分列序 -->
+          <!-- 补充：一般，除了!important声明的样式以外，内联样式的优先级就是最高的 -->
+          <colgroup>
+            <col span="1" style="background-color: #f0f0f0; width: 150px;">
+            <!-- span=2表明控制连续的两列，即第2列和第3列 -->
+            <col span="2" style="background-color: #e0e0e0; width: 200px;">
+            <col span="1" style="background-color: #d0d0d0; width: 100px;">
+          </colgroup>
+          <!-- 行控制只需控制tr就好 -->
+          <!-- 表头部分 -->
+          <thead>
+            <!-- 说明：scope用来表明这个是列标题还是行标题 -->
+            <tr>
+              <th id="tech" scope="col" headers="">技术名称</th>
+              <th id="desc" scope="col" headers="">技术描述</th>
+              <th id="level" scope="col" headers="">掌握程度</th>
+              <th id="status" scope="col" headers="">学习状态</th>
+            </tr>
+          </thead>
+
+          <!-- 表尾部分 -->
+          <tfoot>
+            <tr>
+              <td colspan="2" headers="tech desc">总计</td>
+              <td headers="level">高级</td>
+              <td headers="status">已完成</td>
+            </tr>
+          </tfoot>
+          <!-- colspan和rowspan理解口诀：col就同行，row就同列，反向理解 -->
+          <!-- 表体部分 -->
+          <tbody>
+            <tr>
+              <th id="html" scope="row" headers="tech" rowspan="2">HTML</th>
+              <td headers="html desc">超文本标记语言</td>
+              <td headers="html level">精通</td>
+              <td headers="html status">已完成</td>
+              <!-- 说明：headers用来表明和哪个id为对应的行/列表头关系 -->
+            </tr>
+            <tr>
+              <td headers="html desc">结构化文档标记</td>
+              <td headers="html level">精通</td>
+              <td headers="html status">已完成</td>
+            </tr>
+            <tr>
+              <th id="css" scope="row" headers="tech">CSS</th>
+              <td headers="css desc" colspan="2">层叠样式表，用于页面美化</td>
+              <td headers="css status">进行中</td>
+            </tr>
+            <tr>
+              <th id="js" scope="row" headers="tech">JavaScript</th>
+              <td headers="js desc">动态脚本语言</td>
+              <td headers="js level">熟练</td>
+              <td headers="js status">进行中</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2>表单--重点--关键点</h2>
+        <div>
+          <!-- action: 当用户点击提交的时候告诉浏览器把数据送到哪个url
+          method: 告诉浏览器使用哪种方法进行传递->常用的方法有: get post 
+          get: 数据会显示在网址栏中 post: 数据不会显示在网址栏中->适合用来传输敏感/重要信息 -->
+          <!-- enctype: 告诉浏览器如何打包数据，只有需要上传文件的时候才要这个属性，有三个可选值：
+          application/x-www-form-urlencoded（默认值） (无文件上传)
+          multipart/form-data（文件上传专用）
+          text/plain（纯文本格式）
+          accept-charset声明表单数据编码，不写默认和html编码一致 -->
+          <!-- novalidate表示不启动浏览器自带的验证功能，接收到数据后再进行处理，默认是会在满足特定条件时进行浏览器自动验证的 -->
+          <!-- 某些特定条件: required属性表明 minlength maxlength声明 type格式验证 -> 只有验证通过才会提交表单数据 -->
+          <form action="/submit" method="post" enctype="multipart/form-data" autocomplete="on" novalidate accept-charset="UTF-8">
+
+            <!-- 数据列表 -->
+            <div>
+              <label for="city">城市</label>
+              <input type="text" list="cities" id="city" name="city" placeholder="选择城市">
+              <datalist id="cities">
+                <option value="北京">北京</option>
+                <option value="上海">上海</option>
+                <option value="广州">广州</option>
+                <option value="深圳">深圳</option>
+                <option value="杭州">杭州</option>
+              </datalist>
+            </div>
+
+            <!-- 月和周选择器 -->
+            <div>
+              <label for="birthMonth">出生月份</label>
+              <input type="month" id="birthMonth" name="birthMonth" value="2024-01">
+            </div>
+
+            <div>
+              <label for="workWeek">工作周</label>
+              <input type="week" id="workWeek" name="workWeek" value="2024-W01">
+            </div>
+
+            <!-- 搜索框 -->
+            <div>
+              <label for="search">搜索</label>
+              <!-- results表明搜索建议最多显示的条数，注意只对search类型有效 -->
+              <input type="search" id="search" name="search" placeholder="输入搜索内容" results="5">
+            </div>
+
+            <!-- 电话和URL -->
+            <div>
+              <label for="website">个人网站</label>
+              <input type="url" id="website" name="website" placeholder="https://example.com">
+            </div>
+
+            <!-- 隐藏字段和表单关联 -->
+            <!-- form属性可以使得表单项在任何位置书写，然后指明他是归属于id为对应值的表单的 -->
+            <input type="hidden" form="externalForm" name="formId" value="123"><mark>其实这里有份hidden类型数据表单项，hidden类型表明这份数据是隐藏的，用户看不到，但是会随表单一起提交数据</mark>
+
+            <!-- 表单控件的完整验证 -->
+            <div>
+              <label for="creditCard">信用卡号</label>
+              <!-- pattern表明需要验证的匹配格式，一般利用正则表达式进行规则设定 -->
+              <input type="text" id="creditCard" name="creditCard" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}"
+                placeholder="1234-5678-9012-3456" title="请输入正确的信用卡格式，如：1234-5678-9012-3456" required>
+            </div>
+
+            <!-- 自定义验证 -->
+            <div>
+              <label for="password">密码</label>
+              <input type="password" id="password" name="password" required minlength="8"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="密码至少8位，包含大小写字母和数字">
+            </div>
+
+            <!-- 输出元素 -->
+            <div>
+              <label for="slider">滑块值</label>
+              <input type="range" id="slider" name="slider" min="0" max="100" value="50"
+                oninput="outputSlider.value = this.value">
+              <output id="outputSlider">50</output>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button type="submit" formnovalidate>无验证提交</button>
+            <button type="submit">验证后提交</button>
+            <button type="reset">重置</button>
+          </form>
+
+          <!-- 外部表单控件 -->
+          <input type="text" form="externalForm" name="externalField" placeholder="外部表单字段">
+          <button form="externalForm" type="submit">外部提交按钮</button>
+        </div>
+      </div>
+      <!-- 补充：所有input类型示例 -->
+      <div>
+        <h3>补充的input类型</h3>
+
+        <!-- 图像按钮 -->
+        <div>
+          <label for="imageBtn">图像按钮</label>
+          <input type="image" id="imageBtn" src="submit-btn.png" alt="提交按钮" width="100" height="30">
+        </div>
+
+        <!-- 重置按钮 -->
+        <div>
+          <input type="reset" value="重置表单" id="resetBtn">
+        </div>
+
+        <!-- 普通按钮 -->
+        <div>
+          <input type="button" value="普通按钮" id="normalBtn">
+        </div>
+      </div>
+
+      <!-- 补充：进度条和度量器 -->
+      <div>
+        <h3>进度和度量元素</h3>
+
+        <div>
+          <label for="uploadProgress">上传进度</label>
+          <progress id="uploadProgress" value="30" max="100">30%</progress>
+        </div>
+
+        <div>
+          <label for="diskUsage">磁盘使用情况</label>
+          <meter id="diskUsage" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.2">60%</meter>
+        </div>
+      </div>
+
+      <!-- 补充：表单验证API -->
+      <div>
+        <h3>表单验证示例</h3>
+
+        <form id="validationForm">
+          <div>
+            <label for="customValidate">自定义验证</label>
+            <input type="text" id="customValidate" name="customValidate" oninvalid="this.setCustomValidity('请输入有效内容')"
+              oninput="this.setCustomValidity('')" required>
+          </div>
+
+          <button type="submit">提交验证</button>
+        </form>
+
+        <script>
+          // 完整验证示例
+          document.getElementById('validationForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (this.checkValidity()) {
+              alert('表单验证通过');
+            } else {
+              this.reportValidity(); // 显示验证错误
+            }
+          });
+
+          // 自定义验证函数
+          function validateField(input) {
+            if (input.validity.valueMissing) {
+              input.setCustomValidity('此字段为必填项');
+            } else if (input.validity.patternMismatch) {
+              input.setCustomValidity('输入格式不正确');
+            } else {
+              input.setCustomValidity('');
+            }
+          }
+        </script>
+      </div>
+
+      <!-- 补充：表单关联属性示例 -->
+      <div>
+        <h3>表单关联属性示例</h3>
+
+        <form id="externalForm" action="/submit" method="post">
+          <div>
+            <label for="internalField">内部字段</label>
+            <input type="text" id="internalField" name="internalField" value="内部表单字段">
+          </div>
+        </form>
+
+        <!-- 这些控件不属于form内部，但关联到表单 -->
+        <div>
+          <label for="externalText">外部文本字段</label>
+          <input type="text" form="externalForm" name="externalText" id="externalText" placeholder="外部字段">
+        </div>
+
+        <div>
+          <label for="externalSelect">外部选择框</label>
+          <select form="externalForm" name="externalSelect" id="externalSelect">
+            <option value="option1">外部选项1</option>
+            <option value="option2">外部选项2</option>
+          </select>
+        </div>
+
+        <button form="externalForm" type="submit">外部提交按钮</button>
+        <button form="externalForm" type="reset">外部重置按钮</button>
+      </div>
+
+      <!-- 补充：完整的输出元素示例 -->
+      <div>
+        <h3>输出元素示例</h3>
+
+        <form oninput="result.value=parseInt(a.value||0)+parseInt(b.value||0)">
+          <input type="range" id="a" name="a" value="50" min="0" max="100">
+          +
+          <input type="number" id="b" name="b" value="25" min="0" max="100">
+          =
+          <output name="result" for="a b" id="result">75</output>
+        </form>
+      </div>
+
+      <!-- 补充：更多验证属性示例 -->
+      <div>
+        <h3>验证属性示例</h3>
+
+        <div>
+          <label for="minMaxNumber">最小最大数字</label>
+          <input type="number" id="minMaxNumber" name="minMaxNumber" min="1" max="100" step="5" required>
+        </div>
+
+        <div>
+          <label for="minMaxLength">最小最大长度</label>
+          <input type="text" id="minMaxLength" name="minMaxLength" minlength="3" maxlength="20" required>
+        </div>
+
+        <div>
+          <label for="patternValidate">正则验证</label>
+          <input type="text" id="patternValidate" name="patternValidate" pattern="[A-Z]{3}-[0-9]{3}"
+            title="格式：三个大写字母-三个数字，如ABC-123" placeholder="ABC-123">
+        </div>
+      </div>
+
+      <!-- 补充：可访问性属性 -->
+      <div>
+        <h3>可访问性属性示例</h3>
+
+        <div>
+          <label for="accessibleInput">可访问输入框</label>
+          <input type="text" id="accessibleInput" name="accessibleInput" aria-describedby="inputHelp"
+            aria-required="true" autocomplete="name">
+          <div id="inputHelp">请输入您的姓名</div>
+        </div>
+
+        <div role="radiogroup" aria-labelledby="radioGroupLabel">
+          <h4 id="radioGroupLabel">选择性别</h4>
+          <input type="radio" id="male" name="gender" value="male" aria-describedby="radioHelp">
+          <label for="male">男</label>
+          <input type="radio" id="female" name="gender" value="female">
+          <label for="female">女</label>
+          <div id="radioHelp">请选择您的性别</div>
+        </div>
+      </div>
+      <!-- 补充：复选框示例 -->
+      <div>
+        <h3>复选框（Checkbox）示例</h3>
+
+        <!-- 基本复选框 -->
+        <div>
+          <input type="checkbox" id="basicCheckbox" name="basicCheckbox" value="basic">
+          <label for="basicCheckbox">基本复选框</label>
+        </div>
+
+        <!-- 带默认选中的复选框 -->
+        <div>
+          <input type="checkbox" id="checkedCheckbox" name="checkedCheckbox" value="checked" checked>
+          <label for="checkedCheckbox">默认选中复选框</label>
+        </div>
+
+        <!-- 禁用的复选框 -->
+        <div>
+          <input type="checkbox" id="disabledCheckbox" name="disabledCheckbox" value="disabled" disabled>
+          <label for="disabledCheckbox">禁用复选框</label>
+        </div>
+
+        <!-- 复选框组（多选） -->
+        <fieldset>
+          <legend>兴趣爱好（可多选）</legend>
+          <div>
+            <input type="checkbox" id="hobby1" name="hobbies" value="reading">
+            <label for="hobby1">阅读</label>
+          </div>
+          <div>
+            <input type="checkbox" id="hobby2" name="hobbies" value="sports">
+            <label for="hobby2">运动</label>
+          </div>
+          <div>
+            <input type="checkbox" id="hobby3" name="hobbies" value="music">
+            <label for="hobby3">音乐</label>
+          </div>
+          <div>
+            <input type="checkbox" id="hobby4" name="hobbies" value="travel">
+            <label for="hobby4">旅行</label>
+          </div>
+        </fieldset>
+
+        <!-- 与表单验证结合的复选框 -->
+        <div>
+          <input type="checkbox" id="terms" name="terms" value="agreed" required>
+          <label for="terms">我同意服务条款 *</label>
+        </div>
+
+        <!-- 带可访问性属性的复选框 -->
+        <div>
+          <input type="checkbox" id="accessibleCheckbox" name="accessibleCheckbox" value="accessible"
+            aria-describedby="checkboxDescription" aria-checked="false">
+          <label for="accessibleCheckbox">可访问复选框</label>
+          <div id="checkboxDescription">这是一个具有可访问性属性的复选框示例</div>
+        </div>
+
+        <!-- 使用JavaScript控制的复选框 -->
+        <div>
+          <input type="checkbox" id="jsCheckbox" name="jsCheckbox" value="jsControlled"
+            onchange="handleCheckboxChange(this)">
+          <label for="jsCheckbox">JavaScript控制的复选框</label>
+        </div>
+
+        <!-- 作为外部控件关联到表单的复选框 -->
+        <div>
+          <input type="checkbox" form="externalForm" name="externalCheckbox" value="external" id="externalCheckbox">
+          <label for="externalCheckbox">外部表单复选框</label>
+        </div>
+
+        <script>
+          // 处理复选框变化的函数
+          function handleCheckboxChange(checkbox) {
+            if (checkbox.checked) {
+              console.log('复选框被选中，值为：' + checkbox.value);
+            } else {
+              console.log('复选框被取消选中');
+            }
+          }
+
+          // 全选/取消全选功能示例
+          function toggleAllCheckboxes(checkboxesSelector, toggleCheckbox) {
+            const checkboxes = document.querySelectorAll(checkboxesSelector);
+            checkboxes.forEach(checkbox => {
+              checkbox.checked = toggleCheckbox.checked;
+            });
+          }
+        </script>
+      </div>
+
+      <!-- 补充：复选框组的高级用法 -->
+      <div>
+        <h3>复选框组高级用法</h3>
+
+        <fieldset>
+          <legend>技术栈选择（多选）</legend>
+
+          <!-- 全选复选框 -->
+          <div>
+            <input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes('.tech-stack', this)">
+            <label for="selectAll">全选</label>
+          </div>
+
+          <div>
+            <input type="checkbox" class="tech-stack" id="frontend" name="techStack" value="frontend">
+            <label for="frontend">前端技术</label>
+          </div>
+
+          <div>
+            <input type="checkbox" class="tech-stack" id="backend" name="techStack" value="backend">
+            <label for="backend">后端技术</label>
+          </div>
+
+          <div>
+            <input type="checkbox" class="tech-stack" id="mobile" name="techStack" value="mobile">
+            <label for="mobile">移动端技术</label>
+          </div>
+
+          <div>
+            <input type="checkbox" class="tech-stack" id="devops" name="techStack" value="devops">
+            <label for="devops">运维技术</label>
+          </div>
+        </fieldset>
+      </div>
+    </article>
+    <aside>
+      <code>
+      <blockquote cite="#">
+<pre>
+<abbr title="人工智能" lang="zh-CN">AI:</abbr>
+  This is js code demo-container
+  <var>var hello = "Hello js</var>
+  console.log(hello)
+<!-- address是块级元素 -->
+<address>
+  <a href="mailto:#">address: 邮箱demo</a>
+</address>
+  <kbd>ping baidu.com</kbd>
+  <samp>PING baidu.com (……)</samp>
+  <time datetime="2025-12-25">2025年12月25号</time>
+</pre>
+        <hr>
+        Caffeine's chemical formula is 
+        C<sub>8</sub>H<sub>10</sub>N<sub>4</sub>O<sub>2</sub>
+        <br>
+        if x<sup>2</sup> is 9, x must equal 3 or -3.
+      </blockquote>
+    </code>
+    </aside>
+  </main>
+  <footer>
+    <dl>
+      <dt>HTML</dt>
+      <dd>超文本标记语言</dd>
+    </dl>
+    &nbsp;&nbsp;
+    <dl>
+      <dt>CSS</dt>
+      <dd>层叠样式表</dd>
+    </dl>
+    &nbsp;&nbsp;
+    <dl>
+      <dt>JS</dt>
+      <dd>浏览器的脚本语言</dd>
+    </dl>
+  </footer>
+</body>
+
+</html>
