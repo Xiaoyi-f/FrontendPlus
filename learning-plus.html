@@ -12,6 +12,7 @@
   <title>Frontend Teach</title>
   <link rel="stylesheet" href="learning-plus.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="pluscolor-learning-plus.css">
   <meta property="og:title" content="你的网页标题">
   <meta property="og:description" content="简短有力的描述，最好不超过 200 字符">
   <meta property="og:image" content="https://yoursite.com/share-image.jpg">
@@ -25,6 +26,21 @@
 </head>
 
 <body>
+  <noscript>
+    <p>您的浏览器不支持JavaScript或已禁用JavaScript，部分功能可能无法使用。</p>
+  </noscript>
+  <div>
+    <h2>背景相关属性</h2>
+    <div background-attachment: scroll>
+      background-attachment: scroll 滚动元素内容时,背景图不移动; 滚动页面时背景图随之动
+    </div>
+    <div background-attachment: fixed>
+      background-attachment: fixed 背景图固定不动
+    </div>
+    <div background-attachment: local>
+      background-attachment: local 滚动元素内容时,背景图随动
+    </div>
+  </div>
   <header>
     <h1><mark>HTML CSS JS</mark></h1>
     <p lang="en-US" style="color: skyblue">Some part of text can use the lang attribute too</p>
@@ -56,36 +72,43 @@
           <li>CSS</li>
           <li>JS</li>
         </ul>
-        <ol>
-          <li>HTML</li>
-          <li>CSS</li>
-          <li>JS</li>
+        <ol reversed>
+          <!-- reversed倒序 -->
+          <!-- value用来自己指定前序显示值,前提是要符合属性配置好的类型数据 -->
+          <li value="3">HTML</li>
+          <li value="1">CSS</li>
+          <li value="4">JS</li>
         </ol>
         <br>
       </div>
       <div>
         <h2>媒体相关</h2>
-        <a href="#" target="_self">
-          <img src="#" alt="demoHeadImg"><br>
-          <video src="#" controls autoplay loop muted poster preload width height playsinline>
-            <source src="#" type="video/mp4">
-            <source src="#" type="video/webm">
+        <figure>
+          <figcaption>媒体语义化标签</figcaption>
+          <a href="#" target="_self">
+            <img src="#" alt="demoHeadImg"><br>
+            <video src="#" controls autoplay loop muted poster preload width height playsinline>
+              <source src="#" type="video/mp4">
+              <source src="#" type="video/webm">
+              <p>
+                Your browser doesn't support HTML video. Here is a link(放不出视频就显示)
+                <a href="#">link to the video</a> instead.
+              </p>
+              <track kind="subtitles" src="subtitles_zh.vtt" srclang="zh" label="中文">
+              您的浏览器不支持video标签
+            </video>
+            <img src="#" alt="demoTailImg">
+          </a>
+          <br>
+          <audio src="#" controls autoplay loop muted preload>
+            <source src="viper.mp3" type="audio/mp3">
+            <source src="viper.ogg" type="audio/ogg">
             <p>
-              Your browser doesn't support HTML video. Here is a link(放不出视频就显示)
-              <a href="#">link to the video</a> instead.
+              Your browser doesn't support this audio file. Here is a link
+              <a href="viper.mp3">link to the audio</a> instead.
             </p>
-          </video>
-          <img src="#" alt="demoTailImg">
-        </a>
-        <br>
-        <audio src="#" controls autoplay loop muted preload>
-          <source src="viper.mp3" type="audio/mp3">
-          <source src="viper.ogg" type="audio/ogg">
-          <p>
-            Your browser doesn't support this audio file. Here is a link
-            <a href="viper.mp3">link to the audio</a> instead.
-          </p>
-        </audio>
+          </audio>
+        </figure>
       </div>
       <div>
         <h2>表格</h2>
@@ -165,7 +188,8 @@
           accept-charset声明表单数据编码，不写默认和html编码一致 -->
           <!-- novalidate表示不启动浏览器自带的验证功能，接收到数据后再进行处理，默认是会在满足特定条件时进行浏览器自动验证的 -->
           <!-- 某些特定条件: required属性表明 minlength maxlength声明 type格式验证 -> 只有验证通过才会提交表单数据 -->
-          <form action="/submit" method="post" enctype="multipart/form-data" autocomplete="on" novalidate accept-charset="UTF-8">
+          <form action="/submit" method="post" enctype="multipart/form-data" autocomplete="on" novalidate
+            accept-charset="UTF-8">
 
             <!-- 数据列表 -->
             <div>
@@ -206,7 +230,8 @@
 
             <!-- 隐藏字段和表单关联 -->
             <!-- form属性可以使得表单项在任何位置书写，然后指明他是归属于id为对应值的表单的 -->
-            <input type="hidden" form="externalForm" name="formId" value="123"><mark>其实这里有份hidden类型数据表单项，hidden类型表明这份数据是隐藏的，用户看不到，但是会随表单一起提交数据</mark>
+            <input type="hidden" form="externalForm" name="formId"
+              value="123"><mark>其实这里有份hidden类型数据表单项，hidden类型表明这份数据是隐藏的，用户看不到，但是会随表单一起提交数据</mark>
 
             <!-- 表单控件的完整验证 -->
             <div>
@@ -226,12 +251,17 @@
             <!-- 输出元素 -->
             <div>
               <label for="slider">滑块值</label>
+              <!-- range表示滑块类型 -->
               <input type="range" id="slider" name="slider" min="0" max="100" value="50"
                 oninput="outputSlider.value = this.value">
+              <!-- 输入内容变化时立即执行的事件
+              补充：onchange->元素失去焦点且输入发生改变时触发 -->
               <output id="outputSlider">50</output>
+              <!-- output是专门用来显示计算结果的语义化标签,这里配合使用 -->
             </div>
 
             <!-- 提交按钮 -->
+            <!-- formnovalidate,通过按钮提交整个表单时候控制是否需要浏览器验证,这个表示不用 -->
             <button type="submit" formnovalidate>无验证提交</button>
             <button type="submit">验证后提交</button>
             <button type="reset">重置</button>
@@ -270,11 +300,13 @@
         <div>
           <label for="uploadProgress">上传进度</label>
           <progress id="uploadProgress" value="30" max="100">30%</progress>
+          <!-- 进度条标签,内部数值是用来辅助浏览器不支持时候才会显示的,控制值是value值 -->
         </div>
 
         <div>
           <label for="diskUsage">磁盘使用情况</label>
-          <meter id="diskUsage" value="0.6" min="0" max="1" low="0.3" high="0.8" optimum="0.2">60%</meter>
+          <!-- value是控制值,min和max是比较占比的,low和high都是取大于不取等于,optimum是表明最佳值的,这三个都是用来控制颜色显示的 -->
+          <meter id="diskUsage" value="0.2" min="0" max="1" low="0.3" high="0.8" optimum="0.2">20%</meter>
         </div>
       </div>
 
@@ -336,9 +368,12 @@
 
         <div>
           <label for="externalSelect">外部选择框</label>
-          <select form="externalForm" name="externalSelect" id="externalSelect">
-            <option value="option1">外部选项1</option>
-            <option value="option2">外部选项2</option>
+          <select form="externalForm" name="externalSelect" id="externalSelect" multiple>
+            <optgroup label="demo">
+              <!-- label是分组标题 -->
+              <option value="option1">外部选项1</option>
+              <option value="option2">外部选项2</option>
+            </optgroup>
           </select>
         </div>
 
@@ -386,15 +421,30 @@
 
         <div>
           <label for="accessibleInput">可访问输入框</label>
+          <!-- aria-describedby值是id值,用于关联,aria-required不会有视觉效果,aria前缀的都是辅助技术 -->
           <input type="text" id="accessibleInput" name="accessibleInput" aria-describedby="inputHelp"
             aria-required="true" autocomplete="name">
+          <!-- autocomplete值:
+          given-name	名
+          family-name	姓
+          email	邮箱
+          tel	电话
+          username	用户名
+          password	密码
+          address-line1	地址行1
+          address-line2 地址行2
+          address-line3 地址行3
+          postal-code	邮政编码
+          country	国家	
+          off	关闭自动填充
+          on	开启自动填充 -->
           <div id="inputHelp">请输入您的姓名</div>
         </div>
-
+        <!-- role也是辅助技术,aria-labelledby值也是id -->
         <div role="radiogroup" aria-labelledby="radioGroupLabel">
           <h4 id="radioGroupLabel">选择性别</h4>
           <input type="radio" id="male" name="gender" value="male" aria-describedby="radioHelp">
-          <label for="male">男</label>
+          <label for="male">男</label><!-- for值是id -->
           <input type="radio" id="female" name="gender" value="female">
           <label for="female">女</label>
           <div id="radioHelp">请选择您的性别</div>
@@ -496,7 +546,7 @@
 
         <fieldset>
           <legend>技术栈选择（多选）</legend>
-
+          <!-- 为 <fieldset> 分组元素提供标题或描述信息 -->
           <!-- 全选复选框 -->
           <div>
             <input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes('.tech-stack', this)">
@@ -523,6 +573,249 @@
             <label for="devops">运维技术</label>
           </div>
         </fieldset>
+      </div>
+      <div>
+        <!-- iframe一般就是用于网页链接的 -->
+        <iframe src="https://www.runoob.com" width="800px" height="500px" frameborder="1" scrolling="auto"
+          style="overflow: auto; border: 1px solid #ccc; box-sizing: border-box;"></iframe>
+        <!-- frameborder值为0/1,scroll值为no/yes -->
+        <iframe style="border: 1px solid #ccc; overflow: auto;" width="800" height="600" frameborder="1" scrolling="yes"
+          src="learning-plus.svg"></iframe>
+      </div>
+      <canvas id="myCanvas" width="1000" height="800"></canvas>
+      <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 1. 基础样式与矩形家族
+        ctx.fillStyle = '#42b983';
+        ctx.strokeStyle = '#2c3e50';
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.fillRect(50, 50, 200, 120);
+        ctx.strokeRect(50, 50, 200, 120);
+        ctx.clearRect(80, 80, 60, 40);
+
+        // 2. 虚线样式与直线
+        ctx.setLineDash([15, 5, 3]);
+        ctx.strokeStyle = '#7f8c8d';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(50, 200);
+        ctx.lineTo(950, 200);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 3. 圆形与圆弧
+        ctx.fillStyle = '#ff6b6b';
+        ctx.strokeStyle = '#d32f2f';
+        ctx.beginPath();
+        ctx.arc(400, 110, 60, 0, Math.PI * 1.5, false);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(400, 110, 40, 0, Math.PI * 2, true);
+        ctx.fill();
+
+        // 4. 椭圆形（通过变换实现）
+        ctx.fillStyle = '#3498db';
+        ctx.strokeStyle = '#2980b9';
+        ctx.beginPath();
+        ctx.save();
+        ctx.translate(650, 110);
+        ctx.scale(1.8, 1);
+        ctx.arc(0, 0, 50, 0, Math.PI * 2);
+        ctx.restore();
+        ctx.fill();
+        ctx.stroke();
+
+        // 5. 多边形与闭合路径
+        ctx.fillStyle = '#9b59b6';
+        ctx.strokeStyle = '#8e44ad';
+        ctx.beginPath();
+        ctx.moveTo(400, 250);
+        ctx.lineTo(480, 350);
+        ctx.lineTo(430, 450);
+        ctx.lineTo(370, 450);
+        ctx.lineTo(320, 350);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // 6. 折线与线帽/线连接演示
+        ctx.strokeStyle = '#f39c12';
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'square';
+        ctx.lineJoin = 'bevel';
+        ctx.beginPath();
+        ctx.moveTo(500, 250);
+        ctx.lineTo(580, 300);
+        ctx.lineTo(650, 280);
+        ctx.lineTo(720, 330);
+        ctx.lineTo(800, 300);
+        ctx.stroke();
+
+        // 7. 高级路径：贝塞尔曲线与矩形路径
+        ctx.fillStyle = '#1abc9c';
+        ctx.strokeStyle = '#16a085';
+        ctx.beginPath();
+        ctx.rect(100, 350, 80, 60);
+        ctx.moveTo(200, 380);
+        ctx.quadraticCurveTo(300, 300, 400, 380);
+        ctx.bezierCurveTo(450, 450, 550, 450, 600, 380);
+        ctx.lineTo(600, 430);
+        ctx.lineTo(200, 430);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // 8. 文本家族：填充、描边、测量
+        ctx.font = 'bold 28px Arial, sans-serif';
+        ctx.fillStyle = '#2c3e50';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('Canvas 全语法演示', 500, 50);
+
+        ctx.font = '16px Microsoft YaHei';
+        ctx.textAlign = 'start';
+        ctx.fillText('文本测量演示：', 50, 250);
+        const text = '测试文本宽度';
+        ctx.fillText(text, 180, 250);
+        const textMeasure = ctx.measureText(text);
+        ctx.strokeRect(180, 230, textMeasure.width, 25);
+
+        ctx.strokeStyle = '#e74c3c';
+        ctx.font = '20px serif';
+        ctx.strokeText('描边文本示例', 700, 250);
+
+        // 9. 渐变：线性+径向
+        const linearGrad = ctx.createLinearGradient(50, 480, 250, 580);
+        linearGrad.addColorStop(0, '#f1c40f');
+        linearGrad.addColorStop(0.5, '#ffffff');
+        linearGrad.addColorStop(1, '#f39c12');
+        ctx.fillStyle = linearGrad;
+        ctx.fillRect(50, 480, 200, 100);
+        ctx.strokeRect(50, 480, 200, 100);
+
+        const radialGrad = ctx.createRadialGradient(400, 530, 0, 400, 530, 60);
+        radialGrad.addColorStop(0, '#3498db');
+        radialGrad.addColorStop(0.8, '#2980b9');
+        radialGrad.addColorStop(1, 'rgba(41, 128, 185, 0)');
+        ctx.fillStyle = radialGrad;
+        ctx.beginPath();
+        ctx.arc(400, 530, 60, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 10. 图案填充（通过图像创建）
+        const patternImg = new Image();
+        patternImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTAiIGN5PSIxMCIgcj0iNCIgZmlsbD0iIzQyYjk4MyIvPjwvc3ZnPg==';
+        patternImg.onload = () => {
+          const pattern = ctx.createPattern(patternImg, 'repeat');
+          ctx.fillStyle = pattern;
+          ctx.fillRect(600, 480, 200, 100);
+          ctx.strokeRect(600, 480, 200, 100);
+        };
+
+        // 11. 变换组合：平移、旋转、缩放
+        ctx.save();
+        ctx.translate(250, 650);
+        ctx.rotate(Math.PI / 6);
+        ctx.scale(1.2, 0.8);
+        ctx.fillStyle = 'rgba(230, 126, 34, 0.9)';
+        ctx.strokeStyle = '#d35400';
+        ctx.fillRect(-75, -30, 150, 60);
+        ctx.strokeRect(-75, -30, 150, 60);
+        ctx.restore();
+
+        // 12. 阴影效果
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+        ctx.shadowBlur = 15;
+        ctx.shadowOffsetX = 8;
+        ctx.shadowOffsetY = 8;
+        ctx.fillStyle = '#1abc9c';
+        ctx.fillRect(450, 620, 150, 60);
+        ctx.shadowColor = 'transparent';
+
+        // 13. 裁剪路径
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(750, 650, 50, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.fillStyle = '#ff6b6b';
+        ctx.fillRect(700, 600, 100, 100);
+        ctx.drawImage(patternImg, 700, 600, 100, 100);
+        ctx.restore();
+
+        // 14. 合成模式
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = 'rgba(34, 167, 240, 0.7)';
+        ctx.beginPath();
+        ctx.arc(750, 650, 30, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+
+        // 15. 像素操作
+        const imgData = ctx.getImageData(50, 50, 100, 100);
+        for (let i = 0; i < imgData.data.length; i += 4) {
+          imgData.data[i] = 255 - imgData.data[i];
+          imgData.data[i + 1] = 255 - imgData.data[i + 1];
+          imgData.data[i + 2] = 255 - imgData.data[i + 2];
+        }
+        ctx.putImageData(imgData, 300, 620);
+
+        // 16. 图像绘制（三种格式）
+        const img = new Image();
+        img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0MCIgZmlsbD0iIzQyYjk4MyIvPjwvc3ZnPg==';
+        img.onload = () => {
+          ctx.drawImage(img, 50, 700, 80, 80);
+          ctx.drawImage(img, 150, 700, 80, 80);
+          ctx.drawImage(img, 10, 10, 80, 80, 250, 700, 80, 80);
+        };
+
+        // 17. 全局透明度
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = '#9b59b6';
+        ctx.fillRect(850, 700, 80, 80);
+        ctx.globalAlpha = 1;
+      </script>
+      <div>
+        <h2>HSL 核心用法演示</h2>
+        <div class="hsl-basic">HSL 基础纯色相</div>
+        <div class="hsl-saturation">HSL 高饱和色彩</div>
+        <div class="hsl-saturation low-saturation">HSL 低饱和色彩</div>
+        <div class="hsl-saturation no-saturation">HSL 无饱和（纯灰）</div>
+        <div class="hsl-lightness">HSL 亮色调</div>
+        <div class="hsl-lightness dark">HSL 深色调</div>
+        <div class="hsl-lightness white">HSL 纯白色</div>
+        <div class="hsl-lightness black">HSL 纯黑色</div>
+        <div class="hsl-alpha">HSL 带透明度（50%透明）</div>
+        <button class="hsl-animation">HSL 色彩过渡按钮（hover/active查看效果）</button>
+
+        <h2>HWB 核心用法演示</h2>
+        <div class="hwb-basic">HWB 基础纯色相</div>
+        <div class="hwb-whiteness">HWB 加20%白（浅色调）</div>
+        <div class="hwb-whiteness more-white">HWB 加40%白（更浅色调）</div>
+        <div class="hwb-blackness">HWB 加20%黑（深色调）</div>
+        <div class="hwb-blackness more-black">HWB 加40%黑（更深色调）</div>
+        <div class="hwb-mixed">HWB 加15%白+25%黑（灰调）</div>
+        <div class="hwb-mixed gray">HWB 纯灰色（50%白+50%黑）</div>
+        <div class="hwb-alpha">HWB 带透明度（50%透明）</div>
+        <div class="hwb-button-group">
+          <button class="hwb-btn primary">HWB 主按钮</button>
+          <button class="hwb-btn light">HWB 浅色按钮</button>
+          <button class="hwb-btn dark">HWB 深色按钮</button>
+          <button class="hwb-btn disabled">HWB 禁用按钮</button>
+        </div>
+
+        <h2>HSL 与 HWB 等价对比</h2>
+        <div class="color-comparison">
+          <div class="hsl-compare">HSL 浅蓝<br>hsl(240, 100%, 70%)</div>
+          <div class="hwb-compare">HWB 浅蓝<br>hwb(240, 20%, 0%)</div>
+        </div>
+
+        <h2>高级实战：渐变应用</h2>
+        <div class="hsl-gradient">HSL 多色相渐变（彩虹效果）</div>
+        <div class="hwb-gradient">HWB 同色系渐变（浅蓝过渡）</div>
       </div>
     </article>
     <aside>
@@ -569,3 +862,4 @@
 </body>
 
 </html>
+提示: 可能还有一些未讲到的元素和属性,这些在需要的时候临时问问AI或查询资料临时学习一下就好

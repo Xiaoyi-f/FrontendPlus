@@ -1,0 +1,280 @@
+/* 全局基础样式重置与通用设置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+}
+
+body {
+  padding: 40px;
+  background-color: #f5f5f5;
+  line-height: 1.6;
+}
+
+h2 {
+  color: #2c3e50;
+  margin: 30px 0 20px;
+  font-size: 22px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+}
+
+/* 通用容器样式（所有演示元素统一基础样式） */
+div[class^="hsl-"],
+div[class^="hwb-"],
+.color-comparison>div {
+  width: 300px;
+  height: 80px;
+  margin: 15px 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* -------------------------- HSL 核心用法演示 -------------------------- */
+/* HSL 基础纯色相（色相240，饱和度100%，亮度50%） */
+.hsl-basic {
+  background-color: hsl(240, 100%, 50%);
+}
+
+/* HSL 高饱和色彩（色相180，饱和度100%，亮度50%） */
+.hsl-saturation {
+  background-color: hsl(180, 100%, 50%);
+}
+
+/* HSL 低饱和色彩（色相180，饱和度30%，亮度50%） */
+.hsl-saturation.low-saturation {
+  background-color: hsl(180, 30%, 50%);
+}
+
+/* HSL 无饱和（纯灰：饱和度0%，色相不生效） */
+.hsl-saturation.no-saturation {
+  background-color: hsl(180, 0%, 50%);
+  color: #333;
+}
+
+/* HSL 亮色调（色相200，饱和度100%，亮度70%） */
+.hsl-lightness {
+  background-color: hsl(200, 100%, 70%);
+  color: #2c3e50;
+}
+
+/* HSL 深色调（色相200，饱和度100%，亮度30%） */
+.hsl-lightness.dark {
+  background-color: hsl(200, 100%, 30%);
+}
+
+/* HSL 纯白色（亮度100%，色相/饱和度不生效） */
+.hsl-lightness.white {
+  background-color: hsl(0, 0%, 100%);
+  color: #333;
+  border: 1px solid #eee;
+}
+
+/* HSL 纯黑色（亮度0%，色相/饱和度不生效） */
+.hsl-lightness.black {
+  background-color: hsl(0, 0%, 0%);
+}
+
+/* HSL 带透明度（50%透明：hsla 第四个参数为透明度，0-1之间） */
+.hsl-alpha {
+  background-color: hsla(120, 100%, 50%, 0.5);
+  color: #2c3e50;
+  /* 背景叠加便于查看透明度效果 */
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%);
+  background-size: 20px 20px;
+}
+
+/* HSL 色彩过渡按钮 */
+.hsl-animation {
+  padding: 12px 30px;
+  background-color: hsl(340, 100%, 50%);
+  color: #fff;
+}
+
+.hsl-animation:hover {
+  /* 色相偏移，亮度提高 */
+  background-color: hsl(360, 100%, 60%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 0, 80, 0.3);
+}
+
+.hsl-animation:active {
+  /* 色相偏移，亮度降低 */
+  background-color: hsl(320, 100%, 40%);
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(255, 0, 80, 0.2);
+}
+
+/* -------------------------- HWB 核心用法演示 -------------------------- */
+/* HWB 基础纯色相（色相280，白0%，黑0%） */
+.hwb-basic {
+  background-color: hwb(280, 0%, 0%);
+}
+
+/* HWB 加20%白（浅色调：色相280，白20%，黑0%） */
+.hwb-whiteness {
+  background-color: hwb(280, 20%, 0%);
+  color: #2c3e50;
+}
+
+/* HWB 加40%白（更浅色调：色相280，白40%，黑0%） */
+.hwb-whiteness.more-white {
+  background-color: hwb(280, 40%, 0%);
+  color: #2c3e50;
+}
+
+/* HWB 加20%黑（深色调：色相280，白0%，黑20%） */
+.hwb-blackness {
+  background-color: hwb(280, 0%, 20%);
+}
+
+/* HWB 加40%黑（更深色调：色相280，白0%，黑40%） */
+.hwb-blackness.more-black {
+  background-color: hwb(280, 0%, 40%);
+}
+
+/* HWB 加15%白+25%黑（灰调：色相280，白15%，黑25%） */
+.hwb-mixed {
+  background-color: hwb(280, 15%, 25%);
+}
+
+/* HWB 纯灰色（白50%+黑50%，色相不生效） */
+.hwb-mixed.gray {
+  background-color: hwb(0, 50%, 50%);
+  color: #333;
+}
+
+/* HWB 带透明度（50%透明：hwba 第四个参数为透明度） */
+.hwb-alpha {
+  background-color: hwba(60, 0%, 0%, 0.5);
+  color: #2c3e50;
+  /* 背景叠加便于查看透明度效果 */
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%);
+  background-size: 20px 20px;
+}
+
+/* HWB 按钮组容器 */
+.hwb-button-group {
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* HWB 按钮通用样式 */
+.hwb-btn {
+  padding: 10px 20px;
+}
+
+/* HWB 主按钮（色相220，白0%，黑20%） */
+.hwb-btn.primary {
+  background-color: hwb(220, 0%, 20%);
+  color: #fff;
+}
+
+.hwb-btn.primary:hover {
+  background-color: hwb(220, 10%, 15%);
+  box-shadow: 0 3px 10px rgba(30, 140, 255, 0.3);
+}
+
+/* HWB 浅色按钮（色相220，白30%，黑0%） */
+.hwb-btn.light {
+  background-color: hwb(220, 30%, 0%);
+  color: #2c3e50;
+}
+
+.hwb-btn.light:hover {
+  background-color: hwb(220, 20%, 5%);
+}
+
+/* HWB 深色按钮（色相220，白0%，黑40%） */
+.hwb-btn.dark {
+  background-color: hwb(220, 0%, 40%);
+  color: #fff;
+}
+
+.hwb-btn.dark:hover {
+  background-color: hwb(220, 5%, 35%);
+}
+
+/* HWB 禁用按钮（色相0，白40%，黑10%，禁用状态） */
+.hwb-btn.disabled {
+  background-color: hwb(0, 40%, 10%);
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.hwb-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+  background-color: hwb(0, 40%, 10%);
+}
+
+/* -------------------------- HSL 与 HWB 等价对比 -------------------------- */
+.color-comparison {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+/* HSL 浅蓝对比项 */
+.hsl-compare {
+  background-color: hsl(240, 100%, 70%);
+  color: #2c3e50;
+}
+
+/* HWB 浅蓝对比项（与HSL浅蓝等价） */
+.hwb-compare {
+  background-color: hwb(240, 20%, 0%);
+  color: #2c3e50;
+}
+
+/* -------------------------- 高级实战：渐变应用 -------------------------- */
+/* HSL 多色相渐变（彩虹效果） */
+.hsl-gradient {
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(90deg,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%));
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+/* HWB 同色系渐变（浅蓝过渡） */
+.hwb-gradient {
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(90deg,
+      hwb(240, 10%, 0%),
+      hwb(240, 20%, 5%),
+      hwb(240, 30%, 10%),
+      hwb(240, 40%, 15%),
+      hwb(240, 50%, 20%));
+  color: #2c3e50;
+  font-size: 18px;
+  letter-spacing: 1px;
+}

@@ -1,0 +1,39 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <path id="textPathDemo" d="M500,400 Q600,350 700,400" fill="none" stroke="#bdc3c7" />
+    <linearGradient id="linearGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f1c40f" />
+      <stop offset="100%" stop-color="#f39c12" />
+    </linearGradient>
+    <radialGradient id="circleRadialGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#ff6b6b" />
+      <stop offset="100%" stop-color="#e55555" />
+    </radialGradient>
+    <radialGradient id="radialGrad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#3498db" stop-opacity="1" />
+      <stop offset="100%" stop-color="#2980b9" stop-opacity="0.8" />
+    </radialGradient>
+  </defs>
+
+  <rect x="50" y="50" width="200" height="120" rx="15" ry="15" fill="#42b983" stroke="#2c3e50" stroke-width="3" stroke-dasharray="10,5" opacity="0.9" />
+  <circle cx="400" cy="110" r="60" fill="url(#circleRadialGrad)" stroke="#d32f2f" stroke-width="2" />
+  <ellipse cx="600" cy="110" rx="80" ry="50" fill="#3498db" stroke="#2980b9" stroke-width="2" />
+  <line x1="50" y1="200" x2="750" y2="200" stroke="#7f8c8d" stroke-width="2" stroke-linecap="round" />
+  <polygon points="400,250 450,350 350,350" fill="#9b59b6" stroke="#8e44ad" stroke-width="2" />
+  <polyline points="500,250 550,300 600,280 650,320 700,300" fill="none" stroke="#f39c12" stroke-width="2" stroke-dasharray="5,3" />
+  
+  <path d="M100,350 L150,450 H250 V400 C300,350 350,380 400,350 Q350,450 300,400 Z" fill="#1abc9c" stroke="#16a085" stroke-width="2" />
+  
+  <text x="400" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2c3e50" text-anchor="middle">SVG语法完整示例</text>
+  <text x="50" y="250" font-family="Microsoft YaHei" font-size="14" fill="#34495e">
+    基础形状演示
+    <tspan x="50" y="270">（矩形、圆形、椭圆等）</tspan>
+  </text>
+  <text font-family="Arial" font-size="16" fill="#e74c3c">
+    <textPath href="#textPathDemo">沿贝塞尔曲线排列的文本</textPath>
+  </text>
+  
+  <rect x="50" y="480" width="200" height="60" fill="url(#linearGrad)" stroke="#2c3e50" />
+  <circle cx="400" cy="510" r="30" fill="url(#radialGrad)" />
+  <rect x="600" y="480" width="150" height="60" fill="#e67e22" stroke="#d35400" stroke-width="2" transform="rotate(5, 675, 510)" fill-opacity="0.8" />
+</svg>
