@@ -184,6 +184,21 @@ BFC（Block Formatting Context）是CSS中的一个概念，中文称为"块级�
 
 /* 定位 */
 position: static | relative | absolute | fixed | sticky;
+static是默认形式->默认文档流，无top/right/bottom/left和z-index影响
+relative相对于自身原位置，也不脱离文档流
+反着来： top: 10px; /* 向下偏移10px */
+        left: 20px; /* 向右偏移20px */
+absolute绝对定位->脱离文档流，相对于父盒子定位
+示例：.child {
+        position: absolute;
+        top: 0;
+        right: 0; /* 相对于父级右上角定位 */
+        width: 50px;
+        height: 50px;
+      }
+fixed固定定位->脱离文档流，相对于视口(body)定位
+position: sticky 是 CSS3 引入的一种定位方式，结合了 relative 和 fixed 的特性
+
 top: 10px;
 left: 50%;
 transform: translateX(-50%); /* 配合定位居中 */
