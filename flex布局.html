@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Flex商品卡片布局</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    /* 卡片容器：Flex换行，间距 */
+    .card-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: flex-start;
+    }
+
+    /* 卡片：固定宽度，内部Flex垂直布局 */
+    .card {
+      flex: 0 0 240px;
+      /* 不放大、不缩小、固定宽240px */
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      /* 内部主轴垂直 */
+    }
+
+    /* 卡片图片：拉伸填满 */
+    .card-img {
+      width: 100%;
+      height: 160px;
+      background: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+    }
+
+    /* 卡片内容：Flex占满剩余空间，垂直分布 */
+    .card-content {
+      flex: 1;
+      /* 占满卡片剩余高度 */
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      /* 内容上下分布 */
+    }
+
+    /* 商品标题：单行省略（结合之前的文本溢出） */
+    .card-title {
+      font-size: 16px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-bottom: 10px;
+    }
+
+    /* 商品价格+按钮：Flex两端对齐 */
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .card-price {
+      color: #ff4400;
+      font-weight: bold;
+    }
+
+    .card-btn {
+      padding: 5px 12px;
+      background: #ff4400;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      /* 练flex-shrink：按钮不缩小 */
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card-list">
+    <div class="card">
+      <div class="card-img">商品图片</div>
+      <div class="card-content">
+        <div class="card-title">Flex布局实战商品卡片标题很长会省略</div>
+        <div class="card-footer">
+          <span class="card-price">¥99.00</span>
+          <button class="card-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img">商品图片</div>
+      <div class="card-content">
+        <div class="card-title">Flex专家级练习商品卡片</div>
+        <div class="card-footer">
+          <span class="card-price">¥199.00</span>
+          <button class="card-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img">商品图片</div>
+      <div class="card-content">
+        <div class="card-title">Flex自适应布局商品卡片案例</div>
+        <div class="card-footer">
+          <span class="card-price">¥299.00</span>
+          <button class="card-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img">商品图片</div>
+      <div class="card-content">
+        <div class="card-title">精通Flex布局的实战案例</div>
+        <div class="card-footer">
+          <span class="card-price">¥399.00</span>
+          <button class="card-btn">加入购物车</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

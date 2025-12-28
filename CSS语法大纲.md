@@ -160,7 +160,7 @@ padding: 8px 15px;
 padding-left: max(10px, 2vw);
 
 /* 边框 */
-border: 1px solid #ccc; /* 宽度 样式 颜色 */
+border: 1px solid #ccc; /* 宽度 样式 颜色 */  必须三个都写才会有效果
 border-width: 2px;
 border-style: solid | dashed | dotted | double; /* 实线/虚线/点线/双实线 */
 border-color: #f00 rgb(255,0,0) hsl(0,100%,50%);
@@ -198,6 +198,9 @@ clear: both | left | right;
 overflow: visible | hidden | scroll | auto;
 overflow-x: hidden;
 overflow-y: auto;
+（overflow: hidden;
+  text-overflow: ellipsis;
+  必须一起使用才会有效果一般）
 text-overflow: ellipsis; /* 文字省略号，需配合white-space:nowrap和overflow:hidden */
 white-space: nowrap | normal | pre | pre-wrap;
 
@@ -226,7 +229,7 @@ gap: 10px; // 用来设置网格/弹性项目之间的距离
 flex: 1; /* 缩写：flex-grow flex-shrink flex-basis */
 flex: 0 0 200px; /* 不放大空间 不缩小空间 基准宽度200px */
 flex-grow: 0 | 1 | 2; /* 放大比例 */
-flex-shrink: 0 | 1; /* 缩小比例 */
+flex-shrink: 0 | 1; /* 缩小比例 */  默认值为1
 flex-basis: auto | 200px | 50%;  项目初始在主轴上占据的空间
 align-self: auto | flex-start | center | flex-end | baseline; /* 单独对齐 */
 order: 2; /* 排列顺序，数值越小越靠前 */
