@@ -23,7 +23,7 @@
   a:visited {} 访问选择器
   a:hover {} 鼠标悬停选择器
   a:active {} 激活选择器
-  (说明：上面四个伪类选择器书写顺序一定要按照link visited hover active的顺序)
+  (说明：上面四个伪类选择器书写顺序一定要按照link visited hover active的顺序(LV好))
   input:focus {} 获取焦点选择器
   input:checked {} 选中选择器
   input:disabled {} 禁用选择器
@@ -62,7 +62,7 @@
   ::backdrop {} 背景选择器
 
 2.继承特性
-  (1)能继承的核心属性
+  (1)能继承的核心属性 -> 列表/文本
     1.color 文字颜色文本样式 
     2.text-align 文字对齐方式(左 / 右 / 居中)文本样式 
     3.text-indent 首行缩进文本样式 
@@ -75,11 +75,13 @@
     11.list-style-type 列表标记具体类型（circle/decimal 等）其他 
     12.cursor 鼠标光标样式(如 pointer / 默认箭头)其他 
     13.visibility 元素可见性（hidden/visible）
-  (2)不能继承的核心属性
+  (2)不能继承的核心属性 -> 盒子
     1.width/height 元素宽度 / 高度盒子模型 
     2.margin/padding 外边距 / 内边距盒子模型 
     3.border 边框样式（宽度、颜色、类型）盒子模型 
-    4.box-sizing 盒模型计算方式（content-box/border-box） 
+    4.box-sizing 盒模型计算方式（content-box/border-box）
+    content-box: width 和 height 指定的是内容部分
+    border-box: width 和 height 指定的是内容部分加上padding和border的总宽高，但是不设定margin
     5.background-color 背景颜色背景样式 
     6.background-image 背景图片背景样式 
     7.background-position 背景图片位置定位布局 
@@ -109,7 +111,8 @@
   < ID选择器（权重100） 
   < 行内样式（权重1000） 
   < !important（权重最高，突破所有规则）
-  
+  口诀：继通素类ID行内
+
   其次判断：
   兄弟/后代/子选择器
   < 属性选择器
@@ -122,6 +125,20 @@
 
 6.样式属性
 ## 一、基础盒模型（布局核心）
+/* 1个值 - 四边相同 */
+border-width: 5px;  /* 上右下左都是5px */
+
+/* 2个值 - 垂直/水平方向 */
+border-width: 5px 10px;  /* 上下=5px，左右=10px */
+
+/* 3个值 - 上/左右/下 */
+border-width: 5px 10px 15px;  /* 上=5px，左右=10px，下=15px */
+
+/* 4个值 - 按顺时针顺序 */
+border-width: 5px 10px 15px 20px;  /* 上=5px，右=10px，下=15px，左=20px */
+
+一般auto对应长度值但是自动计算
+
 /* 尺寸 */
 width: 300px; /* 固定值 */
 width: 100%; /* 相对父元素 */
@@ -137,6 +154,7 @@ height: calc(100vh - 80px); /* 计算函数：支持+ - * /，运算符前后加
 margin: 10px; /* 上下左右 */
 margin: 5px 10px 15px 20px; /* 上 右 下 左 */
 margin: auto; /* 水平居中 */
+margin: 20px auto;
 margin-top: calc(20px + 10%);
 padding: 8px 15px;
 padding-left: max(10px, 2vw);
@@ -161,6 +179,8 @@ outline-offset: 5px; /* 轮廓偏移 */
 /* 显示类型 */
 display: block | inline | inline-block | none | flex | grid | table;
 display: flow-root; /* 清除浮动，替代BFC */
+
+BFC（Block Formatting Context）是CSS中的一个概念，中文称为"块级格式化上下文"
 
 /* 定位 */
 position: static | relative | absolute | fixed | sticky;
@@ -187,23 +207,30 @@ opacity: 0.5; /* 透明度，0-1，影响子元素 */
 opacity: calc(1 - 0.3);
 
 ## 三、弹性布局（Flex）
+Flex 布局 = 「弹性容器（父元素）」 + 「弹性项目（子元素）」：
+align-*对于交叉轴/侧轴来看
+父容器开启 display: flex 后，子元素默认变成弹性项目，脱离标准流（无需清浮动）；
+Flex 布局有「主轴」和「侧轴」：
+主轴：由 flex-direction 决定（row/column），项目默认沿主轴排列；
+侧轴：与主轴垂直，负责项目的交叉方向对齐
 /* 父容器 */
 display: flex;
 flex-direction: row | row-reverse | column | column-reverse;
-flex-wrap: nowrap | wrap | wrap-reverse;
+flex-wrap: nowrap | wrap | wrap-reverse;  /* 控制换行行为 */
 flex-flow: row wrap; /* 缩写：方向+换行 */
 justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly;
 align-items: stretch | flex-start | flex-end | center | baseline;
-align-content: flex-start | flex-end | center | space-between | space-around;
-
-/* 子元素 */
+align-content: flex-start | flex-end | center | space-between(项目之间有相等空间) | space-around(项目周围有相等空间);
+gap: 10px; // 用来设置网格/弹性项目之间的距离
+/* 子元素(项目) */
 flex: 1; /* 缩写：flex-grow flex-shrink flex-basis */
-flex: 0 0 200px; /* 不放大 不缩小 基准宽度200px */
+flex: 0 0 200px; /* 不放大空间 不缩小空间 基准宽度200px */
 flex-grow: 0 | 1 | 2; /* 放大比例 */
 flex-shrink: 0 | 1; /* 缩小比例 */
-flex-basis: auto | 200px | 50%;
-align-self: auto | flex-start | center; /* 单独对齐 */
+flex-basis: auto | 200px | 50%;  项目初始在主轴上占据的空间
+align-self: auto | flex-start | center | flex-end | baseline; /* 单独对齐 */
 order: 2; /* 排列顺序，数值越小越靠前 */
+所有弹性项目的order值默认都是0
 
 ## 四、网格布局（Grid）
 display: grid | inline-grid;
