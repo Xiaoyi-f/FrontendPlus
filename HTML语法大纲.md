@@ -16,7 +16,7 @@
   (6)<em /> <i />
   (7)<ins /> <u />
   (8)<del /> <s />
-  (9)<small />
+  (9)<small /><big />
   (10)<pre />
   (11)<ul /> <ol /> <dl /> <dt /> <dd /> <li />
   (12)<br>
@@ -27,11 +27,11 @@
   (17)<video />
   (18)<audio />
   (19)<canvas />
-  (20)<source />
+  (20)<source>
   (21)<object />
   (22)<script />
   (23)<style />
-  (24)<p />
+  (24)<p /><q />
   (25)<track />
   (26)<table /> <tr /> <th /> <td /> <colgroup /> <col /> <caption />
   (27)<label /> <input /> <datalist /> <option /> <output /> <button /> <select /> <fieldset /> <legend /> <textarea /> 
