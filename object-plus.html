@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,19 +11,22 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       padding: 30px;
       background-color: #f5f5f5;
       font-family: "微软雅黑", "PingFang SC", sans-serif;
     }
+
     .wrapper {
       max-width: 1000px;
       margin: 0 auto;
       background: #fff;
       padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
     }
+
     /* Object容器样式，确保显示效果 */
     .pdf-object {
       width: 100%;
@@ -32,6 +36,7 @@
       overflow: hidden;
       position: relative;
     }
+
     /* 加载提示样式 */
     .loading-tip {
       position: absolute;
@@ -46,11 +51,13 @@
       align-items: center;
       z-index: 1;
     }
+
     .loading-tip span {
       margin-top: 15px;
       color: #666;
       font-size: 16px;
     }
+
     /* 降级内容样式优化 */
     .fallback-content {
       width: 100%;
@@ -65,15 +72,18 @@
       border: 1px dashed #ff4444;
       border-radius: 8px;
     }
+
     .fallback-content h3 {
       color: #333;
       margin-bottom: 10px;
       font-size: 18px;
     }
+
     .fallback-content p {
       color: #666;
       margin-bottom: 20px;
     }
+
     .fallback-content a {
       color: #165DFF;
       text-decoration: none;
@@ -83,11 +93,13 @@
       border-radius: 4px;
       transition: all 0.2s ease;
     }
+
     .fallback-content a:hover {
       background-color: #165DFF;
       color: #fff;
       text-decoration: none;
     }
+
     .info-tip {
       text-align: center;
       margin-top: 20px;
@@ -96,21 +108,19 @@
     }
   </style>
 </head>
+
 <body>
   <div class="wrapper">
     <!-- 说明: object不只是可以用于pdf,其他文档等都是可以的 -->
-    <object 
-      class="pdf-object"
-      data="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
-      type="application/pdf"
-      standby="正在加载PDF文档..."
-      onload="this.querySelector('.loading-tip').style.display='none'"
-    >
+    <object class="pdf-object" data="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf"
+      type="application/pdf" standby="正在加载PDF文档..." onload="this.querySelector('.loading-tip').style.display='none'">
       <!-- 加载提示（PDF加载完成后自动隐藏） -->
       <div class="loading-tip">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" stroke="#165DFF" stroke-width="2" stroke-dasharray="18.8496 18.8496" stroke-dashoffset="9.4248" stroke-linecap="round">
-            <animatetransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1.5s" repeatCount="indefinite"/>
+          <circle cx="12" cy="12" r="10" stroke="#165DFF" stroke-width="2" stroke-dasharray="18.8496 18.8496"
+            stroke-dashoffset="9.4248" stroke-linecap="round">
+            <animatetransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1.5s"
+              repeatCount="indefinite" />
           </circle>
         </svg>
         <span>正在加载PDF，请稍候...</span>
@@ -129,7 +139,8 @@
       <div class="fallback-content">
         <h3>❌ 无法通过object标签内嵌预览PDF</h3>
         <p>可能是浏览器不支持或网络加载异常</p>
-        <a href="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf" target="_blank" download="测试PDF文档">
+        <a href="https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf" target="_blank"
+          download="测试PDF文档">
           点击在新窗口打开/下载PDF
         </a>
         <p style="margin-top: 15px; font-size: 14px;">推荐使用Chrome、Edge、Firefox现代浏览器</p>
@@ -138,4 +149,5 @@
     <p class="info-tip">✅ 基于object标签的PDF预览方案（支持工具栏、缩放、打印功能）</p>
   </div>
 </body>
+
 </html>
