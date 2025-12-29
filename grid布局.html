@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid布局全语法精通实战</title>
+  <style>
+    /* 全局样式重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", Arial, sans-serif;
+    }
+
+    body {
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    /* 章节标题样式 */
+    .section {
+      margin: 40px 0 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #2196F3;
+    }
+
+    .section h2 {
+      color: #333;
+      font-size: 24px;
+    }
+
+    .section p {
+      margin-top: 10px;
+      color: #666;
+      font-size: 16px;
+    }
+
+    /* 通用网格容器样式 */
+    .grid-demo {
+      margin: 20px 0;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #fff;
+    }
+
+    /* 通用网格项样式 */
+    .grid-item {
+      padding: 15px;
+      color: white;
+      font-size: 16px;
+      text-align: center;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .grid-item:hover {
+      transform: scale(1.02);
+    }
+
+    /* ==================== 1. 基础语法：显式网格 + 区域命名 ==================== */
+    .grid-basic {
+      display: grid;
+      /* 列定义：固定值 + 比例值 + 自动值 */
+      grid-template-columns: 100px 1fr 2fr;
+      /* 行定义：固定值 + 自动值 + 最小值最大值范围 */
+      grid-template-rows: 60px auto minmax(80px, 1fr);
+      /* 网格间距：行间距 + 列间距 */
+      grid-gap: 10px 15px;
+      /* 区域命名 */
+      grid-template-areas:
+        "header header header"
+        "sidebar main main"
+        "footer footer footer";
+      height: 400px;
+    }
+
+    .item-header {
+      grid-area: header;
+      background-color: #2196F3;
+    }
+
+    .item-sidebar {
+      grid-area: sidebar;
+      background-color: #4CAF50;
+    }
+
+    .item-main {
+      grid-area: main;
+      background-color: #FF9800;
+    }
+
+    .item-footer {
+      grid-area: footer;
+      background-color: #9C27B0;
+    }
+
+    /* ==================== 2. 进阶：重复函数 + 跨度控制 ==================== */
+    .grid-advance {
+      display: grid;
+      /* 重复函数：4列等宽 */
+      grid-template-columns: repeat(4, 1fr);
+      /* 重复函数：3行，每行100px */
+      grid-template-rows: repeat(3, 100px);
+      grid-gap: 8px;
+      height: 350px;
+    }
+
+    /* 跨度控制 */
+    .item-span-2col {
+      grid-column: span 2;
+      /* 跨2列 */
+      background-color: #E91E63;
+    }
+
+    .item-span-2row {
+      grid-row: span 2;
+      /* 跨2行 */
+      background-color: #00BCD4;
+    }
+
+    .item-line {
+      /* 网格线定位：从第2列到第4列，第1行到第3行 */
+      grid-column: 2 / 4;
+      grid-row: 1 / 3;
+      background-color: #8BC34A;
+    }
+
+    /* ==================== 3. 对齐体系：容器 + 项目 ==================== */
+    .grid-align {
+      display: grid;
+      grid-template-columns: repeat(3, 150px);
+      grid-template-rows: repeat(2, 100px);
+      grid-gap: 10px;
+      /* 容器对齐：整个网格在容器中的位置 */
+      justify-content: center;
+      align-content: center;
+      /* 项目对齐：单元格内内容的默认对齐 */
+      justify-items: center;
+      align-items: center;
+      height: 300px;
+      border: 2px solid #666;
+    }
+
+    /* 单独控制某个项目的对齐 */
+    .item-self {
+      justify-self: start;
+      align-self: end;
+      background-color: #FF5722;
+    }
+
+    /* ==================== 4. 隐式网格 + 自动流 ==================== */
+    .grid-implicit {
+      display: grid;
+      /* 显式网格：3列 */
+      grid-template-columns: repeat(3, 1fr);
+      /* 隐式网格行高 */
+      grid-auto-rows: 80px;
+      /* 自动流：先列后行，空白填充 */
+      grid-auto-flow: dense;
+      grid-gap: 10px;
+      height: 400px;
+    }
+
+    /* ==================== 5. 响应式网格：auto-fit + minmax + clamp ==================== */
+    .grid-responsive {
+      display: grid;
+      /* 核心：自动适配列数，最小200px（自适应不超过280px），最大1fr */
+      grid-template-columns: repeat(auto-fit, minmax(clamp(200px, 100%, 280px), 1fr));
+      grid-gap: 16px;
+    }
+
+    .responsive-card {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .responsive-card h3 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .responsive-card p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* ==================== 6. 综合实战：复杂布局（Dashboard） ==================== */
+    .grid-dashboard {
+      display: grid;
+      /* 复杂列定义：固定 + 比例 + 自适应 */
+      grid-template-columns: 200px repeat(3, 1fr) 150px;
+      /* 复杂行定义：混合值 */
+      grid-template-rows: 70px 1fr 1fr 80px;
+      grid-gap: 10px;
+      height: 600px;
+      grid-template-areas:
+        "nav header header header aside"
+        "nav main main chart aside"
+        "nav table table chart aside"
+        "nav footer footer footer footer";
+    }
+
+    .item-nav {
+      grid-area: nav;
+      background-color: #3F51B5;
+    }
+
+    .item-dash-header {
+      grid-area: header;
+      background-color: #009688;
+    }
+
+    .item-dash-main {
+      grid-area: main;
+      background-color: #FF7043;
+    }
+
+    .item-chart {
+      grid-area: chart;
+      background-color: #9E9E9E;
+    }
+
+    .item-table {
+      grid-area: table;
+      background-color: #673AB7;
+    }
+
+    .item-aside {
+      grid-area: aside;
+      background-color: #CDDC39;
+    }
+
+    .item-dash-footer {
+      grid-area: footer;
+      background-color: #795548;
+    }
+
+    /* 响应式适配 */
+    @media (max-width: 992px) {
+      .grid-dashboard {
+        grid-template-columns: 1fr;
+        grid-template-rows: 60px 80px 1fr 1fr 1fr 80px 60px;
+        grid-template-areas:
+          "nav"
+          "header"
+          "main"
+          "chart"
+          "table"
+          "aside"
+          "footer";
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1 style="text-align: center; color: #2196F3; margin-bottom: 30px;">Grid布局全语法精通实战</h1>
+
+  <!-- 1. 基础语法：显式网格 + 区域命名 -->
+  <div class="section">
+    <h2>1. 基础语法：显式网格 + 区域命名</h2>
+    <p>核心：grid-template-columns/rows（行列定义）、grid-template-areas（区域命名）、grid-area（关联区域）、grid-gap（间距）</p>
+    <div class="grid-demo grid-basic">
+      <div class="grid-item item-header">Header（grid-area: header）</div>
+      <div class="grid-item item-sidebar">Sidebar（grid-area: sidebar）</div>
+      <div class="grid-item item-main">Main（grid-area: main）</div>
+      <div class="grid-item item-footer">Footer（grid-area: footer）</div>
+    </div>
+  </div>
+
+  <!-- 2. 进阶：重复函数 + 跨度控制 -->
+  <div class="section">
+    <h2>2. 进阶：重复函数 + 跨度控制</h2>
+    <p>核心：repeat()（重复函数）、grid-column/row（跨度）、span（跨列/行）、网格线编号</p>
+    <div class="grid-demo grid-advance">
+      <div class="grid-item item-span-2col">跨2列（span 2）</div>
+      <div class="grid-item">普通项1</div>
+      <div class="grid-item item-span-2row">跨2行（span 2）</div>
+      <div class="grid-item item-line">网格线定位（2/4列，1/3行）</div>
+      <div class="grid-item">普通项2</div>
+      <div class="grid-item">普通项3</div>
+      <div class="grid-item">普通项4</div>
+      <div class="grid-item">普通项5</div>
+    </div>
+  </div>
+
+  <!-- 3. 对齐体系：容器 + 项目 -->
+  <div class="section">
+    <h2>3. 对齐体系：容器 + 项目</h2>
+    <p>核心：justify-content/align-content（容器对齐）、justify-items/align-items（项目默认对齐）、justify-self/align-self（单个项目对齐）</p>
+    <div class="grid-demo grid-align">
+      <div class="grid-item" style="background-color: #2196F3;">默认居中</div>
+      <div class="grid-item item-self">单独对齐（start/end）</div>
+      <div class="grid-item" style="background-color: #4CAF50;">默认居中</div>
+      <div class="grid-item" style="background-color: #FF9800;">默认居中</div>
+      <div class="grid-item" style="background-color: #9C27B0;">默认居中</div>
+      <div class="grid-item" style="background-color: #E91E63;">默认居中</div>
+    </div>
+  </div>
+
+  <!-- 4. 隐式网格 + 自动流 -->
+  <div class="section">
+    <h2>4. 隐式网格 + 自动流</h2>
+    <p>核心：grid-auto-rows/columns（隐式网格尺寸）、grid-auto-flow（自动流方向/dense填充）</p>
+    <div class="grid-demo grid-implicit">
+      <div class="grid-item" style="background-color: #2196F3;">显式网格项1</div>
+      <div class="grid-item" style="background-color: #4CAF50;">显式网格项2</div>
+      <div class="grid-item" style="background-color: #FF9800;">显式网格项3</div>
+      <div class="grid-item" style="background-color: #9C27B0;">隐式网格项4</div>
+      <div class="grid-item" style="background-color: #E91E63;">隐式网格项5</div>
+      <div class="grid-item" style="background-color: #00BCD4;">隐式网格项6</div>
+      <div class="grid-item" style="background-color: #8BC34A;">隐式网格项7</div>
+      <div class="grid-item" style="background-color: #FF5722;">隐式网格项8</div>
+      <div class="grid-item" style="background-color: #3F51B5;">隐式网格项9</div>
+      <div class="grid-item" style="background-color: #795548;">隐式网格项10</div>
+    </div>
+  </div>
+
+  <!-- 5. 响应式网格：auto-fit + minmax + clamp -->
+  <div class="section">
+    <h2>5. 响应式网格：auto-fit + minmax + clamp</h2>
+    <p>核心：auto-fit（自动适配列数）、minmax（尺寸范围）、clamp（自适应最大值/最小值）</p>
+    <div class="grid-demo grid-responsive">
+      <div class="responsive-card">
+        <h3>响应式卡片1</h3>
+        <p>宽度自适应，最小200px，最大1fr</p>
+      </div>
+      <div class="responsive-card">
+        <h3>响应式卡片2</h3>
+        <p>自动换行，适配不同屏幕</p>
+      </div>
+      <div class="responsive-card">
+        <h3>响应式卡片3</h3>
+        <p>clamp(200px, 100%, 280px) 精准控制</p>
+      </div>
+      <div class="responsive-card">
+        <h3>响应式卡片4</h3>
+        <p>Grid响应式无需媒体查询（基础版）</p>
+      </div>
+      <div class="responsive-card">
+        <h3>响应式卡片5</h3>
+        <p>移动端自动适配为单列</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 综合实战：复杂布局（Dashboard） -->
+  <div class="section">
+    <h2>6. 综合实战：复杂Dashboard布局</h2>
+    <p>核心：混合行列定义、复杂区域命名、响应式适配、Grid综合应用</p>
+    <div class="grid-demo grid-dashboard">
+      <div class="grid-item item-nav">导航（Nav）</div>
+      <div class="grid-item item-dash-header">头部（Header）</div>
+      <div class="grid-item item-dash-main">主内容（Main）</div>
+      <div class="grid-item item-chart">图表（Chart）</div>
+      <div class="grid-item item-table">数据表格（Table）</div>
+      <div class="grid-item item-aside">侧边栏（Aside）</div>
+      <div class="grid-item item-dash-footer">底部（Footer）</div>
+    </div>
+  </div>
+
+  <!-- 语法速查表 -->
+  <div class="section" style="margin-top: 60px;">
+    <h2>Grid布局核心语法速查表</h2>
+    <div style="background-color: #f8f8f8; padding: 20px; border-radius: 8px; margin-top: 10px;">
+      <pre style="font-size: 14px; color: #333; line-height: 1.8;">
+/* 容器核心属性 */
+display: grid | inline-grid;                // 启用Grid布局
+grid-template-columns: 100px 1fr minmax(100px, 1fr); // 列定义
+grid-template-rows: repeat(3, 1fr);        // 行定义（重复函数）
+grid-template-areas: "a a b" "c d d";      // 区域命名
+grid-gap: 10px 15px;                       // 间距（行+列）
+grid-auto-rows: 80px;                       // 隐式网格行高
+grid-auto-flow: row | column | dense;      // 自动流方向
+justify-content: start | center | space-between; // 容器水平对齐
+align-content: start | center | space-around;    // 容器垂直对齐
+justify-items: start | center | end;       // 项目水平对齐
+align-items: start | center | end;         // 项目垂直对齐
+
+/* 项目核心属性 */
+grid-area: header;                         // 关联命名区域
+grid-column: 1 / 3 | span 2;               // 列跨度（网格线/跨列数）
+grid-row: 2 / 4 | span 2;                  // 行跨度（网格线/跨行数）
+justify-self: start | center | end;        // 单个项目水平对齐
+align-self: start | center | end;          // 单个项目垂直对齐
+
+/* 高级函数 */
+repeat(auto-fit, minmax(200px, 1fr));      // 响应式自动适配列数
+clamp(100px, 50%, 300px);                  // 自适应尺寸（最小/首选/最大）
+fit-content(200px);                        // 自适应不超过最大值
+      </pre>
+    </div>
+  </div>
+</body>
+
+</html>
