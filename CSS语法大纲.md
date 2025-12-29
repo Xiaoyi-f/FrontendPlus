@@ -96,7 +96,8 @@
   child {width: inherit;}
   initial 恢复属性的浏览器默认值，取消继承 
   child { color: initial; }
-  unset 智能重置：能继承则 inherit，否则 initial child { all: unset; }
+  unset 智能重置：能继承则 inherit，否则 initial 
+  child { all: unset; }
 
 4.层叠性特性
 层叠性说的是对于同一个元素的重复属性配置的层叠，不是对于选择器整体直接层叠，而是对于样式属性的层叠

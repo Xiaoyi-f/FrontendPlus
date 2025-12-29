@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- html本身是一个大盒子 -->
 <html lang="zh-CN">
 
 <head>
@@ -11,6 +12,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      /* 浏览器会从系统库中寻找字体，找到就使用，windows系统下系统字体一般就是在C:\Windows\Fonts\路径下 */
       font-family: "Microsoft Yahei", Arial, sans-serif;
     }
 
@@ -205,6 +207,8 @@
   </style>
 </head>
 
+<!-- body本身是一个大盒子 -->
+
 <body>
   <h1 style="text-align: center; color: #2196F3; margin-bottom: 30px;">Grid布局核心实战</h1>
 
@@ -313,7 +317,7 @@ justify/align-self: 对齐方式;          // 单个项目对齐
 repeat(次数/auto-fit, 尺寸);            // 重复定义
 minmax(最小值, 最大值);                 // 尺寸范围
 clamp(最小值, 首选值, 最大值);          // 自适应尺寸
-      </pre>
+</pre>
     </div>
   </div>
 </body>
