@@ -61,6 +61,20 @@
   ::placeholder {} 提示选择器
   ::backdrop {} 背景选择器
 
+  伪元素技巧->::before ::after默认是inline类型，但是加上定位会自动切换为inline-block，当然也可以自己显示声明display:inline-block：
+  h1 {
+    position: relative;
+  }
+  h1::after {
+    content: "";
+    background-color: linear-gradient(to right, red, blue);
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
 2.继承特性
   (1)能继承的核心属性 -> 列表/文本
     1.color 文字颜色文本样式 
@@ -203,7 +217,10 @@ box-shadow: h-offset v-offset blur spread color | inset | initial | inherit;
 颜色（color）：阴影的颜色；取值规则：支持 #十六进制 / RGB/HSL（比如 #ccc、rgb (0,0,0,0.2)）；注意点：省略则默认黑色（偏深，建议显式写）
 inset：阴影从「外部」变「内部」；取值规则：加这个关键词 = 内阴影，不加 = 外阴影；注意点：要写在参数最后 / 最前都可以
 
+类(外)边框 -> 但是不占空间
+不受border-radius的影响
 outline: 2px solid blue; /* 外轮廓（不占空间） */
+# 边框和轮廓的距离，能设定负数
 outline-offset: 5px; /* 轮廓偏移 */
 
 ## 二、定位与布局
@@ -214,6 +231,7 @@ display: flow-root; /* 清除浮动，替代BFC */
 BFC（Block Formatting Context）是CSS中的一个概念，中文称为"块级格式化上下文"
 
 /* 定位 */
+->左右只能写一个，上写只能写一个，写了左就只能写左上下同理，再写右是没有用的
 position: static | relative | absolute | fixed | sticky;
 static是默认形式->默认文档流，无top/right/bottom/left和z-index影响
 relative相对于自身原位置，也不脱离文档流
@@ -230,24 +248,50 @@ absolute绝对定位->脱离文档流，相对于父盒子定位
 fixed固定定位->脱离文档流，相对于视口(body)定位
 position: sticky 是 CSS3 引入的一种定位方式，结合了 relative 和 fixed 的特性
 
+注意：位置大多用左上角点来相对
+学会结合translate使用
+
+<!-- 常用定位妙招 -->
+parent {
+  position: relative;
+}
+son {
+  position: absolute;
+}
+若父元素没写position，absolute可能会相对于视口来定位，因为absolute是相对于最近的定位祖先元素的
+脱离文档流就可能浮动起来，覆盖...
+
 top: 10px;
 left: 50%;
 transform: translateX(-50%); /* 配合定位居中 */
+
+static以外的absolut、fixed、relative、sticky才能使用z-index
 z-index: 999; /* 层级，仅定位元素生效 */
 z-index: calc(100 + var(--z-index-base)); /* 结合变量+计算 */
 
 /* 浮动 */
+这种浮动模式需要清除浮动，否则父级盒子无法感知到子元素的尺寸，他们已经脱离了文档流
 float: left | right | none;
+<!-- 用于父级清除浮动 -->
+overflow: hidden;  /* 清除浮动，隐藏又被检测又把父级盒子撑起来，就正常显示 */
+display: flow-root;  /* 代替overflow: hidden; */
+
+阻止当前元素出现在左浮动/右浮动的浮动元素周围，因为块级元素的边界还是可能会和浮动元素重叠，因为浮动元素可能处于溢出状态，但是它们又有父级大盒子，当前块级元素只会相对于他们的父级大盒子，然后可能会和浮动元素影响到
 clear: both | left | right;
 
 /* 溢出处理 */
 overflow: visible | hidden | scroll | auto;
 overflow-x: hidden;
 overflow-y: auto;
+
+注意用法：
 （overflow: hidden;
   text-overflow: ellipsis;
   必须一起使用才会有效果一般）
+
 text-overflow: ellipsis; /* 文字省略号，需配合white-space:nowrap和overflow:hidden */
+
+文本换行逻辑处理
 white-space: nowrap | normal | pre | pre-wrap;
 
 /* 可见性 */
@@ -280,6 +324,10 @@ flex-basis: auto | 200px | 50%;  项目初始在主轴上占据的空间
 align-self: auto | flex-start | center | flex-end | baseline; /* 单独对齐 */
 order: 2; /* 排列顺序，数值越小越靠前 */
 所有弹性项目的order值默认都是0
+
+align-items → 管每一块积木在自己那一排里的副轴位置，不管一排还是好几排，都管用
+align-content → 只在积木挤成好几排的时候才管用，管的是这几排积木整体的副轴间距，要是就一排积木，这属性等于白设，啥用没有
+简单说：align-items 管单个，align-content 管多行整体
 
 ## 四、网格布局（Grid）
 display: grid | inline-grid;
