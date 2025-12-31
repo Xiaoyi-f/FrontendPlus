@@ -106,3 +106,15 @@ git push origin dev
 # 删除本地的repo-a远程别名（合并完成后无需保留，不影响甲/乙仓库本身）
 #    - 仅删除本地别名，不会影响甲仓库的远程数据
 git remote remove repo-a
+
+
+# 替换为你复制的 GitHub 匿名邮箱
+git config --global user.email "你的匿名邮箱@users.noreply.github.com"
+# 验证修改：输出刚设置的匿名邮箱即成功
+git config --global user.email
+
+# 替换为你的实际信息：用户名（如Xiaoyi-f） + 匿名邮箱（160247210+Xiaoyi-f@users.noreply.github.com）
+git commit --amend --author="Xiaoyi-f <160247210+Xiaoyi-f@users.noreply.github.com>"
+
+git push -u origin master
+
