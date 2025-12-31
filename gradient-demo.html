@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>gradient</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 20px;
+      font-family: "微软雅黑", sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      /* auto-fit 自动适应容器宽度：根据容器的可用空间自动调整网格列数 */
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+
+    .box {
+      height: 300px;
+      border: 3px solid #333;
+      border-radius: 8px;
+      padding: 20px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* text-align: center; */
+    }
+
+    .title {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .box-1 {
+      background-color: #f5f5f5;
+      /* 设置背景图片 */
+      background-image: url("https://picsum.photos/80/80");
+      /* 不重复叠加图片 */
+      background-repeat: no-repeat;
+      /* 背景图片定位->相对于容器，距离容器右边距10px，距离容器下边距10px */
+      background-position: right 10px bottom 10px;
+      color: #333;
+    }
+
+    .box-2 {
+      /* background-repeat: repeat;  图片采用了覆盖范围，不会再显示重复图片 */
+      background: #e0e0e0 url("https://picsum.photos/800/450") no-repeat center / cover;
+    }
+
+    .box-3 {
+      border: 10px dashed #666;
+      padding: 20px;
+      background-image: url("https://picsum.photos/800/450");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      /* padding-box：从内边距区域开始（包括 padding 区域） content-box：只在内容区域显示 border-box：从边框开始显示 */
+      /* background-origin: padding-box; */
+      /* 决定从哪里开始绘制 */
+      /* content-box：背景只显示在内容区域，不显示在 padding 和 border 区域 padding-box：背景显示在内容+内边距区域 border-box：背景显示在整个边框区域内 */
+      background-clip: content-box;
+      /* 决定从哪里(边界)停止显示 */
+      color: #333;
+      overflow: auto;
+      /* 滚动条 -> 溢出就自动显示滚动条*/
+    }
+
+    .box-4 {
+      /* 线性渐变函数，创建从一个颜色到另一个颜色的平滑过渡， */
+      background: linear-gradient(45deg, #ff0000 0%, #ffff00 50%, #0000ff 100%);
+      /* 关联坐标轴，关联箭头指向 0deg - 向上（从下到上） 45deg - 向右上角 90deg - 向右（从左到右） 180deg - 向下（从上到下） */
+      /* 百分号表示从占比的空间开始显示这个颜色 */
+    }
+
+    .box-5 {
+      background:
+        /* 图片背景和渐变色可以结合 */
+        linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 60%),
+        url("https://picsum.photos/800/450") no-repeat center / cover;
+    }
+
+    .box-6 {
+      /* 径向渐变 */
+      /* radial-gradient(形状 大小 at 位置, 颜色1 位置, 颜色2 位置)
+      由中心向外辐射渐变 */
+      background: radial-gradient(ellipse 80% 60% at 20% 20%, #ffffff 0%, #000000 100%);
+    }
+
+    .box-7 {
+      border-radius: 50%;
+      height: 300px;
+      /* 圆锥渐变，按照一个圆然后指定度数来转，实现某个区块颜色一样 */
+      background: conic-gradient(#ff0000 0deg 90deg,
+          #ffff00 90deg 180deg,
+          #00ff00 180deg 270deg,
+          #0000ff 270deg 360deg);
+    }
+
+    .box-8 {
+      background: repeating-linear-gradient(45deg,
+          #ff6b6b 0px,
+          /*开始位置*/
+          #ff6b6b 15px,
+          /*结束位置*/
+          #4ecdc4 15px,
+          #4ecdc4 30px,
+          #dddddd 30px,
+          #dddddd 45px);
+    }
+
+    .box-9 {
+      background: linear-gradient(90deg, #00f, #90f, #f09);
+      background-clip: text;
+      /* 背景裁剪到文本 */
+      color: transparent;
+      /* 文字透明，保留文字框 */
+      /* 文字透明显示背景 */
+      font-size: 40px;
+      border-color: #00f;
+    }
+
+    .box-10 {
+      /* 三层背景：渐变蒙层 → 图片 → 格子纹理 */
+      background:
+        linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 70%),
+        url("https://picsum.photos/1200/800") no-repeat center / cover,
+        repeating-linear-gradient(45deg, #666 0px, #666 10px, #888 10px, #888 20px);
+      /* 背景混合模式：让纹理和图片融合 */
+      background-blend-mode: overlay;
+      /* background-blend-mode - 控制多个背景层之间的颜色混合方式 */
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="title">CSS背景与渐变 一站式综合练习</div>
+    <div class="box box-1">1.纯色背景 + 图片(右下不重复)</div>
+    <div class="box box-2">2.背景缩写 + cover(图片覆盖)</div>
+    <div class="box box-3">3.背景固定 + 裁剪/起始位置(滚动看效果)</div>
+    <div class="box box-4">4.线性渐变(45度 红黄蓝)</div>
+    <div class="box box-5">5.透明渐变蒙层(图片 + 渐变)</div>
+    <div class="box box-6">6.径向渐变(椭圆 左上20%位置)</div>
+    <div class="box box-7">7.圆锥渐变(四色饼图)</div>
+    <div class="box box-8">8.重复渐变(45度 条纹背景)</div>
+    <div class="box box-9">9.渐变文字(background-clip: text)</div>
+    <div class="box box-10">10.综合背景(纹理 + 图片 + 渐变蒙层)</div>
+  </div>
+</body>
+
+</html>

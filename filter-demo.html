@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Filter 滤镜 一站式综合学习</title>
+  <style>
+    /* 全局样式：统一布局+基础样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      padding: 2rem;
+      background: #f5f5f5;
+      font-family: "微软雅黑", sans-serif;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .title {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .filter-card {
+      border: 2px solid #333;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .filter-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .img-box {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* 基础过渡：修改参数时更顺滑 */
+      transition: filter 0.4s ease;
+    }
+
+    /* 原图对比层（hover显示） */
+    .img-box .origin {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .img-box:hover .origin {
+      opacity: 1;
+    }
+
+    .card-info {
+      padding: 1rem;
+    }
+
+    .card-info h3 {
+      font-size: 18px;
+      color: #222;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-info p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* ========== 1. 模糊滤镜 blur ========== */
+    #blur img:not(.origin) {
+      filter: blur(2px);
+    }
+
+    /* ========== 2. 亮度滤镜 brightness ========== */
+    #brightness img:not(.origin) {
+      filter: brightness(1.3);
+    }
+
+    /* ========== 3. 对比度滤镜 contrast ========== */
+    #contrast img:not(.origin) {
+      filter: contrast(150%);
+    }
+
+    /* ========== 4. 灰度滤镜 grayscale ========== */
+    #grayscale img:not(.origin) {
+      filter: grayscale(100%);
+    }
+
+    /* ========== 5. 色相旋转 hue-rotate ========== */
+    #hue-rotate img:not(.origin) {
+      filter: hue-rotate(90deg);
+    }
+
+    /* ========== 6. 反色滤镜 invert ========== */
+    #invert img:not(.origin) {
+      filter: invert(100%);
+    }
+
+    /* ========== 7. 透明度滤镜 opacity ========== */
+    #opacity img:not(.origin) {
+      filter: opacity(0.7);
+    }
+
+    /* ========== 8. 饱和度滤镜 saturate ========== */
+    #saturate img:not(.origin) {
+      filter: saturate(200%);
+    }
+
+    /* ========== 9. 褐色滤镜 sepia ========== */
+    #sepia img:not(.origin) {
+      filter: sepia(80%);
+    }
+
+    /* ========== 10. 投影滤镜 drop-shadow ========== */
+    #drop-shadow img:not(.origin) {
+      filter: drop-shadow(0 4px 6px rgba(255, 100, 100, 0.5));
+    }
+
+    /* ========== 11. 组合滤镜（实战常用） ========== */
+    #combo img:not(.origin) {
+      /* 复古清新滤镜：模糊+提亮+对比度+褐色+饱和度 */
+      filter: blur(0.5px) brightness(1.1) contrast(110%) sepia(20%) saturate(130%);
+    }
+
+    /* ========== 12. 交互特效（hover切换滤镜） ========== */
+    #interactive img:not(.origin) {
+      filter: grayscale(100%) brightness(0.9);
+    }
+
+    #interactive:hover img:not(.origin) {
+      filter: grayscale(0) brightness(1.2) saturate(150%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="title">CSS Filter 滤镜 一站式综合学习（hover看原图）</div>
+
+  <!-- 1. 模糊滤镜 -->
+  <div class="filter-card" id="blur">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=1" alt="模糊效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=1" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>blur(2px) → 模糊效果</h3>
+      <p>参数：像素值（越大越模糊）<br>场景：毛玻璃、背景朦胧、氛围感</p>
+    </div>
+  </div>
+
+  <!-- 2. 亮度滤镜 -->
+  <div class="filter-card" id="brightness">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=2" alt="亮度效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=2" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>brightness(1.3) → 亮度提升</h3>
+      <p>参数：1=原图，>1变亮/<1变暗<br>场景：高光、暗角、hover提亮</p>
+    </div>
+  </div>
+
+  <!-- 3. 对比度滤镜 -->
+  <div class="filter-card" id="contrast">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=3" alt="对比度效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=3" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>contrast(150%) → 对比度增强</h3>
+      <p>参数：100%=原图，>100%更通透<br>场景：提升图片质感、黑白强化</p>
+    </div>
+  </div>
+
+  <!-- 4. 灰度滤镜 -->
+  <div class="filter-card" id="grayscale">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=4" alt="灰度效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=4" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>grayscale(100%) → 纯黑白</h3>
+      <p>参数：0%-100%，100%全灰<br>场景：黑白照片、网站置灰、hover变色</p>
+    </div>
+  </div>
+
+  <!-- 5. 色相旋转 -->
+  <div class="filter-card" id="hue-rotate">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=5" alt="色相旋转效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=5" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>hue-rotate(90deg) → 色相旋转</h3>
+      <p>参数：角度（0-360deg）<br>场景：调整主色调、多彩滤镜</p>
+    </div>
+  </div>
+
+  <!-- 6. 反色滤镜 -->
+  <div class="filter-card" id="invert">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=6" alt="反色效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=6" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>invert(100%) → 完全反色</h3>
+      <p>参数：0%-100%，100%负片效果<br>场景：负片、深色模式快速适配</p>
+    </div>
+  </div>
+
+  <!-- 7. 透明度滤镜 -->
+  <div class="filter-card" id="opacity">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=7" alt="透明度效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=7" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>opacity(0.7) → 70%不透明</h3>
+      <p>区别于opacity属性：支持SVG+组合滤镜<br>场景：半透明、SVG透明处理</p>
+    </div>
+  </div>
+
+  <!-- 8. 饱和度滤镜 -->
+  <div class="filter-card" id="saturate">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=8" alt="饱和度效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=8" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>saturate(200%) → 饱和度翻倍</h3>
+      <p>参数：0%无色彩，>100%更鲜艳<br>场景：提升色彩、低饱和高级感</p>
+    </div>
+  </div>
+
+  <!-- 9. 褐色滤镜 -->
+  <div class="filter-card" id="sepia">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=9" alt="褐色效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=9" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>sepia(80%) → 复古褐色</h3>
+      <p>参数：0%-100%，100%纯褐色<br>场景：老照片、怀旧风格</p>
+    </div>
+  </div>
+
+  <!-- 10. 投影滤镜 -->
+  <div class="filter-card" id="drop-shadow">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=10" alt="投影效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=10" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>drop-shadow(0 4px 6px 红)</h3>
+      <p>区别于box-shadow：只给非透明区加阴影<br>场景：透明PNG图标、不规则元素投影</p>
+    </div>
+  </div>
+
+  <!-- 11. 组合滤镜（实战） -->
+  <div class="filter-card" id="combo">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=11" alt="组合滤镜效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=11" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>组合滤镜 → 复古清新风</h3>
+      <p>blur+brightness+contrast+sepia+saturate<br>场景：定制图片滤镜、网红效果</p>
+    </div>
+  </div>
+
+  <!-- 12. 交互特效 -->
+  <div class="filter-card" id="interactive">
+    <div class="img-box">
+      <img src="https://picsum.photos/800/500?nature=12" alt="交互滤镜效果">
+      <img class="origin" src="https://picsum.photos/800/500?nature=12" alt="原图">
+    </div>
+    <div class="card-info">
+      <h3>hover交互 → 黑白变彩色</h3>
+      <p>默认：grayscale+brightness<br>hover：grayscale(0)+提亮+饱和</p>
+    </div>
+  </div>
+</body>
+
+</html>

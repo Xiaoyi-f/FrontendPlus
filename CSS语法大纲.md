@@ -451,14 +451,16 @@ backface-visibility: visible | hidden; /* 背面可见性 */
 ## 八、列表与表格
 /* 列表 */
 list-style: none | disc | circle | square | decimal;
+<!-- list-style得详细写法 -->
 list-style-type: lower-roman | upper-alpha | none;
+
 list-style-position: inside | outside;
 list-style-image: url("icon.png");
 
 /* 表格 */
 border-collapse: collapse | separate; /* 边框合并 */
-border-spacing: 5px; /* 单元格间距 */
-table-layout: auto | fixed; /* 布局方式 */
+border-spacing: 5px; /* 单元格间距->separate模式才有用 */
+table-layout: auto | fixed; /* 布局方式，单元格的大小动态变化/固定 */
 caption-side: top | bottom; /* 标题位置 */
 empty-cells: show | hide; /* 空单元格显示 */
 
@@ -467,10 +469,10 @@ cursor: default | pointer | move | text | not-allowed | wait | help;
 cursor: url("custom-cursor.png"), pointer; /* 自定义光标 */
 pointer-events: auto | none; /* 事件穿透：none不响应鼠标事件 */
 user-select: none | auto | text | all; /* 禁止/允许文本选择 */
-resize: none | both | horizontal | vertical; /* 调整尺寸（textarea） */
-scroll-behavior: auto | smooth; /* 平滑滚动 */
-touch-action: auto | none | pan-x | pan-y; /* 触摸行为 */
-will-change: transform | opacity; /* 提前告知浏览器优化 */
+resize: none | both | horizontal | vertical; /* 控制元素是否可以被用户调整尺寸（textarea） */
+scroll-behavior: auto | smooth; /* 平滑滚动 一般用于锚点得结合使用 */
+touch-action: auto | none | pan-x | pan-y; /* 触摸行为，自动/禁止/横向滚动/纵向滚动 */
+will-change: transform | opacity | contents; /* 提前告知浏览器优化 */
 
 ## 十、滤镜与混合模式（高级视觉）
 /* 滤镜 */
