@@ -5,7 +5,7 @@
  git pull origin dev //若首次拉取远程dev分支到本地就用这个指令
  2.已有仓库更新
  git branch //查看本地所有分支（当前的分支有*来标记）-a可以查看远程和本地所有
- git checkout dev //切换到已有的本地分支 (通常是dev分支） == git switch dev
+ git checkout dev //切换到已有的本地分支 (通常是dev分支) == git switch dev
  git pull //拉取该分支的远程最新内容
  二. 把本地文件推上去：
  1.git status //查看文件当前状态
@@ -106,3 +106,13 @@ git push origin dev
 # 删除本地的repo-a远程别名（合并完成后无需保留，不影响甲/乙仓库本身）
 #    - 仅删除本地别名，不会影响甲仓库的远程数据
 git remote remove repo-a
+
+# 替换为你复制的 GitHub 匿名邮箱
+git config --global user.email "你的匿名邮箱@users.noreply.github.com"
+# 验证修改：输出刚设置的匿名邮箱即成功
+git config --global user.email
+
+# 替换为你的实际信息：用户名（如Xiaoyi-f） + 匿名邮箱（160247210+Xiaoyi-f@users.noreply.github.com）
+git commit --amend --author="Xiaoyi-f <160247210+Xiaoyi-f@users.noreply.github.com>"
+
+git push -u origin master
