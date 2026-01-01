@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS高端知识</title>
+  <style>
+    /* ========== 第一步：定义全局CSS变量 ========== */
+    :root {
+      /* 基础样式变量 -> 用来存值 */
+      --primary-color: #008cff;
+      --primary-light: color-mix(in srgb, var(--primary-color) 80%, white 20%);
+      --primary-dark: color-mix(in srgb, var(--primary-color) 80%, black 20%);
+      --font-size-base: 14px;
+      --font-size-lg: 18px;
+      --spacing: 16px;
+      --border-radius: 8px;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --modal-bg: rgba(0, 0, 0, 0.5);
+      /* 弹窗遮罩背景 */
+
+      /* 响应式断点 */
+      --breakpoint-sm: 768px;
+      --breakpoint-lg: 1200px;
+    }
+
+    /* 大屏适配：修改变量 */
+    @media (min-width: 1200px) {
+      :root {
+        --font-size-base: 16px;
+        --spacing: 20px;
+      }
+    }
+
+    /* ========== 第二步：通用样式 ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: var(--font-size-base);
+      /* ✅ 核心：全局禁止文字选中 */
+      user-select: none;
+      /* 兼容webkit内核浏览器（Chrome/Safari） */
+      -webkit-user-select: none;
+      /* 兼容Firefox */
+      -moz-user-select: none;
+      /* 兼容IE/Edge */
+      -ms-user-select: none;
+    }
+
+    /* ✅ 例外：弹窗内代码块允许选中（方便复制） */
+    .code-block {
+      user-select: text;
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+    }
+
+    .video-bg {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      z-index: -999;
+    }
+
+    body {
+      padding: var(--spacing);
+      background-color: hsl(210, 10%, 98%);
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+
+    .container {
+      max-width: clamp(300px, 80vw, 1200px);
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: clamp(18px, 5vw, calc(var(--font-size-lg) + 4px));
+      color: var(--primary-dark);
+      margin-bottom: calc(var(--spacing) * 2);
+      text-align: center;
+    }
+
+    /* ========== 第三步：卡片组件 ========== */
+    .card-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing);
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .card {
+      background-color: skyblue;
+      padding: calc(var(--spacing) * 1.5);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+      background-color: skyblue;
+    }
+
+    .card-title {
+      font-size: calc(var(--font-size-lg) + 2px);
+      color: var(--primary-color);
+      margin-bottom: calc(var(--spacing) / 2);
+    }
+
+    .card-desc {
+      color: hsl(210, 5%, 50%);
+      line-height: 1.6;
+      margin-bottom: var(--spacing);
+    }
+
+    /* ========== 第四步：按钮样式 ========== */
+    .btn {
+      padding: calc(var(--spacing) / 2) var(--spacing);
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-light);
+    }
+
+    .btn:active {
+      background-color: var(--primary-dark);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .btn-outline:hover {
+      background-color: color-mix(in srgb, var(--primary-color) 10%, white 90%);
+    }
+
+    /* ========== 第五步：特殊效果盒子 ========== */
+    .box {
+      width: min(500px, 100%);
+      height: max(200px, 30vh);
+      margin: var(--spacing) auto;
+      background-color: rgba(var(--primary-color-rgb), 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      filter: brightness(1.1) contrast(105%) drop-shadow(0 4px 6px rgba(0, 140, 255, 0.3));
+      border-radius: var(--border-radius);
+    }
+
+    /* 补充RGB格式主色变量 */
+    :root {
+      --primary-color-rgb: 0, 140, 255;
+    }
+
+    /* ========== 第六步：主题切换按钮 ========== */
+    .theme-switch {
+      position: fixed;
+      top: var(--spacing);
+      right: var(--spacing);
+      padding: calc(var(--spacing) / 2) var(--spacing);
+      background-color: skyblue;
+      border: 1px solid #eee;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    /* ========== 第七步：弹窗样式（核心：查看详情功能） ========== */
+    /* 遮罩层 */
+    .modal-mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: var(--modal-bg);
+      display: none;
+      /* 默认隐藏 */
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    /* 弹窗容器 */
+    .modal-container {
+      width: min(800px, 90vw);
+      max-height: 80vh;
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: calc(var(--spacing) * 2);
+      overflow-y: auto;
+      /* 内容超出滚动 */
+    }
+
+    /* 弹窗标题 */
+    .modal-title {
+      font-size: calc(var(--font-size-lg) + 4px);
+      color: var(--primary-dark);
+      margin-bottom: var(--spacing);
+      border-bottom: 1px solid #eee;
+      padding-bottom: calc(var(--spacing) / 2);
+    }
+
+    /* 弹窗内容 */
+    .modal-content {
+      line-height: 1.8;
+      color: #333;
+    }
+
+    /* 知识点标题 */
+    .modal-content h3 {
+      font-size: calc(var(--font-size-base) + 2px);
+      color: var(--primary-color);
+      margin: calc(var(--spacing)) 0 calc(var(--spacing) / 2) 0;
+    }
+
+    /* 代码块样式 */
+    .code-block {
+      background-color: #f5f5f5;
+      padding: var(--spacing);
+      border-radius: var(--border-radius);
+      margin: calc(var(--spacing) / 2) 0;
+      font-family: "Consolas", monospace;
+      font-size: calc(var(--font-size-base) - 1px);
+      color: #d63384;
+      overflow-x: auto;
+    }
+
+    /* 关闭按钮 */
+    .modal-close {
+      margin-top: calc(var(--spacing) * 1.5);
+      padding: calc(var(--spacing) / 2) var(--spacing);
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      background-color: var(--primary-light);
+    }
+  </style>
+</head>
+
+<body>
+
+  <video class="video-bg" autoplay loop muted playsinline src="background-video.mp4"></video>
+
+  <div class="container">
+    <h1>CSS高端知识</h1>
+
+    <!-- 主题切换按钮 -->
+    <div class="theme-switch" onclick="changeTheme()">切换主题色</div>
+
+    <!-- 卡片组件 -->
+    <div class="card-group">
+      <div class="card">
+        <h2 class="card-title">CSS变量</h2>
+        <p class="card-desc">全局定义，一键复用，支持媒体查询、hover、JS动态修改，告别硬编码！</p>
+        <button class="btn" onclick="openModal('variable')">查看详情</button>
+      </div>
+      <div class="card">
+        <h2 class="card-title">数学函数</h2>
+        <p class="card-desc">calc/min/max/clamp/minmax，动态计算尺寸，适配所有屏幕！</p>
+        <button class="btn" onclick="openModal('math')">查看详情</button>
+      </div>
+      <div class="card">
+        <h2 class="card-title">颜色函数</h2>
+        <p class="card-desc">rgb/rgba/hsl/hsla/color-mix，精准控制色彩，轻松做渐变！</p>
+        <button class="btn" onclick="openModal('color')">查看详情</button>
+      </div>
+    </div>
+
+    <!-- 特殊效果盒子 -->
+    <!-- 提示：可以把内容看成一个内容盒子 -->
+    <div class="box">
+      我是动态计算的盒子<br>宽度≤500px，高度≥200px
+    </div>
+  </div>
+
+  <!-- 弹窗遮罩层 -->
+  <div class="modal-mask" id="modalMask">
+    <div class="modal-container" id="modalContainer">
+      <h2 class="modal-title" id="modalTitle">知识点详情</h2>
+      <div class="modal-content" id="modalContent">
+        <!-- 内容由JS动态填充 -->
+      </div>
+      <button class="modal-close" onclick="closeModal()">关闭</button>
+    </div>
+  </div>
+
+  <script>
+    // ========== 弹窗核心功能 ==========
+    // 打开弹窗
+    function openModal(type) {
+      const mask = document.getElementById('modalMask');
+      const title = document.getElementById('modalTitle');
+      const content = document.getElementById('modalContent');
+
+      // 根据类型填充不同知识点内容
+      if (type === 'variable') {
+        title.innerText = 'CSS变量 小白完全掌握';
+        content.innerHTML = `
+          <h3>1. 什么是CSS变量？</h3>
+          <p>CSS变量（自定义属性）是把重复使用的样式值（颜色、间距、字号）存起来，用的时候直接调用，改一处就能全局生效，不用逐行改代码！</p>
+          <h3>2. 核心语法</h3>
+          <p><strong>定义变量</strong>：必须以--开头，写在:root里是全局变量，写在选择器里是局部变量</p>
+          <div class="code-block">:root {
+  --primary-color: #008cff; /* 全局主色 */
+  --spacing: 16px; /* 全局间距 */
+}</div>
+          <p><strong>使用变量</strong>：用var(变量名, 默认值)，变量不存在时用默认值兜底</p>
+          <div class="code-block">.btn {
+  color: var(--primary-color); /* 调用主色 */
+  padding: var(--spacing, 20px); /* 调用间距，变量不存在则用20px */
+}</div>
+          <h3>3. 新手必学技巧</h3>
+          <p>① 媒体查询改变量：大屏时自动调大间距/字号</p>
+          <div class="code-block">@media (min-width: 1200px) {
+  :root { --spacing: 20px; }
+}</div>
+          <p>② JS动态改变量：点击按钮换主题色（就是页面右上角的功能）</p>
+          <div class="code-block">document.documentElement.style.setProperty('--primary-color', '#ff6600');</div>
+          <h3>4. 避坑点</h3>
+          <p>❌ 变量名区分大小写：--Color和--color是两个变量</p>
+          <p>❌ 不能直接用在媒体查询条件里：@media (min-width: var(--breakpoint)) 无效</p>
+        `;
+      } else if (type === 'math') {
+        title.innerText = 'CSS数学函数 小白完全掌握';
+        content.innerHTML = `
+          <h3>1. 为什么用数学函数？</h3>
+          <p>不用写大量媒体查询，直接动态计算尺寸，比如“宽度最多500px”“字号最小14px”，适配所有屏幕！</p>
+          <h3>2. 核心函数（小白必记）</h3>
+          <p><strong>calc()：万能计算</strong>（支持+ - * /，运算符前后必须加空格）</p>
+          <div class="code-block">/* 宽度=100%减80px，适配侧边栏+主内容 */
+width: calc(100% - 80px);
+/* 间距放大1.5倍 */
+padding: calc(var(--spacing) * 1.5);</div>
+          <p><strong>min()：取最小值</strong>（比如宽度最多500px）</p>
+          <div class="code-block">width: min(500px, 100%); /* 屏幕宽<500px取100%，>500px取500px */</div>
+          <p><strong>max()：取最大值</strong>（比如高度最少200px）</p>
+          <div class="code-block">height: max(200px, 30vh); /* 视口高<200px取200px，>200px取30vh */</div>
+          <p><strong>clamp()：限定范围</strong>（最小值≤值≤最大值，响应式字号神器）</p>
+          <div class="code-block">/* 字号最小14px，最大24px，默认4vw自适应 */
+font-size: clamp(14px, 4vw, 24px);</div>
+          <p><strong>minmax()：Grid专用</strong>（列宽最小280px，超出自动均分）</p>
+          <div class="code-block">grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));</div>
+          <h3>3. 新手避坑</h3>
+          <p>❌ calc()运算符没空格：calc(100%-80px) 无效，必须写 calc(100% - 80px)</p>
+          <p>❌ clamp()参数顺序错：必须是 最小值、参考值、最大值</p>
+        `;
+      } else if (type === 'color') {
+        title.innerText = 'CSS颜色函数 小白完全掌握';
+        content.innerHTML = `
+          <h3>1. 基础颜色函数（小白先学）</h3>
+          <p><strong>rgb/rgba</strong>：红/绿/蓝（0-255），rgba多了透明度（0-1）</p>
+          <div class="code-block">color: rgb(255, 0, 0); /* 纯红 */
+color: rgba(255, 0, 0, 0.5); /* 半透红 */</div>
+          <p><strong>hsl/hsla</strong>：比RGB更好用！色相(0-360)、饱和度(0-100%)、亮度(0-100%)</p>
+          <div class="code-block">color: hsl(0, 100%, 50%); /* 纯红 */
+color: hsl(240, 100%, 50%); /* 纯蓝（只改第一个数） */</div>
+          <h3>2. 高级颜色函数（实战神器）</h3>
+          <p><strong>color-mix</strong>：直接混合两种颜色，不用手动算色值！</p>
+          <div class="code-block">/* 主色+白色8:2混合，做hover浅色调 */
+background-color: color-mix(in srgb, var(--primary-color) 80%, white 20%);</div>
+          <h3>3. 实战技巧</h3>
+          <p>① 定义RGB变量：方便用rgba加透明度</p>
+          <div class="code-block">:root {
+  --primary-color-rgb: 0, 140, 255; /* 对应#008cff */
+}
+background-color: rgba(var(--primary-color-rgb), 0.8);</div>
+          <p>② 用HSL调主题色：只改色相，快速换色系</p>
+          <div class="code-block">--red: hsl(0, 100%, 50%);
+--green: hsl(120, 100%, 50%);</div>
+        `;
+      }
+
+      // 显示弹窗
+      mask.style.display = 'flex';
+    }
+
+    // 关闭弹窗
+    function closeModal() {
+      const mask = document.getElementById('modalMask');
+      mask.style.display = 'none';
+    }
+
+    // ========== 主题切换功能 ==========
+    function changeTheme() {
+      const root = document.documentElement;
+      const randomHue = Math.floor(Math.random() * 360);
+      const newColor = `hsl(${randomHue}, 100%, 50%)`;
+      const newColorRgb = `${hslToRgb(randomHue, 100, 50).join(',')}`;
+
+      root.style.setProperty('--primary-color', newColor);
+      root.style.setProperty('--primary-color-rgb', newColorRgb);
+    }
+
+    // HSL转RGB辅助函数
+    function hslToRgb(h, s, l) {
+      h /= 360;
+      s /= 100;
+      l /= 100;
+      let r, g, b;
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1 / 6) return p + (q - p) * 6 * t;
+          if (t < 1 / 2) return q;
+          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1 / 3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1 / 3);
+      }
+      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+    // 点击遮罩层关闭弹窗
+    document.getElementById('modalMask').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+
+</html>

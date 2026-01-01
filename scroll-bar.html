@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebKit滚动条样式</title>
+  <style>
+    /* ========== 全局基础样式 ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+
+    body {
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* 滚动条不显示的排查提示样式 */
+    .check-tip {
+      background-color: #ffebee;
+      padding: 15px;
+      border-left: 4px solid #f44336;
+      margin: 15px 0;
+      color: #d32f2f;
+      font-size: 14px;
+    }
+
+    /* ========== 第一个演示区（全局滚动条） ========== */
+    .scroll-demo {
+      width: 100%;
+      height: 300px;
+      /* 固定高度，内容超了就会出滚动条 */
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      overflow-y: auto;
+      /* 关键：纵向溢出时强制显示滚动条 */
+      margin-bottom: 30px;
+    }
+
+    .scroll-demo p {
+      line-height: 2;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    /* ========== 第二个演示区（单独定制滚动条） ========== */
+    .custom-scrollbar {
+      width: 100%;
+      height: 200px;
+      /* 高度更矮，更容易出滚动条 */
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 8px;
+      overflow-y: auto;
+      /* 必须加：开启纵向滚动 */
+      /* Firefox兼容（可选） */
+      scrollbar-width: thin;
+      scrollbar-color: skyblue #e8f4f8;
+    }
+
+    /* 给第二个演示区加足够多的内容，确保溢出 */
+    .custom-scrollbar p {
+      line-height: 2.5;
+      /* 行高更大，内容更快溢出 */
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* ========== 核心：WebKit滚动条样式 ========== */
+    /* 1. 全局滚动条尺寸 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      /* 垂直滚动条宽度（核心） */
+      height: 8px;
+      /* 水平滚动条高度（备用） */
+    }
+
+    /* 2. 全局滚动条轨道 */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    /* 3. 全局滚动条滑块 */
+    ::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    /* 4. 全局滑块hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #999;
+    }
+
+    /* ========== 单独定制第二个演示区的滚动条 ========== */
+    /* 必须给每个滚动条选择器都加类名前缀！ */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      /* 比全局更细 */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: red;
+      /* 浅蓝色轨道 */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: red;
+      /* 蓝色滑块（一眼就能区分） */
+      border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: red;
+      /* hover变深蓝 */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>WebKit滚动条样式</h1>
+
+    <div class="check-tip">
+      <strong>小白必看：滚动条不显示的3个原因</strong><br>
+      1. 元素没有设置固定高度（height）；<br>
+      2. 元素没有加 overflow-y: auto/scroll（没开启滚动）；<br>
+      3. 元素内的内容没有超过高度（没溢出）
+    </div>
+
+    <!-- 第一个演示区（全局滚动条） -->
+    <div class="scroll-demo">
+      <h3>全局滚动条演示区（宽度8px，灰色滑块）</h3>
+      <p>这是第一段文字，用来撑高容器，让滚动条显示出来。WebKit滚动条样式只对Chrome、Safari、Edge（新版）、Opera等WebKit内核浏览器生效。</p>
+      <p>这是第二段文字，滚动条的宽度是8px，轨道背景是浅灰色#f1f1f1，滑块默认是#ccc，hover时变#999。</p>
+      <p>这是第三段文字，如果你用的是Firefox（火狐）或IE浏览器，看不到自定义样式，因为这是WebKit非标准属性～</p>
+      <p>这是第四段文字，继续撑高容器，让滚动条更明显。小白要记住：::-webkit-scrollbar是WebKit内核的专属写法，不是W3C标准。</p>
+      <p>这是第五段文字，滚动条的圆角设置在滑块上，轨道也可以加圆角，让样式更圆润。</p>
+      <p>这是第六段文字，试试把鼠标移到滚动条滑块上，颜色会变深，点击时会更深，因为加了hover效果。</p>
+      <p>这是第七段文字，继续撑高，确保滚动条一直显示。记住：width控制垂直滚动条宽度，height控制水平滚动条高度。</p>
+      <p>这是第八段文字，WebKit滚动条的样式虽然不是标准，但实际开发中用得很多，因为能提升页面美观度。</p>
+      <p>这是第九段文字，如果你想给不同元素设置不同滚动条，只需要在选择器前加元素类名即可，比如下面的.custom-scrollbar。</p>
+      <p>这是第十段文字，最后再强调：只兼容Chrome/Safari/Edge（新版），Firefox需要用其他方式。</p>
+    </div>
+
+    <!-- 第二个演示区（单独定制滚动条） -->
+    <div class="custom-scrollbar">
+      <h3>单独定制滚动条演示区（宽度6px，蓝色滑块）</h3>
+      <p>这个区域的滚动条宽度是6px，滑块是蓝色#008cff，hover时变#0066cc，轨道是#e8f4f8。</p>
+      <p>实现方式就是在::-webkit-scrollbar前加元素的类名，比如.custom-scrollbar::-webkit-scrollbar。</p>
+      <p>继续撑高容器，让滚动条显示。这样可以给不同区域设置不同样式的滚动条，更灵活。</p>
+      <p>小白要注意：单独定制时，所有滚动条相关的选择器都要加类名前缀，比如::-webkit-scrollbar-track也要写成.custom-scrollbar::-webkit-scrollbar-track。</p>
+      <p>第五段：测试内容溢出，确保滚动条显示～</p>
+      <p>第六段：再加一段，高度肯定超了～</p>
+      <p>第七段：蓝色滑块和全局的灰色滑块对比，一眼就能区分～</p>
+      <p>第八段：鼠标移到滑块上，会变成深蓝色#0066cc～</p>
+      <p>第九段：即使内容少，只要设置了overflow-y: scroll，也会显示滚动条（可以把auto改成scroll试试）～</p>
+      <p>第十段：最后确认，这个滚动条宽度是6px，比全局的8px细～</p>
+    </div>
+  </div>
+</body>
+
+</html>

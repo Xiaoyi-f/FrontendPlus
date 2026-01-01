@@ -35,11 +35,16 @@
       border-radius: 10px;
       overflow: hidden;
       background: #fff;
+      /* transition: property duration timing-function delay(延迟时间，可以不写); */
+      /* timing-function-> ease先快后慢 linear匀速 ease-in慢->快 ease->out快->慢 ease-in-out慢->快->慢 */
       transition: all 0.3s ease;
+      /* 之后如果有属性发生变化就会进行过渡变化 */
     }
 
     .filter-card:hover {
+      /* 变换属性 -> 变换函数(向x轴往上移动元素) */
       transform: translateY(-5px);
+      /* 阴影元素 -> 水平偏移 垂直偏移 模糊半径 散播半径(可以不写) 颜色 */
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
@@ -53,7 +58,10 @@
     .img-box img {
       width: 100%;
       height: 100%;
+      /* 专门用来控制图片 / 视频在固定尺寸容器里的显示方式，效果是「把元素铺满容器，同时保持比例不变，超出的部分会被裁剪掉」—— 就像给图片 / 视频 “精准取景”，只留核心部分填满容器 */
       object-fit: cover;
+      /* （默认保留中心区域，可通过 object-position 调整裁剪位置）
+      object-position: 水平方位 垂直方位; */
       /* 基础过渡：修改参数时更顺滑 */
       transition: filter 0.4s ease;
     }
@@ -88,6 +96,8 @@
       color: #666;
       line-height: 1.5;
     }
+
+    /* filter 是 CSS 给元素添加图形特效的属性，能对图片 / 文字 / 背景等做颜色、光影、模糊等处理，支持单个滤镜、多个滤镜组合，还能和 hover 结合做交互特效 */
 
     /* ========== 1. 模糊滤镜 blur ========== */
     #blur img:not(.origin) {

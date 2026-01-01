@@ -1,3 +1,4 @@
+在CSS中，每一个语句其实都可以叫做声明--------------------------》明确....
 1.选择器类型
   element {} 元素选择器
   .class {} 类选择器
@@ -553,10 +554,25 @@ font-size: 5vmin; /* 视口最小边的1% */
 font-size: 5vmax; /* 视口最大边的1% */
 
 ## 十三、无障碍与布局进阶
+
+WebKit 是一种「浏览器渲染内核」 —— 你可以把它理解成浏览器的 “核心发动机”：
+浏览器只是一个 “外壳”（比如 Chrome 的界面、收藏夹、设置按钮）；
+WebKit 是外壳里的 “发动机”，负责解析 HTML/CSS/JS、渲染网页内容、处理交互（比如点击按钮、滚动页面）
+
+👉 简单记：Chrome/Safari/ 新版 Edge 都属于 WebKit 家族，我们之前写的 ::-webkit-scrollbar 只对这些浏览器生效
+有些浏览器使用的内核不是webkit，火狐就不是使用的webkit内核，所以这些样式无效
+
 /* 滚动条样式（非标准，兼容webkit） */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+scrollbar-color: 滚动条颜色 滚动轨道颜色;  --> 必须传递两个颜色参数才有效果
+scrollbar-width
+注意优先级问题，标准的优先级可能会更高
+
+
+利用层叠性，优先写标准代码，然后在后面再写webkit代码
 
 /* 粘性定位 */
 position: sticky;
