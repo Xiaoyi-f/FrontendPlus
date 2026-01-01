@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性能优化 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .performance-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .performance-step {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .api-table th, .api-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .api-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .api-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .performance-chart {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 性能优化</div>
+            <h1>性能优化</h1>
+        </header>
+        
+        <div class="content">
+            <p>性能优化是Vue.js应用开发中的重要环节，它直接影响用户体验和应用的可扩展性。本章将介绍Vue.js应用中的性能优化策略、工具和最佳实践。</p>
+            
+            <div class="key-features">
+                <h3>性能优化核心概念</h3>
+                <ul>
+                    <li><strong>响应式系统优化</strong>：优化Vue的响应式机制</li>
+                    <li><strong>渲染性能</strong>：提高渲染效率和响应速度</li>
+                    <li><strong>组件优化</strong>：优化组件的创建和更新</li>
+                    <li><strong>内存管理</strong>：减少内存泄漏和垃圾回收</li>
+                    <li><strong>打包优化</strong>：减少包体积和加载时间</li>
+                    <li><strong>网络优化</strong>：优化资源加载策略</li>
+                </ul>
+            </div>
+            
+            <h2>性能优化工作流程</h2>
+            <div class="performance-diagram">
+                <div class="performance-step">性能分析</div>
+                →
+                <div class="performance-step">问题识别</div>
+                →
+                <div class="performance-step">优化策略</div>
+                →
+                <div class="performance-step">实施优化</div>
+                →
+                <div class="performance-step">效果验证</div>
+            </div>
+            
+            <p>性能优化是一个持续的过程，需要通过分析工具识别瓶颈，然后应用相应的优化策略，最后验证优化效果。Vue.js提供了多种工具和方法来帮助开发者优化应用性能。</p>
+            
+            <h2>Vue DevTools性能分析</h2>
+            <p>Vue DevTools提供了性能面板，可以记录和分析组件渲染性能，帮助识别性能瓶颈。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">性能监控示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;&lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed, onMounted } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> items = ref([]);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> performanceData = ref({});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;onMounted(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 模拟性能数据</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt; <span class="code-number">1000</span>; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: i,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">`项目 <span class="code-variable">${i}</span>`</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value: Math.random() * <span class="code-number">100</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 性能数据</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performanceData.value = {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renderTime: <span class="code-number">15.3</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;memoryUsage: <span class="code-string">'48MB'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;componentsCount: <span class="code-number">1000</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performanceData<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>,
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;性能监控示例&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;项目总数: {{ items.length }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"performance-data"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;渲染时间: {{ performanceData.renderTime }}ms&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;内存使用: {{ performanceData.memoryUsage }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;组件数量: {{ performanceData.componentsCount }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"items-container"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"item"</span> v-for=<span class="code-string">"item in items"</span> :key=<span class="code-string">"item.id"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.name }} - {{ item.value.toFixed(2) }}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>优化策略和方法</h2>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>优化策略</th>
+                        <th>应用场景</th>
+                        <th>实现方法</th>
+                        <th>预期效果</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>虚拟滚动</td>
+                        <td>大量列表项渲染</td>
+                        <td>只渲染可视区域内的元素</td>
+                        <td>显著提升渲染性能</td>
+                    </tr>
+                    <tr>
+                        <td>组件懒加载</td>
+                        <td>大型应用的路由组件</td>
+                        <td>按需加载组件</td>
+                        <td>减少初始包体积</td>
+                    </tr>
+                    <tr>
+                        <td>缓存组件</td>
+                        <td>频繁切换的组件</td>
+                        <td>使用keep-alive缓存</td>
+                        <td>避免重复渲染</td>
+                    </tr>
+                    <tr>
+                        <td>计算属性</td>
+                        <td>复杂数据处理</td>
+                        <td>使用computed缓存结果</td>
+                        <td>避免重复计算</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>虚拟滚动优化</h2>
+            <p>当需要渲染大量数据时，虚拟滚动是一种有效的优化策略，它只渲染可视区域内的元素，大大减少了DOM节点数量。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">虚拟滚动优化示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;&lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> containerHeight = <span class="code-number">400</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> itemHeight = <span class="code-number">50</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> visibleCount = Math.ceil(containerHeight / itemHeight);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> allItems = ref([]);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> scrollTop = ref(<span class="code-number">0</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> startIndex = ref(<span class="code-number">0</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> endIndex = ref(visibleCount);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 生成大量数据</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt; <span class="code-number">10000</span>; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allItems.value.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: i,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">`项目 <span class="code-variable">${i}</span>`</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> visibleItems = computed(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> start = Math.floor(scrollTop.value / itemHeight);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> end = Math.min(start + visibleCount + <span class="code-number">5</span>, allItems.value.length);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> allItems.value.slice(start, end).map(<span class="code-function">(item, index)</span> =&gt; ({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...item,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position: (start + index) * itemHeight<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}));<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleScroll = <span class="code-function">(event)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scrollTop.value = event.target.scrollTop;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visibleItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;containerHeight,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleScroll,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemHeight<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;虚拟滚动优化示例&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;总项目数: {{ allItems.length }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">class</span>=<span class="code-string">"virtual-list"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:style=<span class="code-string">"{ height: containerHeight + 'px', overflowY: 'scroll' }"</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@scroll=<span class="code-string">"handleScroll"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-for=<span class="code-string">"item in visibleItems"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:key=<span class="code-string">"item.id"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:style=<span class="code-string">"{ position: 'absolute', top: item.position + 'px', height: itemHeight + 'px', width: '100%' }"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.name }}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div :style=<span class="code-string">"{ height: allItems.length * itemHeight + 'px' }"</span>&gt;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .virtual-list {<br>
+                    &nbsp;&nbsp;position: relative;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ccc;<br>
+                    }<br><br>
+                    
+                    .virtual-list div[<span class="code-keyword">class</span>!=<span class="code-string">"virtual-list"</span>] {<br>
+                    &nbsp;&nbsp;background-color: #f5f5f5;<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">2</span>px <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">8</span>px;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>组件懒加载优化</h2>
+            <p>通过懒加载，我们可以将应用拆分成更小的块，只在需要时加载组件，从而减少初始加载时间。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">传统加载方式</div>
+                    <div class="code-block">
+                        <span class="code-keyword">import</span> Home from <span class="code-string">'./components/Home.vue'</span>;<br>
+                        <span class="code-keyword">import</span> About from <span class="code-string">'./components/About.vue'</span>;<br>
+                        <span class="code-keyword">import</span> Contact from <span class="code-string">'./components/Contact.vue'</span>;<br><br>
+                        
+                        <span class="code-keyword">const</span> routes = [<br>
+                        &nbsp;&nbsp;{ path: <span class="code-string">'/'</span>, component: Home },<br>
+                        &nbsp;&nbsp;{ path: <span class="code-string">'/about'</span>, component: About },<br>
+                        &nbsp;&nbsp;{ path: <span class="code-string">'/contact'</span>, component: Contact }<br>
+                        ];<br><br>
+                        
+                        <span class="code-comment">// 所有组件在应用启动时都会被加载</span>
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">懒加载方式</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> routes = [<br>
+                        &nbsp;&nbsp;{ <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;path: <span class="code-string">'/'</span>, <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;component: <span class="code-function">()</span> =&gt; import(<span class="code-string">'./components/Home.vue'</span>) <br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;{ <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;path: <span class="code-string">'/about'</span>, <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;component: <span class="code-function">()</span> =&gt; import(<span class="code-string">'./components/About.vue'</span>) <br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;{ <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;path: <span class="code-string">'/contact'</span>, <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;component: <span class="code-function">()</span> =&gt; import(<span class="code-string">'./components/Contact.vue'</span>) <br>
+                        &nbsp;&nbsp;}<br>
+                        ];<br><br>
+                        
+                        <span class="code-comment">// 组件只在访问对应路由时才加载</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>缓存组件优化</h2>
+            <p>使用[keep-alive](file:///e:/FrontendTeach/VUE快速上手/advanced/composition-api.html#L428-L438)组件可以缓存动态组件，避免重复创建和销毁组件实例。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">使用keep-alive缓存组件</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;&lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 定义多个组件</span><br>
+                    <span class="code-keyword">const</span> Home = {<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp: Date.now()<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;created() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'Home组件被创建'</span>);<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;首页组件&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;计数: {{ count }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;创建时间: {{ timestamp }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"count++"</span>&gt;增加计数&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    };<br><br>
+                    
+                    <span class="code-keyword">const</span> About = {<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp: Date.now()<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;created() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'About组件被创建'</span>);<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;关于组件&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;计数: {{ count }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;创建时间: {{ timestamp }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"count++"</span>&gt;增加计数&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    };<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Home,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;About<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentView: <span class="code-string">'Home'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;缓存组件示例&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentView = 'Home'"</span>&gt;首页&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentView = 'About'"</span>&gt;关于&lt;/button&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"component-container"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;不使用缓存&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;component :is=<span class="code-string">"currentView"</span>&gt;&lt;/component&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"component-container"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;使用缓存&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;keep-alive&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;component :is=<span class="code-string">"currentView"</span>&gt;&lt;/component&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/keep-alive&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>计算属性优化</h2>
+            <p>计算属性是Vue中优化性能的重要工具，它会基于响应式依赖进行缓存，只有依赖发生变化时才会重新计算。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">计算属性性能优化示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;&lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 模拟大量数据</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> items = ref([]);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i &lt; <span class="code-number">5000</span>; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: i,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">`项目 <span class="code-variable">${i}</span>`</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value: Math.floor(Math.random() * <span class="code-number">100</span>),<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;category: Math.floor(Math.random() * <span class="code-number">5</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 计算属性 - 仅在items变化时重新计算</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> expensiveCalculation = computed(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.time(<span class="code-string">'计算耗时操作'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> result = items.value<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.filter(<span class="code-function">item</span> =&gt; item.value &gt; <span class="code-number">50</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.map(<span class="code-function">item</span> =&gt; ({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...item,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doubledValue: item.value * <span class="code-number">2</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.sort(<span class="code-function">(a, b)</span> =&gt; b.value - a.value);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.timeEnd(<span class="code-string">'计算耗时操作'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> result;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> otherValue = ref(<span class="code-string">'一些不相关的值'</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expensiveCalculation,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;otherValue<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;计算属性性能优化&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;总项目数: {{ items.length }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;计算结果数: {{ expensiveCalculation.length }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input v-model=<span class="code-string">"otherValue"</span> placeholder=<span class="code-string">"修改这个值不会触发计算属性重新计算"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;当前otherValue: {{ otherValue }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"items.push({ id: items.length, name: '新项目', value: 75, category: 2 })"</span>&gt;添加项目&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>性能优化最佳实践</h2>
+            <p>在实际开发中，遵循性能优化的最佳实践可以显著提升应用性能。</p>
+            
+            <div class="key-features">
+                <h3>Vue性能优化最佳实践</h3>
+                <ul>
+                    <li><strong>合理使用key</strong>：在v-for中使用唯一的key值</li>
+                    <li><strong>避免在模板中使用复杂表达式</strong>：使用计算属性代替</li>
+                    <li><strong>使用v-show而不是v-if</strong>：对于频繁切换的元素</li>
+                    <li><strong>组件拆分</strong>：将大组件拆分为小组件</li>
+                    <li><strong>事件销毁</strong>：在组件销毁时移除事件监听器</li>
+                    <li><strong>异步组件</strong>：使用异步组件减少初始加载时间</li>
+                </ul>
+            </div>
+            
+            <h3>性能检测工具</h3>
+            <p>Vue提供了多种性能检测工具来帮助开发者识别性能问题：</p>
+            
+            <ul>
+                <li>Vue DevTools - 提供性能面板来分析组件渲染时间</li>
+                <li>浏览器开发者工具 - 分析渲染性能和内存使用</li>
+                <li>Webpack Bundle Analyzer - 分析包大小和依赖关系</li>
+                <li>Lighthouse - 分析应用的整体性能</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个大数据量的列表并实现虚拟滚动</li>
+                    <li>实现一个带有懒加载的路由系统</li>
+                    <li>使用keep-alive优化组件切换性能</li>
+                    <li>使用计算属性优化复杂数据处理</li>
+                    <li>实现防抖和节流优化频繁操作</li>
+                    <li>使用异步组件优化首屏加载时间</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="advanced/custom-elements.html" class="nav-link">← 上一课：自定义元素</a>
+            <a href="testing.html" class="nav-link">下一课：测试 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

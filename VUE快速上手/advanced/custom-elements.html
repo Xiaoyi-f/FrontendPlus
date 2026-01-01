@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义元素 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .custom-element-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .custom-element-step {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .api-table th, .api-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .api-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .api-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .counter-element {
+            padding: 10px;
+            border: 1px solid #42b983;
+            border-radius: 4px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 进阶特性篇 > 自定义元素</div>
+            <h1>自定义元素</h1>
+        </header>
+        
+        <div class="content">
+            <p>自定义元素（Custom Elements）是Web Components标准的一部分，允许我们创建可重用的自定义HTML元素。Vue支持将组件编译为原生自定义元素，这使得Vue组件可以在非Vue应用中使用。</p>
+            
+            <div class="key-features">
+                <h3>自定义元素核心概念</h3>
+                <ul>
+                    <li><strong>Web Components标准</strong>：基于W3C标准的组件化技术</li>
+                    <li><strong>可重用性</strong>：跨框架使用的组件</li>
+                    <li><strong>封装性</strong>：组件内部实现细节的封装</li>
+                    <li><strong>Shadow DOM</strong>：可选的样式和DOM封装</li>
+                    <li><strong>生命周期回调</strong>：自定义元素的生命周期管理</li>
+                    <li><strong>属性观察</strong>：响应属性变化</li>
+                </ul>
+            </div>
+            
+            <h2>自定义元素工作原理</h2>
+            <div class="custom-element-diagram">
+                <div class="custom-element-step">定义自定义元素</div>
+                →
+                <div class="custom-element-step">注册到浏览器</div>
+                →
+                <div class="custom-element-step">在DOM中使用</div>
+                →
+                <div class="custom-element-step">实例化元素</div>
+                →
+                <div class="custom-element-step">执行生命周期</div>
+            </div>
+            
+            <p>自定义元素是Web Components标准的一部分，允许开发者创建具有自定义功能的专用DOM元素。Vue提供了工具来将Vue组件编译为原生自定义元素，这样它们就可以在任何HTML页面中使用，而不依赖Vue运行时。</p>
+            
+            <h2>创建自定义元素</h2>
+            <p>Vue提供了[defineCustomElement](file:///e:/FrontendTeach/VUE快速上手/advanced/custom-elements.html)方法来创建自定义元素。此方法将Vue组件转换为原生自定义元素。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">基本自定义元素示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;这是一个普通Vue应用&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;my-vue-counter initial-count=<span class="code-string">"5"</span>&gt;&lt;/my-vue-counter&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script <span class="code-keyword">type</span>=<span class="code-string">"module"</span>&gt;<br>
+                    <span class="code-keyword">import</span> { defineCustomElement } from <span class="code-string">'https://unpkg.com/vue@3/dist/vue.esm-browser.js'</span>;<br><br>
+                    
+                    <span class="code-keyword">const</span> MyVueCounter = defineCustomElement({<br>
+                    &nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;initialCount: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: Number,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-keyword">this</span>.initialCount<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'count-updated'</span>, <span class="code-keyword">this</span>.count);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;render() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> { count } = <span class="code-keyword">this</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> Vue.h(<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'div'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="code-keyword">class</span>: <span class="code-string">'counter-element'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vue.h(<span class="code-string">'p'</span>, <span class="code-string">`计数: <span class="code-variable">${count}</span>`</span>),<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vue.h(<span class="code-string">'button'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onClick: <span class="code-keyword">this</span>.increment<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, <span class="code-string">'增加'</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                    &nbsp;&nbsp;}<br>
+                    });<br><br>
+                    <span class="code-comment">// 注册自定义元素</span><br>
+                    customElements.define(<span class="code-string">'my-vue-counter'</span>, MyVueCounter);<br><br>
+                    <span class="code-comment">// 使用自定义元素</span><br>
+                    document.addEventListener(<span class="code-string">'DOMContentLoaded'</span>, <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> counter = document.querySelector(<span class="code-string">'my-vue-counter'</span>);<br>
+                    &nbsp;&nbsp;counter.addEventListener(<span class="code-string">'count-updated'</span>, <span class="code-function">(event)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'计数已更新为:'</span>, event.detail);<br>
+                    &nbsp;&nbsp;});<br>
+                    });<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>自定义元素的生命周期</h2>
+            <p>自定义元素具有特定的生命周期回调函数，Vue会自动将它们映射到相应的组件生命周期钩子。</p>
+            
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>自定义元素生命周期</th>
+                        <th>说明</th>
+                        <th>对应Vue钩子</th>
+                        <th>使用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>connectedCallback</td>
+                        <td>元素插入DOM时调用</td>
+                        <td>mounted</td>
+                        <td>初始化操作、事件监听</td>
+                    </tr>
+                    <tr>
+                        <td>disconnectedCallback</td>
+                        <td>元素从DOM移除时调用</td>
+                        <td>unmounted</td>
+                        <td>清理操作、移除事件监听</td>
+                    </tr>
+                    <tr>
+                        <td>attributeChangedCallback</td>
+                        <td>观察的属性变化时调用</td>
+                        <td>updated</td>
+                        <td>响应属性变化</td>
+                    </tr>
+                    <tr>
+                        <td>adoptedCallback</td>
+                        <td>元素移动到新文档时调用</td>
+                        <td>无对应</td>
+                        <td>文档迁移处理</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">生命周期回调示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;my-lifecycle-element message=<span class="code-string">"Hello World"</span>&gt;&lt;/my-lifecycle-element&gt;<br>
+                    &nbsp;&nbsp;&lt;button onclick=<span class="code-string">"toggleElement()"</span>&gt;切换元素&lt;/button&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script <span class="code-keyword">type</span>=<span class="code-string">"module"</span>&gt;<br>
+                    <span class="code-keyword">import</span> { defineCustomElement } from <span class="code-string">'https://unpkg.com/vue@3/dist/vue.esm-browser.js'</span>;<br><br>
+                    
+                    <span class="code-keyword">const</span> MyLifecycleElement = defineCustomElement({<br>
+                    &nbsp;&nbsp;props: [<span class="code-string">'message'</span>],<br><br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log: []<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;mounted() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'Vue组件已挂载'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.log.push(<span class="code-string">'组件已挂载'</span>);<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;unmounted() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'Vue组件已卸载'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.log.push(<span class="code-string">'组件已卸载'</span>);<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;updated() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'Vue组件已更新'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.log.push(<span class="code-string">'组件已更新'</span>);<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;render() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> Vue.h(<span class="code-string">'div'</span>, { <span class="code-keyword">class</span>: <span class="code-string">'lifecycle-element'</span> }, [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vue.h(<span class="code-string">'h4'</span>, <span class="code-string">'生命周期示例'</span>),<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vue.h(<span class="code-string">'p'</span>, <span class="code-keyword">this</span>.message),<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vue.h(<span class="code-string">'ul'</span>, <span class="code-keyword">this</span>.log.map(item =&gt; Vue.h(<span class="code-string">'li'</span>, item)))<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+                    &nbsp;&nbsp;}<br>
+                    });<br><br>
+                    customElements.define(<span class="code-string">'my-lifecycle-element'</span>, MyLifecycleElement);<br><br>
+                    <span class="code-keyword">let</span> elementVisible = <span class="code-boolean">true</span>;<br>
+                    <span class="code-function">function</span> <span class="code-function">toggleElement</span>() {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> container = document.getElementById(<span class="code-string">'app'</span>);<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> element = document.querySelector(<span class="code-string">'my-lifecycle-element'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-keyword">if</span> (elementVisible) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;element.remove();<br>
+                    &nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;container.innerHTML = <span class="code-string">`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;my-lifecycle-element message="Hello World"&gt;&lt;/my-lifecycle-element&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onclick="toggleElement()"&gt;切换元素&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;elementVisible = !elementVisible;<br>
+                    }<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>使用JSX/TSX创建自定义元素</h2>
+            <p>在JSX/TSX中创建自定义元素需要特殊的配置和编译器支持。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">JSX自定义元素示例</div>
+                <div class="code-block">
+                    <span class="code-comment">// counter.ce.js - 自定义元素定义</span><br>
+                    <span class="code-keyword">import</span> { defineCustomElement } from <span class="code-string">'vue'</span>;<br><br>
+                    
+                    <span class="code-keyword">const</span> MyCounter = defineCustomElement({<br>
+                    &nbsp;&nbsp;name: <span class="code-string">'MyCounterElement'</span>,<br>
+                    &nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;initialValue: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: Number,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-keyword">this</span>.$props.initialValue<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;render() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> (<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"jsx-counter"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;JSX自定义元素计数器&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;当前计数: {<span class="code-keyword">this</span>.count}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onClick={ <span class="code-keyword">this</span>.increment }&gt;增加&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button onClick={ <span class="code-keyword">this</span>.decrement }&gt;减少&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                    &nbsp;&nbsp;},<br><br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'update'</span>, <span class="code-keyword">this</span>.count);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;decrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'update'</span>, <span class="code-keyword">this</span>.count);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    });<br><br>
+                    <span class="code-comment">// 注册自定义元素</span><br>
+                    customElements.define(<span class="code-string">'my-jsx-counter'</span>, MyCounter);<br><br>
+                    <span class="code-comment">// 在HTML中使用</span><br>
+                    &lt;my-jsx-counter initial-value=<span class="code-string">"10"</span>&gt;&lt;/my-jsx-counter&gt;
+                </div>
+            </div>
+            
+            <h2>与非Vue应用集成</h2>
+            <p>自定义元素的最大优势是可以轻松集成到任何非Vue应用中，如原生HTML页面、React应用或Angular应用。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">在原生HTML中使用</div>
+                    <div class="code-block">
+                        &lt;!DOCTYPE html&gt;<br>
+                        &lt;html&gt;<br>
+                        &lt;head&gt;<br>
+                        &nbsp;&nbsp;&lt;title&gt;自定义元素示例&lt;/title&gt;<br>
+                        &lt;/head&gt;<br>
+                        &lt;body&gt;<br>
+                        &nbsp;&nbsp;&lt;h1&gt;在原生HTML中使用Vue自定义元素&lt;/h1&gt;<br>
+                        &nbsp;&nbsp;&lt;my-vue-counter initial-count=<span class="code-string">"0"</span>&gt;&lt;/my-vue-counter&gt;<br>
+                        &nbsp;&nbsp;&lt;my-vue-counter initial-count=<span class="code-string">"10"</span>&gt;&lt;/my-vue-counter&gt;<br><br>
+                        
+                        &nbsp;&nbsp;&lt;script src=<span class="code-string">"https://unpkg.com/vue@3/dist/vue.esm-browser.js"</span>&gt;&lt;/script&gt;<br>
+                        &nbsp;&nbsp;&lt;script&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 这里是定义自定义元素的代码</span><br>
+                        &nbsp;&nbsp;&lt;/script&gt;<br>
+                        &lt;/body&gt;<br>
+                        &lt;/html&gt;
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">在React应用中使用</div>
+                    <div class="code-block">
+                        <span class="code-keyword">import</span> React, { useState, useEffect } from <span class="code-string">'react'</span>;<br><br>
+                        
+                        <span class="code-function">function</span> <span class="code-function">App</span>() {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">const</span> [count, setCount] = useState(<span class="code-number">0</span>);<br><br>
+                        
+                        &nbsp;&nbsp;useEffect(<span class="code-function">()</span> =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleCountUpdate = <span class="code-function">(event)</span> =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setCount(event.detail);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> counter = document.querySelector(<span class="code-string">'my-vue-counter'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (counter) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter.addEventListener(<span class="code-string">'count-updated'</span>, handleCountUpdate);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> () =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (counter) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter.removeEventListener(<span class="code-string">'count-updated'</span>, handleCountUpdate);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;}, []);<br><br>
+                        
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;React应用中的Vue自定义元素&lt;/h1&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;my-vue-counter initial-count={<span class="code-number">5</span>} /&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;来自自定义元素的计数: {count}&lt;/p&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;);<br>
+                        }<br><br>
+                        
+                        export default App;
+                    </div>
+                </div>
+            </div>
+            
+            <h2>自定义元素最佳实践</h2>
+            <p>在创建和使用自定义元素时，遵循一些最佳实践可以确保良好的兼容性和性能。</p>
+            
+            <div class="key-features">
+                <h3>自定义元素最佳实践</h3>
+                <ul>
+                    <li><strong>命名规范</strong>：自定义元素名称必须包含连字符</li>
+                    <li><strong>属性设计</strong>：使用简单数据类型的属性</li>
+                    <li><strong>事件通信</strong>：使用标准事件与父应用通信</li>
+                    <li><strong>样式封装</span>：考虑使用Shadow DOM封装样式</li>
+                    <li><strong>性能优化</strong>：避免在自定义元素中使用复杂逻辑</li>
+                    <li><strong>向后兼容</strong>：提供降级方案以支持旧浏览器</li>
+                </ul>
+            </div>
+            
+            <h3>注意事项</h3>
+            <p>使用自定义元素时需要注意以下几点：</p>
+            
+            <ul>
+                <li>自定义元素名称必须包含至少一个连字符(-)，以避免与标准HTML元素冲突</li>
+                <li>自定义元素需要在使用前注册</li>
+                <li>属性传递时，非字符串类型会被转换为字符串</li>
+                <li>自定义元素不依赖Vue运行时，体积更小</li>
+                <li>Shadow DOM可能影响样式和选择器的使用</li>
+                <li>部分Vue特性（如响应式计算属性）在自定义元素中使用方式略有不同</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个可重用的模态框自定义元素</li>
+                    <li>实现一个数据表格自定义元素</li>
+                    <li>创建一个表单验证自定义元素</li>
+                    <li>实现一个卡片展示自定义元素</li>
+                    <li>创建一个可折叠面板自定义元素</li>
+                    <li>实现一个带有插槽功能的自定义元素</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="mixins.html" class="nav-link">← 上一课：混入(Mixins)</a>
+            <a href="../performance.html" class="nav-link">下一课：性能优化 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务端渲染 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>服务端渲染(SSR)</h1>
+            <p class="subtitle">Nuxt.js、SSR/SSG</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./testing.html" class="nav-link">上一课：测试</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./typescript.html" class="nav-link">下一课：TypeScript集成</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>SSR核心概念</h3>
+                <ul>
+                    <li><strong>服务端渲染</strong>：在服务端生成HTML字符串并发送到客户端</li>
+                    <li><strong>客户端激活</strong>：将静态HTML转换为可交互的Vue应用</li>
+                    <li><strong>同构应用</strong>：一套代码既能在服务端运行也能在客户端运行</li>
+                    <li><strong>预渲染</strong>：在构建时生成静态HTML页面</li>
+                    <li><strong>Nuxt.js</strong>：Vue.js的通用应用框架</li>
+                    <li><strong>静态站点生成</strong>：预生成所有页面为静态文件</li>
+                </ul>
+            </div>
+            
+            <h2>什么是服务端渲染(SSR)？</h2>
+            <p>服务端渲染（Server-Side Rendering，SSR）是指在服务端完成页面的HTML结构渲染，然后将完整的HTML发送给客户端，客户端再将静态HTML"激活"为可交互的客户端应用。</p>
+            
+            <h2>为什么需要SSR？</h2>
+            <p>SSR的主要优势：</p>
+            <ul>
+                <li><strong>SEO友好</strong>：搜索引擎可以直接抓取完全渲染的页面</li>
+                <li><strong>更快的首屏加载</strong>：用户可以更快看到页面内容</li>
+                <li><strong>更好的用户体验</strong>：对于慢网络和低性能设备尤其重要</li>
+            </ul>
+            
+            <h2>SSR vs 客户端渲染(CSR)</h2>
+            <p>客户端渲染的流程：</p>
+            <ol>
+                <li>浏览器请求页面</li>
+                <li>服务端返回一个基本的HTML页面</li>
+                <li>浏览器下载JavaScript文件</li>
+                <li>JavaScript执行并渲染页面</li>
+            </ol>
+            
+            <p>服务端渲染的流程：</p>
+            <ol>
+                <li>浏览器请求页面</li>
+                <li>服务端渲染组件为HTML字符串</li>
+                <li>服务端返回完整HTML给浏览器</li>
+                <li>浏览器直接显示内容</li>
+                <li>客户端JavaScript激活为交互应用</li>
+            </ol>
+            
+            <h2>基础SSR实现</h2>
+            <p>使用Vue 3和Vue Server Renderer实现基础SSR：</p>
+            
+            <div class="code-block">
+// server.js
+import express from 'express'
+import { createSSRApp } from 'vue'
+import { renderToString } from '@vue/server-renderer'
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname, resolve } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const server = express()
+
+// 读取构建后的客户端文件
+const getClientManifest = () => {
+  const manifestPath = resolve(__dirname, 'dist', 'ssr-manifest.json')
+  return JSON.parse(readFileSync(manifestPath, 'utf-8'))
+}
+
+// 服务构建后的静态资源
+server.use('/assets', express.static('dist/assets'))
+
+// 处理所有GET请求
+server.get('*', async (req, res) => {
+  try {
+    // 创建Vue应用实例
+    const app = createSSRApp({
+      data() {
+        return {
+          title: 'SSR应用',
+          message: 'Hello SSR!'
+        }
+      },
+      template: `
+        &lt;div&gt;
+          &lt;h1&gt;{{ title }}&lt;/h1&gt;
+          &lt;p&gt;{{ message }}&lt;/p&gt;
+        &lt;/div&gt;
+      `
+    })
+    
+    // 渲染应用为HTML字符串
+    const appHtml = await renderToString(app)
+    
+    // 返回完整的HTML页面
+    const html = `
+      &lt;!DOCTYPE html&gt;
+      &lt;html&gt;
+      &lt;head&gt;
+        &lt;title&gt;Vue 3 SSR&lt;/title&gt;
+      &lt;/head&gt;
+      &lt;body&gt;
+        &lt;div id="app"&gt;${appHtml}&lt;/div&gt;
+        &lt;script type="module" src="/assets/client.js"&gt;&lt;/script&gt;
+      &lt;/body&gt;
+      &lt;/html&gt;
+    `
+    
+    res.send(html)
+  } catch (error) {
+    console.error(error)
+    res.status(500).send('服务器错误')
+  }
+})
+
+server.listen(3000, () => {
+  console.log('服务器运行在 http://localhost:3000')
+})
+</div>
+            
+            <h2>同构数据获取</h2>
+            <p>在SSR应用中，需要处理数据获取逻辑：</p>
+            
+            <div class="code-block">
+// components/Article.vue
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h1&gt;{{ article.title }}&lt;/h1&gt;
+    &lt;div v-html="article.content"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { ref, onMounted } from 'vue'
+
+export default {
+  async setup(props) {
+    const article = ref({})
+    
+    // 定义获取数据的函数
+    const fetchArticle = async (id) => {
+      // 服务端渲染时使用API端点
+      // 客户端渲染时也使用API端点
+      const response = await fetch(`/api/article/${id}`)
+      return response.json()
+    }
+    
+    // 组件挂载时获取数据（仅客户端）
+    onMounted(async () => {
+      if (!article.value.id) {
+        const data = await fetchArticle(props.id)
+        article.value = data
+      }
+    })
+    
+    return {
+      article
+    }
+  },
+  // 服务端渲染时的数据获取
+  async serverPrefetch() {
+    // 在服务端渲染期间执行
+    this.article = await this.fetchArticle(this.$props.id)
+  },
+  props: ['id']
+}
+&lt;/script&gt;
+</div>
+            
+            <h2>使用Nuxt.js</h2>
+            <p>Nuxt.js是Vue.js的通用应用框架，可以轻松实现SSR、SSG和客户端渲染。以下是Nuxt 3的基本项目结构：</p>
+            
+            <div class="code-block">
+my-nuxt-app/
+├── assets/          # 静态资源
+├── components/      # Vue组件
+├── composables/     # 可组合函数
+├── layouts/         # 布局组件
+├── middleware/      # 路由中间件
+├── pages/           # 页面组件（自动生成路由）
+├── public/          # 静态文件
+├── server/          # 服务端API和处理程序
+├── app.vue          # 根组件
+├── nuxt.config.ts   # Nuxt配置
+├── package.json
+└── tsconfig.json
+</div>
+            
+            <h3>Nuxt页面示例</h3>
+            <div class="code-block">
+// pages/index.vue
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h1&gt;欢迎来到首页&lt;/h1&gt;
+    &lt;p&gt;文章数量: {{ articles.length }}&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li v-for="article in articles" :key="article.id"&gt;
+        &lt;NuxtLink :to="`/article/${article.id}`"&gt;
+          {{ article.title }}
+        &lt;/NuxtLink&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+// 使用Nuxt的useAsyncData进行服务端数据获取
+const { data: articles, pending, error } = await useAsyncData('articles', async () => {
+  const response = await $fetch('/api/articles')
+  return response
+})
+
+// 设置页面元信息
+useHead({
+  title: '首页 - 我的Nuxt应用',
+  meta: [
+    { name: 'description', content: '这是我的Nuxt应用首页' }
+  ]
+})
+&lt;/script&gt;
+</div>
+            
+            <h3>API路由示例</h3>
+            <div class="code-block">
+// server/api/articles.ts
+export default defineEventHandler(async (event) => {
+  // 模拟数据获取
+  const articles = [
+    { id: 1, title: '第一篇文章', content: '这是第一篇文章的内容' },
+    { id: 2, title: '第二篇文章', content: '这是第二篇文章的内容' }
+  ]
+  
+  return articles
+})
+</div>
+            
+            <h3>Nuxt配置</h3>
+            <div class="code-block">
+// nuxt.config.ts
+export default defineNuxtConfig({
+  // 应用配置
+  app: {
+    head: {
+      title: '我的Nuxt应用',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: '一个Nuxt应用示例' }
+      ]
+    }
+  },
+  
+  // 构建配置
+  build: {
+    transpile: ['@vue/runtime-core']
+  },
+  
+  // 运行时配置
+  runtimeConfig: {
+    // 私有配置（仅在服务端可用）
+    apiSecret: process.env.API_SECRET,
+    // 公共配置（可在客户端访问）
+    public: {
+      apiUrl: process.env.API_URL || 'http://localhost:3000'
+    }
+  },
+  
+  // 模块配置
+  modules: [
+    '@nuxtjs/tailwindcss',  // Tailwind CSS支持
+    '@nuxtjs/pwa'          // PWA支持
+  ],
+  
+  // 构建相关配置
+  nitro: {
+    preset: 'node-server'  // 部署预设
+  }
+})
+</div>
+            
+            <h2>静态站点生成(SSG)</h2>
+            <p>静态站点生成（Static Site Generation）是在构建时生成静态HTML文件：</p>
+            
+            <div class="code-block">
+// nuxt.config.ts
+export default defineNuxtConfig({
+  // 指定需要预渲染的路由
+  generate: {
+    routes: [
+      '/article/1',
+      '/article/2',
+      '/article/3'
+    ]
+  },
+  
+  // 或者动态生成路由
+  hooks: {
+    async 'nitro:config'(nitroConfig) {
+      if (nitroConfig.preset === 'static') {
+        // 在静态生成时获取所有路由
+        const { $fetch } = await import('ofetch')
+        const articles = await $fetch('/api/articles')
+        
+        nitroConfig.prerender = nitroConfig.prerender || {}
+        nitroConfig.prerender.routes = [
+          ...nitroConfig.prerender.routes || [],
+          ...articles.map(article => `/article/${article.id}`)
+        ]
+      }
+    }
+  }
+})
+</div>
+            
+            <h2>客户端激活</h2>
+            <p>客户端激活是将服务端渲染的静态HTML转换为交互式Vue应用的过程：</p>
+            
+            <div class="code-block">
+// main.js (客户端入口)
+import { createSSRApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import App from './App.vue'
+import routes from './routes'
+
+export function createApp() {
+  const app = createSSRApp(App)
+  
+  const router = createRouter({
+    history: createWebHistory(),
+    routes
+  })
+  
+  app.use(router)
+  
+  return { app, router }
+}
+
+// 在客户端挂载应用
+const { app, router } = createApp()
+router.isReady().then(() => {
+  app.mount('#app')
+})
+</div>
+            
+            <h2>SSR最佳实践</h2>
+            <p>实现SSR时需要注意的几个关键点：</p>
+            
+            <h3>1. 避免浏览器特定的API</h3>
+            <div class="code-block">
+// 错误示例
+export default {
+  data() {
+    return {
+      width: window.innerWidth  // SSR时window未定义
+    }
+  }
+}
+
+// 正确示例
+export default {
+  data() {
+    return {
+      width: 0
+    }
+  },
+  mounted() {
+    this.width = window.innerWidth
+  }
+}
+</div>
+            
+            <h3>2. 组件生命周期考虑</h3>
+            <div class="code-block">
+export default {
+  data() {
+    return {
+      userAgent: ''
+    }
+  },
+  // 服务端和客户端都会执行
+  async setup() {
+    const userAgent = process.client ? navigator.userAgent : 'server'
+    return { userAgent }
+  },
+  
+  // 仅在客户端执行
+  mounted() {
+    // 客户端特定的逻辑
+    this.initClientSideFeature()
+  }
+}
+</div>
+            
+            <h3>3. CSS处理</h3>
+            <div class="code-block">
+// 在SSR中，CSS需要特殊处理
+export default {
+  async serverPrefetch() {
+    // 在服务端渲染前收集CSS
+    if (process.server) {
+      // 服务端渲染时收集组件的CSS
+      const { getSSRContext } = require('vue/server-renderer')
+      const ctx = getSSRContext(this.$ssrContext)
+      // 使用模板字符串构建样式标签
+      ctx.styles += this.$options._scopeId ? 
+        '&lt;style scoped&gt;' + this.styles + '&lt;/style&gt;' : 
+        '&lt;style&gt;' + this.styles + '&lt;/style&gt;'
+    }
+  }
+}
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./testing.html" class="nav-link">上一课：测试</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./typescript.html" class="nav-link">下一课：TypeScript集成</a>
+        </div>
+        
+        <footer>
+            <p>服务端渲染 - 提升Vue.js应用性能和SEO</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

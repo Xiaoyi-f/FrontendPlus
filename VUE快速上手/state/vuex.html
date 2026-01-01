@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuex状态管理 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vuex状态管理</h1>
+            <p class="subtitle">状态管理模式、核心概念</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./pinia.html" class="nav-link">下一课：Pinia状态管理</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>Vuex核心概念</h3>
+                <ul>
+                    <li><strong>State</strong>：单一状态树，存储应用的所有状态数据</li>
+                    <li><strong>Getters</strong>：从state中派生出状态，类似于组件中的computed</li>
+                    <li><strong>Mutations</strong>：更改Vuex的store中的state的唯一方法</li>
+                    <li><strong>Actions</strong>：提交mutation而非直接变更状态，可包含任意异步操作</li>
+                    <li><strong>Modules</strong>：将store分割成模块，每个模块拥有自己的state、mutation等</li>
+                </ul>
+            </div>
+            
+            <h2>什么是Vuex？</h2>
+            <p>Vuex 是一个专为 Vue.js 应用程序开发的状态管理模式。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。</p>
+            
+            <h2>为什么需要Vuex？</h2>
+            <p>当我们的应用遇到多个组件共享状态时，单向数据流的简洁性很容易被破坏：</p>
+            <ul>
+                <li>多个视图依赖于同一状态</li>
+                <li>来自不同视图的行为需要变更同一状态</li>
+            </ul>
+            <p>Vuex 通过提供一个应用程序的数据存储框架来解决这个问题，使得状态变化可预测且易于维护。</p>
+            
+            <h2>Vuex基本结构</h2>
+            <div class="code-block">
+// store.js
+import { createStore } from 'vuex'
+
+const store = createStore({
+  // 定义状态
+  state: {
+    count: 0,
+    user: {
+      name: 'John',
+      age: 30
+    },
+    todos: [
+      { id: 1, text: '学习Vuex', done: true },
+      { id: 2, text: '学习Vue', done: false }
+    ]
+  },
+  
+  // 定义getters
+  getters: {
+    doneTodos: state => {
+      return state.todos.filter(todo => todo.done)
+    },
+    // getters也可以接受其他getters作为第二个参数
+    doneTodosCount: (state, getters) => {
+      return getters.doneTodos.length
+    }
+  },
+  
+  // 定义mutations
+  mutations: {
+    increment (state) {
+      state.count++
+    },
+    decrement (state) {
+      state.count--
+    },
+    setUser (state, payload) {
+      state.user.name = payload.name
+      state.user.age = payload.age
+    }
+  },
+  
+  // 定义actions
+  actions: {
+    incrementAsync ({ commit }) {
+      setTimeout(() => {
+        commit('increment')
+      }, 1000)
+    },
+    // Action 函数接受一个与 store 实例具有相同方法和属性的 context 对象
+    // 因此你可以调用 context.commit 提交一个 mutation
+    // 或者通过 context.state 和 context.getters 来获取 state 和 getters
+    incrementIfOdd ({ commit, state }) {
+      if ((state.count + 1) % 2 === 0) {
+        commit('increment')
+      }
+    }
+  }
+})
+
+export default store
+            </div>
+            
+            <h2>在Vue组件中使用Vuex</h2>
+            <p>在组件中可以通过 this.$store 访问 store 实例</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;计数: {{ count }}&lt;/p&gt;
+    &lt;button @click="increment"&gt;+&lt;/button&gt;
+    &lt;button @click="decrement"&gt;-&lt;/button&gt;
+    &lt;button @click="incrementAsync"&gt;异步+&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  computed: {
+    count() {
+      return this.$store.state.count
+    }
+  },
+  methods: {
+    increment() {
+      this.$store.commit('increment')
+    },
+    decrement() {
+      this.$store.commit('decrement')
+    },
+    incrementAsync() {
+      this.$store.dispatch('incrementAsync')
+    }
+  }
+}
+&lt;/script&gt;
+            </div>
+            
+            <h2>使用mapState、mapGetters、mapActions辅助函数</h2>
+            <p>当映射的计算属性的名称与state的子节点名称相同时，可以给mapState传一个字符串数组</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;计数: {{ count }}&lt;/p&gt;
+    &lt;p&gt;双倍计数: {{ doubleCount }}&lt;/p&gt;
+    &lt;button @click="increment"&gt;+&lt;/button&gt;
+    &lt;button @click="incrementAsync"&gt;异步+&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    // 使用对象形式映射state
+    ...mapState({
+      count: state => state.count
+    }),
+    // 使用数组形式映射state
+    // ...mapState(['count']),
+    
+    // 映射getters
+    ...mapGetters(['doubleCount'])
+  },
+  methods: {
+    // 映射mutations
+    ...mapMutations(['increment']),
+    // 或者使用对象形式重命名
+    // ...mapMutations({
+    //   increment: 'increment'
+    // }),
+    
+    // 映射actions
+    ...mapActions(['incrementAsync'])
+  }
+}
+&lt;/script&gt;
+            </div>
+            
+            <h2>模块化(Module)</h2>
+            <p>由于使用单一状态树，应用的所有状态会集中到一个比较大的对象。当应用变得非常复杂时，store 对象就有可能变得十分臃肿。为了解决以上问题，Vuex 允许我们将 store 分割成模块(module)。每个模块拥有自己的 state、mutation、action、getter、甚至是嵌套子模块。</p>
+            
+            <div class="code-block">
+// moduleA.js
+const moduleA = {
+  state: () => ({
+    count: 0
+  }),
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  },
+  actions: {
+    incrementIfOdd ({ commit, state }) {
+      if ((state.count + 1) % 2 === 0) {
+        commit('increment')
+      }
+    }
+  },
+  getters: {
+    doubleCount (state) {
+      return state.count * 2
+    }
+  }
+}
+
+// moduleB.js
+const moduleB = {
+  state: () => ({
+    list: []
+  }),
+  mutations: {
+    pushItem (state, item) {
+      state.list.push(item)
+    }
+  },
+  actions: {
+    pushItemAsync ({ commit }, item) {
+      setTimeout(() => {
+        commit('pushItem', item)
+      }, 1000)
+    }
+  }
+}
+
+// store.js
+import { createStore } from 'vuex'
+import moduleA from './moduleA'
+import moduleB from './moduleB'
+
+const store = createStore({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+// 使用
+store.state.a.count // -> moduleA 的状态
+store.state.b.list // -> moduleB 的状态
+            </div>
+            
+            <h2>命名空间(Namespace)</h2>
+            <p>模块内部的action、mutation和getter默认注册在全局命名空间中，这使得多个模块能够响应同一mutation或action。如果你希望你的模块成为可重用的，可以添加 namespaced: true 的方式使其成为命名空间模块。</p>
+            
+            <div class="code-block">
+const moduleA = {
+  namespaced: true,
+  
+  // ... 模块内容
+  state: () => ({
+    count: 0
+  }),
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  },
+  actions: {
+    incrementBy ({ commit }, amount) {
+      commit('increment', amount, { root: true }) // 提交根节点mutation
+    }
+  },
+  getters: {
+    countDouble (state) {
+      return state.count * 2
+    }
+  }
+}
+
+// 使用命名空间模块
+store.state.a // -> moduleA 的状态
+store.commit('a/increment') // -> 调用moduleA的increment mutation
+store.dispatch('a/incrementBy', 10) // -> 调用moduleA的incrementBy action
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./pinia.html" class="nav-link">下一课：Pinia状态管理</a>
+        </div>
+        
+        <footer>
+            <p>Vuex状态管理 - 掌握Vue.js状态管理模式</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

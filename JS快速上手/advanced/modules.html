@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块化 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .module-diagram {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .module-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .module-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 进阶特性 > 模块化</div>
+            <h1>模块化</h1>
+        </header>
+        
+        <div class="content">
+            <p>模块化是现代JavaScript开发的核心概念，它允许我们将代码组织成可重用的模块，提高代码的可维护性、可读性和可重用性。ES6模块系统为JavaScript提供了标准的模块化方案。</p>
+            
+            <div class="key-features">
+                <h3>模块化概览</h3>
+                <ul>
+                    <li><strong>ES6模块</strong>：JavaScript官方模块系统</li>
+                    <li><strong>CommonJS</strong>：Node.js使用的模块系统</li>
+                    <li><strong>模块导出</strong>：命名导出和默认导出</li>
+                    <li><strong>模块导入</strong>：按需导入模块功能</li>
+                    <li><strong>模块化优势</strong>：代码组织、重用和维护</li>
+                </ul>
+            </div>
+            
+            <h2>模块系统对比</h2>
+            <table class="modules-table">
+                <thead>
+                    <tr>
+                        <th>模块系统</th>
+                        <th>语法</th>
+                        <th>运行环境</th>
+                        <th>特点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ES6模块</td>
+                        <td>import/export</td>
+                        <td>现代浏览器/Node.js</td>
+                        <td>静态分析，支持树摇</td>
+                    </tr>
+                    <tr>
+                        <td>CommonJS</td>
+                        <td>require/module.exports</td>
+                        <td>Node.js</td>
+                        <td>动态加载，运行时确定依赖</td>
+                    </tr>
+                    <tr>
+                        <td>AMD</td>
+                        <td>define/require</td>
+                        <td>浏览器</td>
+                        <td>异步加载，适合浏览器环境</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>ES6模块系统</h2>
+            <p>ES6模块是JavaScript官方的模块系统，使用import和export关键字来导入和导出模块。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// math.js - 导出模块</span><br><br>
+                
+                <span class="code-comment">// 默认导出 - 每个模块只能有一个默认导出</span><br>
+                <span class="code-keyword">export default function</span> add(a, b) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> a + b;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 命名导出 - 可以有多个命名导出</span><br>
+                <span class="code-keyword">export const</span> PI = <span class="code-number">3.14159</span>;<br><br>
+                
+                <span class="code-keyword">export function</span> multiply(a, b) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> a * b;<br>
+                }<br><br>
+                
+                <span class="code-keyword">export class</span> Calculator {<br>
+                &nbsp;&nbsp;<span class="code-keyword">constructor</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.history = [];<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;add(a, b) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> result = a + b;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.history.push({ operation: <span class="code-string">'add'</span>, a, b, result });<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> result;<br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-comment">// 还可以在文件末尾统一导出</span><br>
+                <span class="code-keyword">const</span> subtract = (a, b) => a - b;<br>
+                <span class="code-keyword">const</span> divide = (a, b) => {<br>
+                &nbsp;&nbsp;<span class="code-keyword">if</span> (b === <span class="code-number">0</span>) <span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'除数不能为0'</span>);<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> a / b;<br>
+                };<br><br>
+                
+                <span class="code-keyword">export</span> { subtract, divide };
+            </div>
+            
+            <div class="code-block">
+                <span class="code-comment">// main.js - 导入模块</span><br><br>
+                
+                <span class="code-comment">// 导入默认导出</span><br>
+                <span class="code-keyword">import</span> add <span class="code-keyword">from</span> <span class="code-string">'./math.js'</span>;<br><br>
+                
+                <span class="code-comment">// 导入命名导出</span><br>
+                <span class="code-keyword">import</span> { PI, multiply, Calculator, subtract, divide } <span class="code-keyword">from</span> <span class="code-string">'./math.js'</span>;<br><br>
+                
+                <span class="code-comment">// 导入所有命名导出到一个对象</span><br>
+                <span class="code-keyword">import</span> * <span class="code-keyword">as</span> mathUtils <span class="code-keyword">from</span> <span class="code-string">'./math.js'</span>;<br><br>
+                
+                <span class="code-comment">// 混合导入</span><br>
+                <span class="code-keyword">import</span> add, { PI, multiply } <span class="code-keyword">from</span> <span class="code-string">'./math.js'</span>;<br><br>
+                
+                <span class="code-comment">// 导入时重命名</span><br>
+                <span class="code-keyword">import</span> { multiply <span class="code-keyword">as</span> mult, divide <span class="code-keyword">as</span> div } <span class="code-keyword">from</span> <span class="code-string">'./math.js'</span>;<br><br>
+                
+                <span class="code-comment">// 使用导入的功能</span><br>
+                console.log(add(<span class="code-number">2</span>, <span class="code-number">3</span>)); <span class="code-comment">// 5</span><br>
+                console.log(PI); <span class="code-comment">// 3.14159</span><br>
+                console.log(multiply(<span class="code-number">4</span>, <span class="code-number">5</span>)); <span class="code-comment">// 20</span><br><br>
+                
+                <span class="code-keyword">const</span> calc = <span class="code-keyword">new</span> Calculator();<br>
+                console.log(calc.add(<span class="code-number">10</span>, <span class="code-number">5</span>)); <span class="code-comment">// 15</span>
+            </div>
+            
+            <div class="module-diagram">
+                <h3>模块依赖关系示意图</h3>
+                <p>app.js → utils.js → helpers.js</p>
+                <p>main.js → components/ → api/</p>
+                <p>每个箭头表示一个import关系</p>
+            </div>
+            
+            <h2>模块化高级用法</h2>
+            <p>ES6模块系统提供了丰富的功能来满足复杂的模块化需求。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 动态导入模块</span><br>
+                <span class="code-keyword">async function</span> loadCalculator() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">try</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> { Calculator } = <span class="code-keyword">await</span> <span class="code-keyword">import</span>(<span class="code-string">'./math.js'</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> calc = <span class="code-keyword">new</span> Calculator();<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> calc;<br>
+                &nbsp;&nbsp;} <span class="code-keyword">catch</span> (error) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="code-string">'加载计算器模块失败:'</span>, error);<br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-comment">// 条件导入</span><br>
+                <span class="code-keyword">async function</span> loadFeature(featureName) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> module;<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">switch</span> (featureName) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">'chart'</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module = <span class="code-keyword">await</span> <span class="code-keyword">import</span>(<span class="code-string">'./charts.js'</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">'editor'</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;module = <span class="code-keyword">await</span> <span class="code-keyword">import</span>(<span class="code-string">'./editor.js'</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">default</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">`未知功能: ${featureName}`</span>);<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">return</span> module;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 在事件处理中使用动态导入</span><br>
+                document.getElementById(<span class="code-string">'load-chart-btn'</span>).addEventListener(<span class="code-string">'click'</span>, <span class="code-keyword">async</span> () => {<br>
+                &nbsp;&nbsp;<span class="code-keyword">const</span> chartModule = <span class="code-keyword">await</span> loadFeature(<span class="code-string">'chart'</span>);<br>
+                &nbsp;&nbsp;chartModule.renderChart();<br>
+                });
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">静态导入 vs 动态导入</div>
+                    <ul>
+                        <li><strong>静态导入</strong>：编译时确定，提升性能，支持tree-shaking</li>
+                        <li><strong>动态导入</strong>：运行时确定，按需加载，减少初始包大小</li>
+                        <li><strong>语法</strong>：静态使用import声明，动态使用import()函数</li>
+                        <li><strong>时机</strong>：静态在文件顶部，动态可在任何地方</li>
+                        <li><strong>条件性</strong>：静态无法条件导入，动态可条件导入</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">模块系统对比</div>
+                    <ul>
+                        <li><strong>ES6模块</strong>：标准，静态分析友好，浏览器原生支持</li>
+                        <li><strong>CommonJS</strong>：Node.js，运行时求值，支持动态导入</li>
+                        <li><strong>AMD</strong>：浏览器，异步加载，现已较少使用</li>
+                        <li><strong>UMD</strong>：通用模块定义，兼容多种模块系统</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>模块设计模式</h2>
+            <p>模块设计的最佳实践包括如何组织模块结构、导出内容以及处理依赖关系。</p>
+            
+            <div class="module-example">
+                <div class="module-example-title">工具函数模块设计</div>
+                <div class="code-block">
+                    <span class="code-comment">// utils/string.js - 字符串处理工具</span><br><br>
+                    
+                    <span class="code-keyword">export function</span> capitalize(str) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> str !== <span class="code-string">'string'</span>) <span class="code-keyword">return</span> str;<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> str.charAt(<span class="code-number">0</span>).toUpperCase() + str.slice(<span class="code-number">1</span>).toLowerCase();<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">export function</span> truncate(str, maxLength, suffix = <span class="code-string">'...'</span>) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">if</span> (str.length <= maxLength) <span class="code-keyword">return</span> str;<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> str.substring(<span class="code-number">0</span>, maxLength - suffix.length) + suffix;<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">export function</span> camelCase(str) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> str<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.replace(<span class="code-regexp">/[^a-zA-Z0-9]+/g</span>, <span class="code-string">' '</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.trim()<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.split(<span class="code-string">' '</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.map((word, index) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (index === <span class="code-number">0</span>) <span class="code-keyword">return</span> word.toLowerCase();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> word.charAt(<span class="code-number">0</span>).toUpperCase() + word.slice(<span class="code-number">1</span>).toLowerCase();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.join(<span class="code-string">''</span>);<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// 默认导出一个包含所有函数的对象</span><br>
+                    <span class="code-keyword">export default</span> {<br>
+                    &nbsp;&nbsp;capitalize,<br>
+                    &nbsp;&nbsp;truncate,<br>
+                    &nbsp;&nbsp;camelCase<br>
+                    };
+                </div>
+            </div>
+            
+            <div class="module-example">
+                <div class="module-example-title">API客户端模块设计</div>
+                <div class="code-block">
+                    <span class="code-comment">// api/client.js - API客户端模块</span><br><br>
+                    
+                    <span class="code-keyword">class</span> ApiClient {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">constructor</span>(baseUrl, options = {}) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.baseUrl = baseUrl;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.defaultHeaders = options.headers || {};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.timeout = options.timeout || <span class="code-number">5000</span>;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;async request(endpoint, options = {}) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> url = <span class="code-string">`${<span class="code-keyword">this</span>.baseUrl}${endpoint}`</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> config = {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<span class="code-keyword">this</span>.defaultHeaders,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...options.headers,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...options,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (options.body && <span class="code-keyword">typeof</span> options.body === <span class="code-string">'object'</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config.body = JSON.stringify(options.body);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">try</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> controller = <span class="code-keyword">new</span> AbortController();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> timeoutId = setTimeout(() => controller.abort(), <span class="code-keyword">this</span>.timeout);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config.signal = controller.signal;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> response = <span class="code-keyword">await</span> fetch(url, config);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearTimeout(timeoutId);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!response.ok) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">`HTTP错误! 状态: ${response.status}`</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">await</span> response.json();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">catch</span> (error) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (error.name === <span class="code-string">'AbortError'</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">throw</span> <span class="code-keyword">new</span> Error(<span class="code-string">'请求超时'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">throw</span> error;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;get(endpoint) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.request(endpoint, { method: <span class="code-string">'GET'</span> });<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;post(endpoint, data) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.request(endpoint, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method: <span class="code-string">'POST'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body: data<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;put(endpoint, data) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.request(endpoint, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method: <span class="code-string">'PUT'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body: data<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;delete(endpoint) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.request(endpoint, { method: <span class="code-string">'DELETE'</span> });<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// 默认导出</span><br>
+                    <span class="code-keyword">export default</span> ApiClient;<br><br>
+                    
+                    <span class="code-comment">// 预配置的API客户端</span><br>
+                    <span class="code-keyword">export const</span> createApiClient = (baseUrl) => <span class="code-keyword">new</span> ApiClient(baseUrl);<br><br>
+                    
+                    <span class="code-comment">// 通用API客户端</span><br>
+                    <span class="code-keyword">export const</span> defaultClient = <span class="code-keyword">new</span> ApiClient(<span class="code-string">'https://api.example.com'</span>);
+                </div>
+            </div>
+            
+            <h2>模块打包和构建</h2>
+            <p>在实际项目中，我们通常使用构建工具来处理模块，如Webpack、Rollup或Vite。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// package.json - 项目配置</span><br><br>
+                
+                {<br>
+                &nbsp;&nbsp;<span class="code-string">"name"</span>: <span class="code-string">"my-app"</span>,<br>
+                &nbsp;&nbsp;<span class="code-string">"version"</span>: <span class="code-string">"1.0.0"</span>,<br>
+                &nbsp;&nbsp;<span class="code-string">"type"</span>: <span class="code-string">"module"</span>, <span class="code-comment">// 启用ES6模块</span><br>
+                &nbsp;&nbsp;<span class="code-string">"main"</span>: <span class="code-string">"dist/index.js"</span>,<br>
+                &nbsp;&nbsp;<span class="code-string">"scripts"</span>: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"build"</span>: <span class="code-string">"webpack --mode production"</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">"dev"</span>: <span class="code-string">"webpack serve --mode development"</span><br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-comment">// webpack.config.js - Webpack配置</span><br><br>
+                
+                <span class="code-keyword">const</span> path = <span class="code-keyword">require</span>(<span class="code-string">'path'</span>);<br><br>
+                
+                <span class="code-keyword">module.exports</span> = {<br>
+                &nbsp;&nbsp;entry: <span class="code-string">'./src/index.js'</span>,<br>
+                &nbsp;&nbsp;output: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;filename: <span class="code-string">'bundle.js'</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;path: path.resolve(__dirname, <span class="code-string">'dist'</span>)<br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;module: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;rules: [<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test: <span class="code-regexp">/\.js$/</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loader: <span class="code-string">'babel-loader'</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;presets: [<span class="code-string">'@babel/preset-env'</span>]<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;]<br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;mode: <span class="code-string">'development'</span><br>
+                };
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个完整的模块化项目结构，包含utils、api、components等模块</li>
+                    <li>实现一个模块，使用动态导入实现按需加载功能</li>
+                    <li>设计一个插件系统，允许外部模块扩展功能</li>
+                    <li>创建一个配置模块，支持环境特定的配置</li>
+                    <li>实现一个模块加载器，支持模块缓存和依赖解析</li>
+                </ul>
+            </div>
+            
+            <h2>模块化最佳实践</h2>
+            <p>在使用模块化时，有一些最佳实践需要注意：</p>
+            <ul>
+                <li>保持模块单一职责，每个模块只做一件事</li>
+                <li>使用有意义的模块名称</li>
+                <li>合理组织模块依赖关系，避免循环依赖</li>
+                <li>导出的内容应该是稳定的API</li>
+                <li>考虑使用tree-shaking来减少包大小</li>
+                <li>为模块编写适当的文档</li>
+            </ul>
+        </div>
+        
+        <nav>
+            <a href="error-handling.html" class="nav-link">← 上一课：错误处理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>闭包与作用域 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .scope-diagram {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .closure-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .closure-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 进阶特性 > 闭包与作用域</div>
+            <h1>闭包与作用域</h1>
+        </header>
+        
+        <div class="content">
+            <p>闭包和作用域是JavaScript中最重要的概念之一，理解它们对于编写高质量的JavaScript代码至关重要。闭包允许函数访问其外部作用域中的变量，即使在外部函数已经执行完毕后。</p>
+            
+            <div class="key-features">
+                <h3>闭包与作用域概览</h3>
+                <ul>
+                    <li><strong>词法作用域</strong>：变量和函数的可访问性由其在源代码中的位置决定</li>
+                    <li><strong>作用域链</strong>：JavaScript引擎查找变量的机制</li>
+                    <li><strong>闭包定义</strong>：函数和其词法环境的组合</li>
+                    <li><strong>闭包应用</strong>：数据封装、模块模式、回调函数等</li>
+                    <li><strong>内存管理</li>
+</ul>
+            </div>
+            
+            <h2>作用域基础</h2>
+            <p>作用域决定了变量和函数的可访问性。JavaScript有三种作用域：全局作用域、函数作用域和块级作用域（ES6引入）。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 全局作用域</span><br>
+                <span class="code-keyword">var</span> globalVar = <span class="code-string">"我是全局变量"</span>;<br><br>
+                
+                <span class="code-keyword">function</span> outerFunction() {<br>
+                &nbsp;&nbsp;<span class="code-comment">// 函数作用域</span><br>
+                &nbsp;&nbsp;<span class="code-keyword">var</span> outerVar = <span class="code-string">"我是外部函数变量"</span>;<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">function</span> innerFunction() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 内部函数可以访问外部函数和全局作用域的变量</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(globalVar); <span class="code-comment">// "我是全局变量"</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(outerVar); <span class="code-comment">// "我是外部函数变量"</span><br><br>
+                
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">var</span> innerVar = <span class="code-string">"我是内部函数变量"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(innerVar); <span class="code-comment">// "我是内部函数变量"</span><br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;innerFunction();<br>
+                }<br><br>
+                
+                outerFunction();<br><br>
+                
+                <span class="code-comment">// 块级作用域（ES6）</span><br>
+                {<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> blockScoped = <span class="code-string">"我是块级作用域变量"</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">const</span> constantVar = <span class="code-string">"我是常量"</span>;<br>
+                &nbsp;&nbsp;console.log(blockScoped); <span class="code-comment">// "我是块级作用域变量"</span><br>
+                }<br><br>
+                
+                <span class="code-comment">// console.log(blockScoped); // ReferenceError: blockScoped is not defined</span>
+            </div>
+            
+            <div class="scope-diagram">
+                <h3>作用域链示意图</h3>
+                <p>内部函数可以访问外部函数的变量，但外部函数不能访问内部函数的变量。这种关系形成了一条作用域链。</p>
+                <pre>
+    全局作用域
+        |
+    outerFunction 作用域
+        |
+    innerFunction 作用域
+                </pre>
+            </div>
+            
+            <h2>闭包的定义与原理</h2>
+            <p>闭包是指内部函数能够访问其外部函数作用域中的变量，即使外部函数已经执行完毕。闭包由两部分组成：内部函数和该函数引用的外部函数的变量。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 基本闭包示例</span><br>
+                <span class="code-keyword">function</span> outerFunction(x) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span> innerFunction(y) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// innerFunction可以访问外部函数的参数x</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> x + y;<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                
+                <span class="code-keyword">const</span> closure = outerFunction(<span class="code-number">10</span>);<br>
+                console.log(closure(<span class="code-number">5</span>)); <span class="code-comment">// 15</span><br><br>
+                
+                <span class="code-comment">// 闭包保持对外部变量的引用</span><br>
+                <span class="code-keyword">function</span> createCounter() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> count = <span class="code-number">0</span>; <span class="code-comment">// 私有变量</span><br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;increment: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count++;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> count;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;decrement: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count--;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> count;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;getCount: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> count;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                
+                <span class="code-keyword">const</span> counter = createCounter();<br>
+                console.log(counter.increment()); <span class="code-comment">// 1</span><br>
+                console.log(counter.increment()); <span class="code-comment">// 2</span><br>
+                console.log(counter.decrement()); <span class="code-comment">// 1</span><br>
+                console.log(counter.getCount()); <span class="code-comment">// 1</span><br><br>
+                
+                <span class="code-keyword">const</span> counter2 = createCounter();<br>
+                console.log(counter2.increment()); <span class="code-comment">// 1 (独立的计数器)</span>
+            </div>
+            
+            <h2>闭包的实际应用</h2>
+            <p>闭包在JavaScript中有许多实际应用，包括创建私有变量、模块模式、回调函数等。</p>
+            
+            <div class="closure-example">
+                <div class="closure-example-title">1. 模块模式</div>
+                <div class="code-block">
+                    <span class="code-keyword">const</span> myModule = (<span class="code-keyword">function</span>() {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// 私有变量和函数</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">let</span> privateVar = <span class="code-string">"这是一个私有变量"</span>;<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-keyword">function</span> privateFunction() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"这是一个私有函数"</span>);<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-comment">// 返回公共接口</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;publicMethod1: <span class="code-keyword">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(privateVar);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;publicMethod2: <span class="code-keyword">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;privateFunction();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;updatePrivateVar: <span class="code-keyword">function</span>(newValue) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;privateVar = newValue;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;};<br>
+                    })();<br><br>
+                    
+                    myModule.publicMethod1(); <span class="code-comment">// "这是一个私有变量"</span><br>
+                    myModule.updatePrivateVar(<span class="code-string">"更新后的私有变量"</span>);<br>
+                    myModule.publicMethod1(); <span class="code-comment">// "更新后的私有变量"</span>
+                </div>
+            </div>
+            
+            <div class="closure-example">
+                <div class="closure-example-title">2. 事件处理和回调</div>
+                <div class="code-block">
+                    <span class="code-keyword">function</span> attachListeners() {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 使用let确保每个循环创建新的块级作用域</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(<span class="code-keyword">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(i); <span class="code-comment">// 输出 0, 1, 2, 3, 4</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}, i * <span class="code-number">1000</span>);<br>
+                    }<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-comment">// 使用闭包解决传统var循环问题</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">var</span> j = <span class="code-number">0</span>; j < <span class="code-number">5</span>; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;(function(index) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(<span class="code-keyword">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(index); <span class="code-comment">// 输出 0, 1, 2, 3, 4</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, j * <span class="code-number">1000</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}(j));<br>
+                    }<br>
+                    }<br><br>
+                    
+                    attachListeners();
+                </div>
+            </div>
+            
+            <div class="closure-example">
+                <div class="closure-example-title">3. 函数工厂</div>
+                <div class="code-block">
+                    <span class="code-keyword">function</span> createMultiplier(multiplier) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(number) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> number * multiplier;<br>
+                    &nbsp;&nbsp;};<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">const</span> double = createMultiplier(<span class="code-number">2</span>);<br>
+                    <span class="code-keyword">const</span> triple = createMultiplier(<span class="code-number">3</span>);<br><br>
+                    
+                    console.log(double(<span class="code-number">5</span>)); <span class="code-comment">// 10</span><br>
+                    console.log(triple(<span class="code-number">5</span>)); <span class="code-comment">// 15</span><br><br>
+                    
+                    <span class="code-comment">// 更复杂的工厂示例</span><br>
+                    <span class="code-keyword">function</span> createValidator(type) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> patterns = {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-regexp">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;phone: <span class="code-regexp">/^\d{3}-\d{3}-\d{4}$/</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;url: <span class="code-regexp">/^https?:\/\/.+/</span><br>
+                    &nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(value) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> patterns[type] ? patterns[type].test(value) : <span class="code-boolean">false</span>;<br>
+                    &nbsp;&nbsp;};<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">const</span> emailValidator = createValidator(<span class="code-string">'email'</span>);<br>
+                    <span class="code-keyword">const</span> phoneValidator = createValidator(<span class="code-string">'phone'</span>);<br><br>
+                    
+                    console.log(emailValidator(<span class="code-string">'test@example.com'</span>)); <span class="code-comment">// true</span><br>
+                    console.log(phoneValidator(<span class="code-string">'123-456-7890'</span>)); <span class="code-comment">// true</span>
+                </div>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">var vs let/const 和闭包</div>
+                    <ul>
+                        <li><strong>使用var</strong>：函数作用域，容易在循环中产生意外结果</li>
+                        <li><strong>使用let/const</strong>：块级作用域，每次迭代创建新变量绑定</li>
+                        <li>ES6之前的闭包解决方案：IIFE（立即执行函数表达式）</li>
+                        <li>现代JavaScript使用let/const更简洁直观</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">闭包的优缺点</div>
+                    <ul>
+                        <li><strong>优点</strong>：数据封装、创建私有变量、模块化、函数工厂</li>
+                        <li><strong>缺点</strong>：内存消耗、性能开销、可能导致内存泄漏</li>
+                        <li><strong>注意事项</strong>：合理使用，避免过度创建闭包</li>
+                        <li><strong>最佳实践</strong>：及时清理不需要的引用</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>闭包与内存管理</h2>
+            <p>闭包会保持对外部函数变量的引用，这可能影响垃圾回收。理解内存管理对于编写高效JavaScript代码很重要。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 闭包可能导致内存泄漏的示例</span><br>
+                <span class="code-keyword">function</span> createLargeClosure() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">const</span> largeData = <span class="code-keyword">new</span> Array(<span class="code-number">1000000</span>).fill(<span class="code-string">'data'</span>); <span class="code-comment">// 大量数据</span><br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 即使只使用了内部函数的一小部分功能</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// largeData仍然被引用，占用内存</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"执行函数"</span>);<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                
+                <span class="code-comment">// 内存管理最佳实践</span><br>
+                <span class="code-keyword">function</span> createOptimizedClosure() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">const</span> largeData = <span class="code-keyword">new</span> Array(<span class="code-number">1000000</span>).fill(<span class="code-string">'data'</span>);<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> neededData = <span class="code-string">"important value"</span>;<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(neededData);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 清理不需要的大数据引用</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;neededData = <span class="code-boolean">null</span>;<br>
+                &nbsp;&nbsp;};<br>
+                }
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个使用闭包实现的计数器工厂，可以创建多个独立的计数器实例</li>
+                    <li>实现一个缓存函数，使用闭包存储已计算的结果</li>
+                    <li>创建一个配置管理器，使用闭包保护内部配置数据</li>
+                    <li>实现一个事件发布/订阅系统，使用闭包管理事件监听器</li>
+                    <li>编写一个防抖函数，使用闭包保存定时器引用</li>
+                </ul>
+            </div>
+            
+            <h2>实际应用示例</h2>
+            <p>闭包在实际开发中的应用非常广泛，以下是一些常见的使用场景：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 1. 防抖函数 - 常用于搜索输入、窗口调整等场景</span><br>
+                <span class="code-keyword">function</span> debounce(func, delay) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> timeoutId;<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(...args) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 每次调用时清除之前的定时器</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;clearTimeout(timeoutId);<br><br>
+                
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 设置新的定时器</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;timeoutId = setTimeout(() => {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;func.apply(<span class="code-keyword">this</span>, args);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}, delay);<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用示例</span><br>
+                <span class="code-keyword">const</span> debouncedSearch = debounce(<span class="code-keyword">function</span>(query) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`搜索: ${query}`</span>);<br>
+                }, <span class="code-number">300</span>);<br><br>
+                
+                <span class="code-comment">// 2. 柯里化函数</span><br>
+                <span class="code-keyword">function</span> curry(fn) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span> curried(...args) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (args.length >= fn.length) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 参数足够，执行原函数</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> fn.apply(<span class="code-keyword">this</span>, args);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 参数不足，返回接收剩余参数的函数</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(...args2) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> curried.apply(<span class="code-keyword">this</span>, args.concat(args2));<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用示例</span><br>
+                <span class="code-keyword">const</span> add = (a, b, c) => a + b + c;<br>
+                <span class="code-keyword">const</span> curriedAdd = curry(add);<br><br>
+                
+                console.log(curriedAdd(<span class="code-number">1</span>)(<span class="code-number">2</span>)(<span class="code-number">3</span>)); <span class="code-comment">// 6</span><br>
+                console.log(curriedAdd(<span class="code-number">1</span>, <span class="code-number">2</span>)(<span class="code-number">3</span>)); <span class="code-comment">// 6</span><br>
+                console.log(curriedAdd(<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>)); <span class="code-comment">// 6</span>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="nav-link">← 上一课：进阶特性索引</a>
+            <a href="prototypes.html" class="nav-link">下一课：原型与继承 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

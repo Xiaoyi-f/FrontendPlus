@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .directive-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .directive-step {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .api-table th, .api-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .api-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .api-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .focus-input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .focus-input.focused {
+            border-color: #42b983;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 进阶特性篇 > 自定义指令</div>
+            <h1>自定义指令</h1>
+        </header>
+        
+        <div class="content">
+            <p>自定义指令是Vue.js提供的一种功能，允许我们直接在DOM元素上应用特定行为。除了Vue提供的内置指令（如v-if、v-for、v-model等），我们还可以创建自定义指令来封装DOM操作逻辑。</p>
+            
+            <div class="key-features">
+                <h3>自定义指令核心概念</h3>
+                <ul>
+                    <li><strong>指令钩子函数</strong>：在不同阶段执行的函数</li>
+                    <li><strong>元素操作</strong>：直接操作DOM元素</li>
+                    <li><strong>参数传递</strong>：通过指令传递参数</li>
+                    <li><strong>修饰符支持</strong>：支持指令修饰符</li>
+                    <li><strong>生命周期</strong>：指令的完整生命周期</li>
+                    <li><strong>复用性</strong>：可复用的DOM操作逻辑</li>
+                </ul>
+            </div>
+            
+            <h2>自定义指令工作原理</h2>
+            <div class="directive-diagram">
+                <div class="directive-step">指令绑定</div>
+                →
+                <div class="directive-step">插入元素</div>
+                →
+                <div class="directive-step">更新前</div>
+                →
+                <div class="directive-step">更新后</div>
+                →
+                <div class="directive-step">移除前</div>
+                →
+                <div class="directive-step">移除后</div>
+            </div>
+            
+            <p>自定义指令提供了多个生命周期钩子函数，允许我们在指令的不同阶段执行特定的逻辑。这些钩子函数包括：bind、inserted、update、componentUpdated和unbind。</p>
+            
+            <h2>指令钩子函数</h2>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>钩子函数</th>
+                        <th>调用时机</th>
+                        <th>参数</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>bind</td>
+                        <td>指令第一次绑定到元素时调用</td>
+                        <td>el, binding, vnode</td>
+                        <td>进行一次性设置</td>
+                    </tr>
+                    <tr>
+                        <td>inserted</td>
+                        <td>元素插入父节点时调用</td>
+                        <td>el, binding, vnode</td>
+                        <td>处理DOM操作</td>
+                    </tr>
+                    <tr>
+                        <td>update</td>
+                        <td>组件更新时调用</td>
+                        <td>el, binding, vnode, oldVnode</td>
+                        <td>处理更新逻辑</td>
+                    </tr>
+                    <tr>
+                        <td>componentUpdated</td>
+                        <td>组件及其子组件更新完成后调用</td>
+                        <td>el, binding, vnode, oldVnode</td>
+                        <td>处理更新后逻辑</td>
+                    </tr>
+                    <tr>
+                        <td>unbind</td>
+                        <td>指令与元素解绑时调用</td>
+                        <td>el, binding, vnode</td>
+                        <td>清理工作</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">基本自定义指令示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;basic-directive-demo&gt;&lt;/basic-directive-demo&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.directive(<span class="code-string">'color'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;bind(el, binding) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 指令绑定时设置颜色</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.style.color = binding.value;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;update(el, binding) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 当绑定值更新时更新颜色</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.style.color = binding.value;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'basic-directive-demo'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color: <span class="code-string">'red'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;基本自定义指令示例&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p v-color=<span class="code-string">"color"</span>&gt;这段文字的颜色会根据数据变化&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"color = 'blue'"</span>&gt;蓝色&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"color = 'red'"</span>&gt;红色&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"color = 'green'"</span>&gt;绿色&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>指令参数详解</h2>
+            <p>每个指令钩子函数都接收几个参数，这些参数提供了关于指令使用上下文的详细信息：</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">el参数</div>
+                    <p>el是绑定指令的DOM元素，它可用于直接操作DOM。</p>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> myDirective = {<br>
+                        &nbsp;&nbsp;bind(<span class="code-function">el</span>, binding) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;el.style.backgroundColor = <span class="code-string">'yellow'</span>;<br>
+                        &nbsp;&nbsp;}<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">binding参数</div>
+                    <p>binding对象包含指令的详细信息：</p>
+                    <ul>
+                        <li>name: 指令名称</li>
+                        <li>value: 指令绑定的值</li>
+                        <li>oldValue: 更新前的值</li>
+                        <li>expression: 指令表达式字符串</li>
+                        <li>arg: 传递给指令的参数</li>
+                        <li>modifiers: 包含修饰符的对象</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">带参数和修饰符的指令示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;advanced-directive-demo&gt;&lt;/advanced-directive-demo&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.directive(<span class="code-string">'tooltip'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;bind(el, binding) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 创建tooltip元素</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> tooltip = document.createElement(<span class="code-string">'div'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.className = <span class="code-string">'tooltip-text'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.textContent = binding.value;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.cssText = <span class="code-string">`
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position: absolute;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;background-color: #333;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color: white;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;padding: 5px 10px;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;border-radius: 4px;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display: none;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;font-size: 12px;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z-index: 1000;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`</span>;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.appendChild(tooltip);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.classList.add(<span class="code-string">'tooltip'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 根据修饰符设置位置</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (binding.modifiers.top) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.bottom = <span class="code-string">'100%'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.left = <span class="code-string">'50%'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.transform = <span class="code-string">'translateX(-50%)'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> <span class="code-keyword">if</span> (binding.modifiers.right) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.left = <span class="code-string">'100%'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.top = <span class="code-string">'50%'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.transform = <span class="code-string">'translateY(-50%)'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 默认底部</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.top = <span class="code-string">'100%'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.left = <span class="code-string">'50%'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.transform = <span class="code-string">'translateX(-50%)'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 绑定事件</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.addEventListener(<span class="code-string">'mouseenter'</span>, <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.display = <span class="code-string">'block'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.addEventListener(<span class="code-string">'mouseleave'</span>, <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.style.display = <span class="code-string">'none'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;update(el, binding) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 更新tooltip文本</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> tooltip = el.querySelector(<span class="code-string">'.tooltip-text'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (tooltip) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltip.textContent = binding.value;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'advanced-directive-demo'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> tooltipText = ref(<span class="code-string">'这是一个工具提示'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tooltipText<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;带参数和修饰符的指令&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-tooltip=<span class="code-string">"tooltipText"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"tooltip-demo"</span>&gt;底部工具提示&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-tooltip.top=<span class="code-string">"tooltipText"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"tooltip-demo"</span>&gt;顶部工具提示&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-tooltip.right=<span class="code-string">"tooltipText"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"tooltip-demo"</span>&gt;右侧工具提示&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"tooltipText"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"输入工具提示文本"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"input-field"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .tooltip-demo {<br>
+                    &nbsp;&nbsp;display: inline-block;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;background-color: #e0e0e0;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    &nbsp;&nbsp;cursor: pointer;<br>
+                    }<br><br>
+                    
+                    .input-field {<br>
+                    &nbsp;&nbsp;margin-top: <span class="code-number">20</span>px;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">8</span>px;<br>
+                    &nbsp;&nbsp;width: <span class="code-number">200</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>全局与局部指令</h2>
+            <p>Vue支持全局和局部注册指令。全局指令在所有组件中都可用，而局部指令仅在定义的组件中可用。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">全局与局部指令示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;directive-scope-demo&gt;&lt;/directive-scope-demo&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 全局指令 - 在所有组件中都可用</span><br>
+                    createApp({})<br>
+                    &nbsp;&nbsp;.directive(<span class="code-string">'global-highlight'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;bind(el, binding) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.style.backgroundColor = binding.value || <span class="code-string">'yellow'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.style.padding = <span class="code-string">'5px'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'directive-scope-demo'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;directives: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 局部指令 - 仅在此组件中可用</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;localUnderline: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bind(el) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.style.textDecoration = <span class="code-string">'underline'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.style.color = <span class="code-string">'blue'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;全局与局部指令&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p v-global-highlight&gt;这个段落使用全局指令&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p v-global-highlight=<span class="code-string">"'lightblue'"</span>&gt;这个段落使用全局指令并传入参数&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p v-local-underline&gt;这个段落使用局部指令&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>函数式指令</h2>
+            <p>如果一个指令需要同时使用bind和update钩子，且这两个钩子的逻辑相同，我们可以使用函数式指令来简化代码。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">函数式指令示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;functional-directive-demo&gt;&lt;/functional-directive-demo&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.directive(<span class="code-string">'colorize'</span>, <span class="code-function">(el, binding)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 这个函数同时处理bind和update钩子</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;el.style.color = binding.value || <span class="code-string">'black'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;el.style.fontWeight = <span class="code-string">'bold'</span>;<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'functional-directive-demo'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> textColor = ref(<span class="code-string">'red'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;textColor<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;函数式指令示例&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p v-colorize=<span class="code-string">"textColor"</span>&gt;这段文字的颜色会根据数据变化&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"textColor"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"输入颜色名称"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style=<span class="code-string">"margin-top: 10px;"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"textColor = 'red'"</span>&gt;红色&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"textColor = 'blue'"</span>&gt;蓝色&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"textColor = 'green'"</span>&gt;绿色&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>自定义指令在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>焦点管理</strong>：自动聚焦到特定输入框</li>
+                    <li><strong>文本格式化</strong>：格式化显示文本</li>
+                    <li><strong>事件处理</strong>：处理特定事件逻辑</li>
+                    <li><strong>元素尺寸</strong>：处理元素尺寸变化</li>
+                    <li><strong>工具提示</strong>：显示提示信息</li>
+                    <li><strong>权限控制</strong>：根据权限显示/隐藏元素</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">焦点管理指令示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;focus-directive-demo&gt;&lt;/focus-directive-demo&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.directive(<span class="code-string">'focus'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;inserted(el) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.focus();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;update(el, binding) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (binding.value) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;el.focus();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'focus-directive-demo'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shouldFocus: <span class="code-boolean">true</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inputValue: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;焦点管理指令&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-focus=<span class="code-string">"shouldFocus"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"inputValue"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"这个输入框会自动获得焦点"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"focus-input"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;输入值: {{ inputValue }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"shouldFocus = !shouldFocus"</span>&gt;切换焦点&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>自定义指令最佳实践</h2>
+            <p>在使用自定义指令时，有一些最佳实践可以帮助我们更好地利用其功能：</p>
+            
+            <div class="key-features">
+                <h3>自定义指令最佳实践</h3>
+                <ul>
+                    <li><strong>避免复杂逻辑</strong>：指令应该专注于DOM操作</li>
+                    <li><strong>清理资源</strong>：在unbind钩子中清理事件监听器</li>
+                    <li><li><strong>可重用性</strong>：设计可复用的指令</li>
+                    <li><strong>性能考虑</strong>：避免在指令中执行重计算</li>
+                    <li><strong>文档说明</strong>：为指令提供清晰的文档</li>
+                    <li><strong>遵循约定</strong>：使用一致的命名和参数约定</li>
+                </ul>
+            </div>
+            
+            <h3>注意事项</h3>
+            <p>使用自定义指令时需要注意以下几点：</p>
+            
+            <ul>
+                <li>自定义指令直接操作DOM，应该仅用于纯粹的DOM操作，避免包含业务逻辑</li>
+                <li>在指令中修改数据或触发事件时要谨慎</li>
+                <li>需要在unbind钩子中清理事件监听器和定时器</li>
+                <li>指令不能替代组件，复杂的UI逻辑应该使用组件实现</li>
+                <li>指令的参数是响应式的，但指令本身不会触发组件重新渲染</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个v-copy指令，点击复制文本到剪贴板</li>
+                    <li>实现一个v-resize指令，监听元素尺寸变化</li>
+                    <li>创建一个v-longpress指令，处理长按事件</li>
+                    <li>实现一个v-permission指令，根据权限显示/隐藏元素</li>
+                    <li>创建一个v-watermark指令，在元素上添加水印</li>
+                    <li>实现一个v-debounce指令，对事件处理函数进行防抖</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="suspense.html" class="nav-link">← 上一课：Suspense组件</a>
+            <a href="render-functions.html" class="nav-link">下一课：渲染函数与JSX →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件事件 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>组件事件</h1>
+            <p class="subtitle">自定义事件、事件透传</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./props.html" class="nav-link">上一课：Props传递数据</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./slots.html" class="nav-link">下一课：插槽Slots</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>组件事件核心概念</h3>
+                <ul>
+                    <li><strong>自定义事件</strong>：组件间通信的机制</li>
+                    <li><strong>事件触发</strong>：使用$emit触发自定义事件</li>
+                    <li><strong>事件监听</strong>：父组件监听子组件事件</li>
+                    <li><strong>事件修饰符</strong>：事件处理的修饰符</li>
+                    <li><strong>事件透传</strong>：将事件传递到内部元素</li>
+                    <li><strong>事件验证</strong>：确保事件按预期触发</li>
+                </ul>
+            </div>
+            
+            <h2>组件间事件通信</h2>
+            <p>在Vue中，父组件可以通过props向子组件传递数据，而子组件可以通过自定义事件向父组件发送消息。这种模式确保了数据流的单向性，同时允许子组件与父组件进行通信。</p>
+            
+            <h2>触发自定义事件</h2>
+            <p>子组件可以通过调用[vm.$emit(event, ...args)](file:///e:\FrontendTeach\VUE快速上手\api\instance-methods.html#L18-L18)方法触发自定义事件：</p>
+            
+            <div class="code-block">
+// 子组件
+const ChildComponent = {
+  template: `
+    &lt;div&gt;
+      &lt;button @click="notifyParent"&gt;通知父组件&lt;/button&gt;
+    &lt;/div&gt;
+  `,
+  methods: {
+    notifyParent() {
+      // 触发名为'notify'的自定义事件，并传递参数
+      this.$emit('notify', { message: '来自子组件的消息', timestamp: Date.now() })
+    }
+  }
+}
+            </div>
+            
+            <h2>监听自定义事件</h2>
+            <p>父组件可以使用v-on指令监听子组件触发的自定义事件：</p>
+            
+            <div class="code-block">
+// 父组件
+const ParentComponent = {
+  template: `
+    &lt;div&gt;
+      &lt;h2&gt;父组件&lt;/h2&gt;
+      &lt;child-component @notify="handleNotification"&gt;&lt;/child-component&gt;
+      &lt;p&gt;收到消息: {{ message }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      message: ''
+    }
+  },
+  methods: {
+    handleNotification(payload) {
+      this.message = payload.message
+      console.log('时间戳:', payload.timestamp)
+    }
+  },
+  components: {
+    'child-component': ChildComponent
+  }
+}
+            </div>
+            
+            <h2>事件参数传递</h2>
+            <p>可以向自定义事件传递任意数量和类型的参数：</p>
+            
+            <div class="code-block">
+// 子组件
+const Counter = {
+  template: `
+    &lt;div&gt;
+      &lt;p&gt;计数: {{ count }}&lt;/p&gt;
+      &lt;button @click="increment"&gt;+1&lt;/button&gt;
+      &lt;button @click="reset"&gt;重置&lt;/button&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      count: 0
+    }
+  },
+  methods: {
+    increment() {
+      this.count++
+      // 传递多个参数
+      this.$emit('incremented', this.count, 'user-action', { type: 'click', value: 1 })
+    },
+    reset() {
+      this.count = 0
+      // 传递一个参数
+      this.$emit('reset', this.count)
+    }
+  }
+}
+
+// 父组件
+const App = {
+  template: `
+    &lt;div&gt;
+      &lt;h2&gt;计数器应用&lt;/h2&gt;
+      &lt;counter 
+        @incremented="onIncremented" 
+        @reset="onReset"
+      &gt;&lt;/counter&gt;
+      &lt;p&gt;总操作次数: {{ operations }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      operations: 0
+    }
+  },
+  methods: {
+    onIncremented(newValue, action, details) {
+      this.operations++
+      console.log('计数器增加到:', newValue, '操作:', action, '详情:', details)
+    },
+    onReset(value) {
+      this.operations++
+      console.log('计数器重置为:', value)
+    }
+  },
+  components: {
+    'counter': Counter
+  }
+}
+            </div>
+            
+            <h2>事件修饰符</h2>
+            <p>Vue提供了多个事件修饰符，也可以用于组件事件：</p>
+            
+            <div class="code-block">
+&lt;!-- 阻止事件触发一次后不再监听 --&gt;
+&lt;my-component @custom-event.once="handleEvent"&gt;&lt;/my-component&gt;
+
+&lt;!-- 事件只触发一次 --&gt;
+&lt;my-component @custom-event="handleEvent" v-on:custom-event.once&gt;&lt;/my-component&gt;
+            </div>
+            
+            <h2>使用.sync修饰符</h2>
+            <p>.sync修饰符是一种语法糖，用于实现prop的双向绑定：</p>
+            
+            <div class="code-block">
+// 子组件
+const Modal = {
+  template: `
+    &lt;div v-show="visible" class="modal"&gt;
+      &lt;div class="modal-content"&gt;
+        &lt;span @click="close" class="close"&gt;&amp;times;&lt;/span&gt;
+        &lt;h3&gt;{{ title }}&lt;/h3&gt;
+        &lt;p&gt;{{ content }}&lt;/p&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `,
+  props: ['visible', 'title', 'content'],
+  methods: {
+    close() {
+      // 触发update:visible事件，更新父组件的visible值
+      this.$emit('update:visible', false)
+    }
+  }
+}
+
+// 父组件
+const App = {
+  template: `
+    &lt;div&gt;
+      &lt;button @click="openModal"&gt;打开模态框&lt;/button&gt;
+      &lt;modal 
+        :visible.sync="isModalVisible" 
+        title="模态框标题"
+        content="这是模态框内容"
+      &gt;&lt;/modal&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      isModalVisible: false
+    }
+  },
+  methods: {
+    openModal() {
+      this.isModalVisible = true
+    }
+  },
+  components: {
+    'modal': Modal
+  }
+}
+
+// :visible.sync 是以下写法的语法糖：
+// :visible="isModalVisible" @update:visible="isModalVisible = $event"
+            </div>
+            
+            <h2>事件透传（Event Bubbling）</h2>
+            <p>当组件嵌套较深时，可以通过事件透传来实现跨层级通信：</p>
+            
+            <div class="code-block">
+// 深层组件
+const Button = {
+  template: `&lt;button @click="$emit('click', $event)"&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/button&gt;`
+}
+
+// 中间组件
+const Card = {
+  template: `
+    &lt;div class="card"&gt;
+      &lt;slot&gt;&lt;/slot&gt;
+    &lt;/div&gt;
+  `
+}
+
+// 根组件
+const App = {
+  template: `
+    &lt;div&gt;
+      &lt;card&gt;
+        &lt;button-component @click="handleClick"&gt;点击我&lt;/button-component&gt;
+      &lt;/card&gt;
+    &lt;/div&gt;
+  `,
+  methods: {
+    handleClick(event) {
+      console.log('按钮被点击了！', event)
+    }
+  },
+  components: {
+    'button-component': Button,
+    'card': Card
+  }
+}
+            </div>
+            
+            <h2>在组合式API中使用事件</h2>
+            <p>在Vue 3的组合式API中，组件事件的定义和使用方式略有不同：</p>
+            
+            <div class="code-block">
+// Vue 3 - 使用组合式API
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;button @click="notifyParent"&gt;通知父组件&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'ChildComponent',
+  emits: ['notify'], // 声明组件触发的事件
+  setup(props, { emit }) {
+    const notifyParent = () => {
+      emit('notify', { message: '来自子组件的消息' })
+    }
+    
+    return {
+      notifyParent
+    }
+  }
+})
+&lt;/script&gt;
+            </div>
+            
+            <h2>使用defineEmits宏（Script Setup）</h2>
+            <p>在Vue 3.2+中，可以使用defineEmits宏来声明事件：</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;button @click="increment"&gt;+1&lt;/button&gt;
+    &lt;button @click="reset"&gt;重置&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+const emit = defineEmits(['increment', 'reset']) // 声明事件
+
+const increment = () => {
+  emit('increment', 1) // 触发increment事件
+}
+
+const reset = () => {
+  emit('reset') // 触发reset事件
+}
+&lt;/script&gt;
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例：任务管理组件</h3>
+                <p>下面是一个使用组件事件的完整示例：</p>
+                
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;组件事件示例&lt;/title&gt;
+  &lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+    &lt;h2&gt;任务管理器&lt;/h2&gt;
+    &lt;task-manager&gt;&lt;/task-manager&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // 任务项组件
+    const TaskItem = {
+      template: `
+        &lt;div class="task-item" :class="{ completed: task.completed }"&gt;
+          &lt;span&gt;{{ task.title }}&lt;/span&gt;
+          &lt;div class="task-actions"&gt;
+            &lt;button @click="toggleStatus" class="status-btn"&gt;
+              {{ task.completed ? '未完成' : '完成' }}
+            &lt;/button&gt;
+            &lt;button @click="removeTask" class="remove-btn"&gt;删除&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      `,
+      props: ['task'],
+      methods: {
+        toggleStatus() {
+          this.$emit('toggle', this.task.id)
+        },
+        removeTask() {
+          this.$emit('remove', this.task.id)
+        }
+      }
+    }
+
+    // 任务列表组件
+    const TaskList = {
+      template: `
+        &lt;div class="task-list"&gt;
+          &lt;task-item 
+            v-for="task in tasks" 
+            :key="task.id"
+            :task="task"
+            @toggle="onToggle"
+            @remove="onRemove"
+          &gt;&lt;/task-item&gt;
+        &lt;/div&gt;
+      `,
+      props: ['tasks'],
+      components: { TaskItem },
+      methods: {
+        onToggle(id) {
+          this.$emit('toggle-task', id)
+        },
+        onRemove(id) {
+          this.$emit('remove-task', id)
+        }
+      }
+    }
+
+    // 任务管理组件
+    const TaskManager = {
+      template: `
+        &lt;div class="task-manager"&gt;
+          &lt;div class="add-task"&gt;
+            &lt;input v-model="newTask" @keyup.enter="addTask" placeholder="添加新任务..."&gt;
+            &lt;button @click="addTask"&gt;添加&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;task-list 
+            :tasks="tasks"
+            @toggle-task="toggleTask"
+            @remove-task="removeTask"
+          &gt;&lt;/task-list&gt;
+          &lt;p&gt;总任务数: {{ tasks.length }} | 完成: {{ completedCount }}&lt;/p&gt;
+        &lt;/div&gt;
+      `,
+      data() {
+        return {
+          tasks: [
+            { id: 1, title: '学习Vue组件', completed: true },
+            { id: 2, title: '理解组件事件', completed: false },
+            { id: 3, title '实践事件通信', completed: false }
+          ],
+          newTask: ''
+        }
+      },
+      computed: {
+        completedCount() {
+          return this.tasks.filter(task => task.completed).length
+        }
+      },
+      methods: {
+        addTask() {
+          if (this.newTask.trim()) {
+            this.tasks.push({
+              id: Date.now(),
+              title: this.newTask.trim(),
+              completed: false
+            })
+            this.newTask = ''
+          }
+        },
+        toggleTask(id) {
+          const task = this.tasks.find(t => t.id === id)
+          if (task) {
+            task.completed = !task.completed
+          }
+        },
+        removeTask(id) {
+          this.tasks = this.tasks.filter(t => t.id !== id)
+        }
+      },
+      components: { TaskList }
+    }
+
+    const { createApp } = Vue
+    createApp({
+      components: { TaskManager }
+    }).mount('#app')
+  &lt;/script&gt;
+  
+  &lt;style&gt;
+    .task-manager {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .add-task {
+      margin-bottom: 20px;
+    }
+    
+    .add-task input {
+      width: 70%;
+      padding: 8px;
+      margin-right: 10px;
+    }
+    
+    .add-task button {
+      padding: 8px 15px;
+    }
+    
+    .task-list {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+    }
+    
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .task-item.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+    
+    .task-actions {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .status-btn, .remove-btn {
+      padding: 4px 8px;
+      font-size: 0.8em;
+    }
+    
+    .status-btn {
+      background: #42b983;
+      color: white;
+    }
+    
+    .remove-btn {
+      background: #e74c3c;
+      color: white;
+    }
+  &lt;/style&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </div>
+            </div>
+            
+            <h2>事件验证和错误处理</h2>
+            <p>在开发过程中，可以验证事件是否按预期触发：</p>
+            
+            <div class="code-block">
+// 在开发环境中验证事件
+const DebugComponent = {
+  template: `&lt;button @click="doSomething"&gt;点击&lt;/button&gt;`,
+  methods: {
+    doSomething() {
+      console.log('方法被调用')
+      // 触发事件
+      this.$emit('something-happened', { data: 'some data' })
+      
+      // 在控制台验证事件是否被监听
+      if (this.$attrs.onSomethingHappened) {
+        console.log('父组件监听了something-happened事件')
+      } else {
+        console.warn('没有监听something-happened事件')
+      }
+    }
+  }
+}
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./props.html" class="nav-link">上一课：Props传递数据</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./slots.html" class="nav-link">下一课：插槽Slots</a>
+        </div>
+        
+        <footer>
+            <p>组件事件 - Vue.js组件通信的重要机制</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渲染函数 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>渲染函数</h1>
+            <p class="subtitle">JSX、虚拟DOM</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./custom-directives.html" class="nav-link">上一课：自定义指令</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./performance.html" class="nav-link">下一课：性能优化</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>渲染函数核心概念</h3>
+                <ul>
+                    <li><strong>虚拟DOM</strong>：Vue的虚拟DOM实现</li>
+                    <li><strong>createElement</strong>：创建虚拟DOM节点</li>
+                    <li><strong>JSX语法</strong>：在Vue中使用JSX</li>
+                    <li><strong>渲染函数</strong>：函数式组件渲染</li>
+                    <li><strong>函数式组件</strong>：无状态组件</li>
+                    <li><strong>模板编译</strong>：模板到渲染函数的转换</li>
+                </ul>
+            </div>
+            
+            <h2>什么是渲染函数？</h2>
+            <p>渲染函数是Vue中用于生成虚拟DOM节点的函数。Vue推荐在绝大多数情况下使用模板来创建HTML，但在某些场景下，我们可能需要利用JavaScript的编程功能来声明渲染输出，这时候就需要使用渲染函数了。</p>
+            
+            <h2>虚拟DOM概念</h2>
+            <p>虚拟DOM（Virtual DOM）是Vue的核心概念之一。它是一个轻量级的JavaScript对象，表示真实DOM节点的抽象。Vue通过比较新旧虚拟DOM树的差异，然后只更新实际DOM中需要改变的部分，从而提高性能。</p>
+            
+            <h2>createElement函数</h2>
+            <p>在Vue 2中，渲染函数接收一个名为[createElement](file:///e:\FrontendTeach\VUE快速上手\api\render-function.html#L25-L25)的函数作为参数。在Vue 3中，它被重命名为[h](file:///e:\FrontendTeach\VUE快速上手\api\render-function.html#L1-L1)（hyperscript的缩写）。</p>
+            
+            <div class="code-block">
+// Vue 2 中的渲染函数
+render: function (createElement) {
+  return createElement(
+    'h' + this.level,   // 标签名称
+    this.$slots.default // 子节点数组
+  )
+}
+
+// Vue 3 中的渲染函数
+render(h) {
+  return h(
+    'h' + this.level,
+    this.$slots.default
+  )
+}
+
+// 或者使用解构
+import { h } from 'vue'
+
+export default {
+  render() {
+    return h(
+      'h' + this.level,
+      this.$slots.default
+    )
+  }
+}
+            </div>
+            
+            <h2>createElement/h函数参数</h2>
+            <p>createElement/h函数可以接收三个参数：</p>
+            
+            <div class="code-block">
+// 完整的函数签名
+h(
+  // {String | Object | Function} 标签名称或组件
+  'div',
+  
+  // {Object} 该HTML的属性、组件的props等
+  {
+    // 普通的HTML属性
+    id: 'my-id',
+    class: 'my-class',
+    
+    // 组件props
+    myProp: 'some-value',
+    
+    // DOM属性
+    innerHTML: '...',
+    
+    // 事件监听器
+    onClick: this.clickHandler,
+    onKeyup: event => { /* ... */ }
+  },
+  
+  // {String | Array} 子节点
+  [
+    'Some text comes first.',
+    h('h1', 'A nested heading'),
+    h(MyComponent, {
+      someProp: 'some-value'
+    })
+  ]
+)
+            </div>
+            
+            <h2>基础渲染函数示例</h2>
+            <p>下面是一个简单的渲染函数示例，实现一个动态标题组件：</p>
+            
+            <div class="code-block">
+import { h } from 'vue'
+
+export default {
+  name: 'DynamicHeading',
+  props: {
+    level: {
+      type: Number,
+      required: true
+    }
+  },
+  render() {
+    // 创建标签名称
+    const tag = 'h' + this.level
+    
+    // 返回虚拟DOM节点
+    return h(
+      tag,
+      {
+        class: 'dynamic-heading',
+        id: `heading-${this.level}`
+      },
+      this.$slots.default // 插槽内容
+    )
+  }
+}
+            </div>
+            
+            <h2>JSX语法</h2>
+            <p>JSX是一种JavaScript语法扩展，允许我们在JavaScript中编写类似HTML的模板语法。Vue支持使用JSX来编写渲染函数。</p>
+            
+            <div class="code-block">
+// 需要配置Babel插件 @vue/babel-plugin-jsx
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'JSXExample',
+  props: {
+    title: String,
+    level: {
+      type: Number,
+      default: 1
+    }
+  },
+  render() {
+    return (
+      &lt;div class="jsx-example"&gt;
+        &lt;h{this.level} class="title"&gt;
+          {this.title}
+        &lt;/h{this.level}&gt;
+        &lt;div class="content"&gt;
+          {this.$slots.default?.()}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
+})
+            </div>
+            
+            <h2>处理条件和列表</h2>
+            <p>在渲染函数中处理条件渲染和列表渲染：</p>
+            
+            <div class="code-block">
+import { h } from 'vue'
+
+export default {
+  name: 'ListWithCondition',
+  props: {
+    items: Array,
+    showEmpty: Boolean
+  },
+  render() {
+    // 条件渲染
+    if (!this.items || this.items.length === 0) {
+      if (this.showEmpty) {
+        return h('div', { class: 'empty' }, '暂无数据')
+      }
+      return h('div', { class: 'empty' }, '列表为空')
+    }
+    
+    // 列表渲染
+    const listItems = this.items.map((item, index) => {
+      return h(
+        'div',
+        {
+          class: 'list-item',
+          key: item.id || index,
+          onClick: () => this.handleItemClick(item)
+        },
+        [
+          h('span', { class: 'item-text' }, item.text),
+          item.status === 'active' && h('span', { class: 'status' }, '激活')
+        ]
+      )
+    })
+    
+    return h('div', { class: 'list-container' }, listItems)
+  },
+  methods: {
+    handleItemClick(item) {
+      console.log('Item clicked:', item)
+    }
+  }
+}
+            </div>
+            
+            <h2>函数式组件</h2>
+            <p>函数式组件是一个无状态、无实例的组件，渲染开销更低。在Vue 3中，函数式组件只是一个函数：</p>
+            
+            <div class="code-block">
+import { h } from 'vue'
+
+// Vue 3 函数式组件
+const FunctionalComponent = (props, { slots, attrs, emit }) => {
+  return h(
+    'div',
+    {
+      class: ['functional-component', attrs.class],
+      ...attrs
+    },
+    [
+      h('h3', props.title),
+      slots.default ? slots.default() : null
+    ]
+  )
+}
+
+// 定义组件属性
+FunctionalComponent.props = ['title']
+
+// 在模板中使用
+export default {
+  components: {
+    FunctionalComponent
+  }
+}
+            </div>
+            
+            <h2>渲染函数中的插槽</h2>
+            <p>在渲染函数中处理插槽内容：</p>
+            
+            <div class="code-block">
+import { h } from 'vue'
+
+export default {
+  name: 'SlotExample',
+  render() {
+    // 默认插槽
+    const defaultSlot = this.$slots.default?.() || '默认内容'
+    
+    // 具名插槽
+    const headerSlot = this.$slots.header?.() || h('div', '默认头部')
+    const footerSlot = this.$slots.footer?.() || h('div', '默认底部')
+    
+    // 作用域插槽
+    const scopedSlot = this.$slots.item?.({
+      item: { name: '示例项目', id: 1 },
+      index: 0
+    }) || h('div', '默认项目内容')
+    
+    return h(
+      'div',
+      { class: 'slot-example' },
+      [
+        h('header', { class: 'slot-header' }, headerSlot),
+        h('main', { class: 'slot-main' }, [
+          defaultSlot,
+          h('div', { class: 'scoped-slot' }, scopedSlot)
+        ]),
+        h('footer', { class: 'slot-footer' }, footerSlot)
+      ]
+    )
+  }
+}
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例：动态表单生成器</h3>
+                <p>以下是一个使用渲染函数构建的动态表单生成器示例：</p>
+                
+                <div class="code-block">
+&lt;template&gt;
+  &lt;div class="form-generator"&gt;
+    &lt;h2&gt;动态表单生成器&lt;/h2&gt;
+    &lt;dynamic-form :schema="formSchema" @submit="handleSubmit" /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { h, ref } from 'vue'
+
+// 动态表单组件
+const DynamicForm = {
+  name: 'DynamicForm',
+  props: {
+    schema: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      formData: {}
+    }
+  },
+  methods: {
+    handleSubmit() {
+      this.$emit('submit', this.formData)
+    },
+    createField(fieldConfig, index) {
+      const { type, name, label, placeholder, required } = fieldConfig
+      
+      // 根据字段类型创建不同元素
+      let inputElement
+      
+      switch (type) {
+        case 'input':
+        case 'text':
+          inputElement = h('input', {
+            type: 'text',
+            name: name,
+            placeholder: placeholder || '',
+            value: this.formData[name] || '',
+            onInput: (e) => {
+              this.formData[name] = e.target.value
+            },
+            class: 'form-input'
+          })
+          break
+          
+        case 'textarea':
+          inputElement = h('textarea', {
+            name: name,
+            placeholder: placeholder || '',
+            value: this.formData[name] || '',
+            onInput: (e) => {
+              this.formData[name] = e.target.value
+            },
+            class: 'form-textarea'
+          })
+          break
+          
+        case 'select':
+          inputElement = h('select', {
+            name: name,
+            value: this.formData[name] || '',
+            onChange: (e) => {
+              this.formData[name] = e.target.value
+            },
+            class: 'form-select'
+          }, fieldConfig.options?.map(option => 
+            h('option', { value: option.value }, option.label)
+          ))
+          break
+          
+        case 'checkbox':
+          inputElement = h('input', {
+            type: 'checkbox',
+            name: name,
+            checked: this.formData[name] || false,
+            onChange: (e) => {
+              this.formData[name] = e.target.checked
+            },
+            class: 'form-checkbox'
+          })
+          break
+          
+        default:
+          inputElement = h('input', {
+            type: type || 'text',
+            name: name,
+            placeholder: placeholder || '',
+            value: this.formData[name] || '',
+            onInput: (e) => {
+              this.formData[name] = e.target.value
+            },
+            class: 'form-input'
+          })
+      }
+      
+      return h('div', { key: index, class: 'form-field' }, [
+        h('label', {
+          for: name,
+          class: 'form-label'
+        }, [
+          label,
+          required ? h('span', { class: 'required' }, ' *') : null
+        ]),
+        inputElement
+      ])
+    }
+  },
+  render() {
+    const fields = this.schema.fields.map((field, index) => 
+      this.createField(field, index)
+    )
+    
+    return h('form', {
+      onSubmit: (e) => {
+        e.preventDefault()
+        this.handleSubmit()
+      },
+      class: 'dynamic-form'
+    }, [
+      ...fields,
+      h('div', { class: 'form-actions' }, [
+        h('button', { 
+          type: 'submit', 
+          class: 'submit-btn' 
+        }, '提交')
+      ])
+    ])
+  }
+}
+
+// 表单模式定义
+const formSchema = ref({
+  title: '用户信息表单',
+  fields: [
+    {
+      type: 'text',
+      name: 'name',
+      label: '姓名',
+      placeholder: '请输入姓名',
+      required: true
+    },
+    {
+      type: 'text',
+      name: 'email',
+      label: '邮箱',
+      placeholder: '请输入邮箱',
+      required: true
+    },
+    {
+      type: 'select',
+      name: 'department',
+      label: '部门',
+      options: [
+        { value: 'tech', label: '技术部' },
+        { value: 'sales', label: '销售部' },
+        { value: 'hr', label: '人事部' }
+      ]
+    },
+    {
+      type: 'checkbox',
+      name: 'newsletter',
+      label: '订阅邮件',
+      required: false
+    },
+    {
+      type: 'textarea',
+      name: 'bio',
+      label: '个人简介',
+      placeholder: '请简单介绍一下自己'
+    }
+  ]
+})
+
+const handleSubmit = (formData) => {
+  console.log('表单提交:', formData)
+  alert('表单已提交，数据：' + JSON.stringify(formData, null, 2))
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+.form-generator {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.dynamic-form {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.required {
+  color: #e74c3c;
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-checkbox {
+  width: auto;
+}
+
+.form-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-btn:hover {
+  background: #359c6d;
+}
+&lt;/style&gt;
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./custom-directives.html" class="nav-link">上一课：自定义指令</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./performance.html" class="nav-link">下一课：性能优化</a>
+        </div>
+        
+        <footer>
+            <p>渲染函数 - Vue.js底层渲染机制的核心</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

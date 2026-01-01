@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件基础 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>组件基础</h1>
+            <p class="subtitle">组件注册、使用、嵌套</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="../basics/events.html" class="nav-link">上一课：事件处理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./props.html" class="nav-link">下一课：Props传递数据</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>组件基础核心概念</h3>
+                <ul>
+                    <li><strong>组件注册</strong>：全局注册与局部注册</li>
+                    <li><strong>组件使用</strong>：在模板中使用组件</li>
+                    <li><strong>组件嵌套</strong>：构建组件树结构</li>
+                    <li><strong>组件命名</strong>：命名规范与最佳实践</li>
+                    <li><strong>根组件</strong>：应用的顶层组件</li>
+                    <li><strong>组件复用</strong>：创建可复用UI组件</li>
+                </ul>
+            </div>
+            
+            <h2>什么是组件？</h2>
+            <p>组件是Vue.js最强大的功能之一。组件可以扩展HTML元素，封装可重用的代码。在较高层面上，组件是自定义元素，Vue.js的编译器为它添加特殊功能。在有些情况下，组件也可以表现为用[is](file:///e:\FrontendTeach\VUE快速上手\basics\template-syntax.html#L37-L37)特性控制的原生HTML元素。</p>
+            
+            <h2>组件注册</h2>
+            <p>组件在使用前需要先注册。注册有两种方式：全局注册和局部注册。</p>
+            
+            <h3>全局注册</h3>
+            <p>全局注册的组件可以在任何Vue实例中使用：</p>
+            
+            <div class="code-block">
+// 全局注册组件
+Vue.component('my-component', {
+  template: '&lt;div&gt;这是一个全局组件&lt;/div&gt;'
+})
+
+// 现在可以在任何Vue实例的模板中使用
+const app = new Vue({
+  el: '#app'
+})
+            </div>
+            
+            <h3>局部注册</h3>
+            <p>局部注册的组件只能在当前实例或组件中使用：</p>
+            
+            <div class="code-block">
+const ComponentA = {
+  template: '&lt;div&gt;这是局部组件A&lt;/div&gt;'
+}
+
+const ComponentB = {
+  template: '&lt;div&gt;这是局部组件B&lt;/div&gt;'
+}
+
+const app = new Vue({
+  el: '#app',
+  components: {
+    'component-a': ComponentA,
+    'component-b': ComponentB
+  }
+})
+            </div>
+            
+            <h2>使用组件</h2>
+            <p>组件可以通过自定义标签在模板中使用：</p>
+            
+            <div class="code-block">
+&lt;!-- HTML --&gt;
+&lt;div id="app"&gt;
+  &lt;my-component&gt;&lt;/my-component&gt;
+  &lt;component-a&gt;&lt;/component-a&gt;
+  &lt;component-b&gt;&lt;/component-b&gt;
+&lt;/div&gt;
+            </div>
+            
+            <h2>组件命名规范</h2>
+            <p>Vue组件的命名遵循以下规范：</p>
+            
+            <ul>
+                <li><strong>使用PascalCase或kebab-case</strong>：推荐使用PascalCase（驼峰命名法）</li>
+                <li><strong>语义化命名</strong>：组件名称应具有明确的语义</li>
+                <li><strong>避免HTML标签名</strong>：不要使用已存在的HTML元素名称</li>
+            </ul>
+            
+            <div class="code-block">
+// 推荐的命名方式
+Vue.component('MyButton', { /* ... */ })
+Vue.component('UserCard', { /* ... */ })
+
+// 或者使用kebab-case
+Vue.component('my-button', { /* ... */ })
+Vue.component('user-card', { /* ... */ })
+            </div>
+            
+            <h2>组件嵌套</h2>
+            <p>组件可以相互嵌套，形成组件树结构：</p>
+            
+            <div class="code-block">
+// 定义一个按钮组件
+const Button = {
+  template: `&lt;button class="my-button"&gt;{{ label }}&lt;/button&gt;`,
+  props: ['label']
+}
+
+// 定义一个卡片组件，包含按钮
+const Card = {
+  template: `
+    &lt;div class="card"&gt;
+      &lt;h3&gt;{{ title }}&lt;/h3&gt;
+      &lt;p&gt;{{ content }}&lt;/p&gt;
+      &lt;button-component :label="buttonLabel"&gt;&lt;/button-component&gt;
+    &lt;/div&gt;
+  `,
+  props: ['title', 'content', 'buttonLabel'],
+  components: {
+    'button-component': Button
+  }
+}
+
+// 定义根组件，包含卡片
+const App = {
+  template: `
+    &lt;div class="app"&gt;
+      &lt;card-component 
+        title="Vue组件示例" 
+        content="这是一个组件嵌套的示例"
+        button-label="点击我"
+      &gt;&lt;/card-component&gt;
+    &lt;/div&gt;
+  `,
+  components: {
+    'card-component': Card
+  }
+}
+
+const app = new Vue({
+  el: '#app',
+  components: {
+    'app-component': App
+  }
+})
+            </div>
+            
+            <h2>组件的复用</h2>
+            <p>组件最重要的特性之一是复用。通过props可以向组件传递不同的数据：</p>
+            
+            <div class="code-block">
+// 定义一个用户卡片组件
+const UserCard = {
+  template: `
+    &lt;div class="user-card"&gt;
+      &lt;h3&gt;{{ user.name }}&lt;/h3&gt;
+      &lt;p&gt;{{ user.email }}&lt;/p&gt;
+      &lt;p&gt;{{ user.role }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+  props: ['user']
+}
+
+// 在不同地方使用同一组件，传入不同的数据
+const app = new Vue({
+  el: '#app',
+  data: {
+    users: [
+      { id: 1, name: '张三', email: 'zhangsan@example.com', role: '管理员' },
+      { id: 2, name: '李四', email: 'lisi@example.com', role: '用户' },
+      { id: 3, name: '王五', email: 'wangwu@example.com', role: '编辑' }
+    ]
+  },
+  components: {
+    'user-card': UserCard
+  }
+})
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例</h3>
+                <p>下面是一个完整的组件基础示例：</p>
+                
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Vue组件示例&lt;/title&gt;
+  &lt;script src="https://unpkg.com/vue@2.6.14/dist/vue.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+    &lt;product-card 
+      v-for="product in products" 
+      :key="product.id"
+      :product="product"
+    &gt;&lt;/product-card&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // 定义产品卡片组件
+    Vue.component('product-card', {
+      template: `
+        &lt;div class="product-card"&gt;
+          &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+          &lt;p class="price"&gt;¥{{ product.price }}&lt;/p&gt;
+          &lt;p class="description"&gt;{{ product.description }}&lt;/p&gt;
+          &lt;button @click="buyProduct"&gt;购买&lt;/button&gt;
+        &lt;/div&gt;
+      `,
+      props: ['product'],
+      methods: {
+        buyProduct() {
+          alert(`您选择了购买: ${this.product.name}`)
+        }
+      }
+    })
+
+    new Vue({
+      el: '#app',
+      data: {
+        products: [
+          { id: 1, name: 'iPhone 13', price: 6999, description: '最新款iPhone' },
+          { id: 2, name: 'MacBook Pro', price: 12999, description: '专业笔记本' },
+          { id: 3, name: 'iPad Air', price: 4399, description: '轻薄平板' }
+        ]
+      }
+    })
+  &lt;/script&gt;
+  
+  &lt;style&gt;
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px;
+      width: 250px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    .price {
+      color: #e74c3c;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    
+    .description {
+      color: #7f8c8d;
+    }
+  &lt;/style&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </div>
+            </div>
+            
+            <h2>组件的data选项</h2>
+            <p>组件的[data](file:///e:\FrontendTeach\VUE快速上手\basics\instance.html#L20-L20)选项必须是一个函数，这样每个组件实例才能维护一份被返回对象的独立的拷贝：</p>
+            
+            <div class="code-block">
+// 正确的写法
+const Component = {
+  data: function() {
+    return {
+      count: 0
+    }
+  }
+}
+
+// 错误的写法
+const Component = {
+  data: {
+    count: 0
+  }
+}
+            </div>
+            
+            <h2>组件的组织结构</h2>
+            <p>在大型应用中，通常使用构建工具和单文件组件（.vue文件）来组织组件：</p>
+            
+            <div class="code-block">
+// ProductCard.vue
+&lt;template&gt;
+  &lt;div class="product-card"&gt;
+    &lt;h3&gt;{{ product.name }}&lt;/h3&gt;
+    &lt;p class="price"&gt;¥{{ product.price }}&lt;/p&gt;
+    &lt;p class="description"&gt;{{ product.description }}&lt;/p&gt;
+    &lt;button @click="buyProduct"&gt;购买&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'ProductCard',
+  props: {
+    product: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    buyProduct() {
+      alert(`您选择了购买: ${this.product.name}`)
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px;
+  width: 250px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.price {
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.description {
+  color: #7f8c8d;
+}
+&lt;/style&gt;
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="../basics/events.html" class="nav-link">上一课：事件处理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./props.html" class="nav-link">下一课：Props传递数据</a>
+        </div>
+        
+        <footer>
+            <p>组件基础 - Vue.js组件化开发的起点</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

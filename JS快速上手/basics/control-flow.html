@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条件语句与循环 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .control-flow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .control-flow-table th, .control-flow-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .control-flow-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .control-flow-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .flow-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .flow-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 基础语法 > 条件语句与循环</div>
+            <h1>条件语句与循环</h1>
+        </header>
+        
+        <div class="content">
+            <p>控制流语句是编程中的核心概念，它使程序能够根据条件执行不同的代码路径，或者重复执行某些操作。在JavaScript中，我们使用条件语句和循环来控制程序的执行流程。</p>
+            
+            <div class="key-features">
+                <h3>控制流概览</h3>
+                <ul>
+                    <li><strong>条件语句</strong>：if/else、switch/case</li>
+                    <li><strong>循环语句</strong>：for、while、do-while循环</li>
+                    <li><strong>循环控制</strong>：break、continue语句</li>
+                    <li><strong>迭代器</strong>：for...in、for...of循环</li>
+                    <li><strong>三元运算符</strong>：简化的条件语句</li>
+                    <li><strong>逻辑操作</strong>：与、或、非操作符</li>
+                </ul>
+            </div>
+            
+            <h2>条件语句</h2>
+            <p>条件语句允许我们根据不同的条件执行不同的代码块。</p>
+            
+            <h3>if/else语句</h3>
+            <p>if/else语句是最基本的条件语句，它根据条件的真假执行不同的代码块。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">let</span> age = <span class="code-number">20</span>;<br><br>
+                
+                <span class="code-keyword">if</span> (age >= <span class="code-number">18</span>) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"您已成年"</span>);<br>
+                } <span class="code-keyword">else</span> {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"您未成年"</span>);<br>
+                }<br><br>
+                
+                <span class="code-comment">// if/else if/else 链</span><br>
+                <span class="code-keyword">let</span> score = <span class="code-number">85</span>;<br><br>
+                
+                <span class="code-keyword">if</span> (score >= <span class="code-number">90</span>) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"优秀"</span>);<br>
+                } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (score >= <span class="code-number">80</span>) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"良好"</span>);<br>
+                } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (score >= <span class="code-number">70</span>) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"中等"</span>);<br>
+                } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (score >= <span class="code-number">60</span>) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"及格"</span>);<br>
+                } <span class="code-keyword">else</span> {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"不及格"</span>);<br>
+                }
+            </div>
+            
+            <h3>switch语句</h3>
+            <p>switch语句提供了一种更优雅的方式来处理多个可能的值。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">let</span> dayOfWeek = <span class="code-number">3</span>;<br>
+                <span class="code-keyword">let</span> dayName;<br><br>
+                
+                <span class="code-keyword">switch</span> (dayOfWeek) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-number">1</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dayName = <span class="code-string">"星期一"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-number">2</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dayName = <span class="code-string">"星期二"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-number">3</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dayName = <span class="code-string">"星期三"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-number">4</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dayName = <span class="code-string">"星期四"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-number">5</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dayName = <span class="code-string">"星期五"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">default</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;dayName = <span class="code-string">"周末"</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                }<br><br>
+                
+                console.log(dayName); <span class="code-comment">// "星期三"</span><br><br>
+                
+                <span class="code-comment">// switch用于字符串匹配</span><br>
+                <span class="code-keyword">let</span> browser = <span class="code-string">"Chrome"</span>;<br><br>
+                
+                <span class="code-keyword">switch</span> (browser) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"Edge"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"Edge浏览器"</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"Chrome"</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"Firefox"</span>:<br>
+                &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"Safari"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"其他现代浏览器"</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;<span class="code-keyword">default</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"未知浏览器"</span>);<br>
+                }
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">if/else vs switch</div>
+                    <div class="code-block">
+                        <span class="code-comment">// 使用if/else</span><br>
+                        <span class="code-keyword">let</span> grade = <span class="code-string">"B"</span>;<br>
+                        <span class="code-keyword">if</span> (grade === <span class="code-string">"A"</span>) {<br>
+                        &nbsp;&nbsp;console.log(<span class="code-string">"优秀"</span>);<br>
+                        } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (grade === <span class="code-string">"B"</span>) {<br>
+                        &nbsp;&nbsp;console.log(<span class="code-string">"良好"</span>);<br>
+                        } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (grade === <span class="code-string">"C"</span>) {<br>
+                        &nbsp;&nbsp;console.log(<span class="code-string">"中等"</span>);<br>
+                        } <span class="code-keyword">else</span> {<br>
+                        &nbsp;&nbsp;console.log(<span class="code-string">"其他"</span>);<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// 使用switch</span><br>
+                        <span class="code-keyword">switch</span> (grade) {<br>
+                        &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"A"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"优秀"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"B"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"良好"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"C"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"中等"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="code-keyword">default</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"其他"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">何时使用if/else vs switch</div>
+                    <ul>
+                        <li><strong>使用if/else</strong>：
+                            <ul>
+                                <li>条件是范围值（如age > 18）</li>
+                                <li>条件涉及复杂的逻辑表达式</li>
+                                <li>条件数量较少</li>
+                            </ul>
+                        </li>
+                        <li><strong>使用switch</strong>：
+                            <li>条件是具体的值比较</li>
+                            <li>有多个可能的值</li>
+                            <li>值的类型是基本数据类型</li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>循环语句</h2>
+            <p>循环语句允许我们重复执行代码块，直到满足特定条件为止。</p>
+            
+            <h3>for循环</h3>
+            <p>for循环用于在已知循环次数的情况下重复执行代码块。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 基本for循环</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`循环第${i+1}次`</span>);<br>
+                }<br><br>
+                
+                <span class="code-comment">// for循环遍历数组</span><br>
+                <span class="code-keyword">const</span> fruits = [<span class="code-string">"苹果"</span>, <span class="code-string">"香蕉"</span>, <span class="code-string">"橙子"</span>, <span class="code-string">"葡萄"</span>];<br><br>
+                
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < fruits.length; i++) {<br>
+                &nbsp;&nbsp;console.log(fruits[i]);<br>
+                }<br><br>
+                
+                <span class="code-comment">// 倒序循环</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = fruits.length - <span class="code-number">1</span>; i >= <span class="code-number">0</span>; i--) {<br>
+                &nbsp;&nbsp;console.log(fruits[i]);<br>
+                }<br><br>
+                
+                <span class="code-comment">// 嵌套循环 - 创建乘法表</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">1</span>; i <= <span class="code-number">9</span>; i++) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> j = <span class="code-number">1</span>; j <= i; j++) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;document.write(<span class="code-string">`${j}×${i}=${i*j} `</span>);<br>
+                &nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;document.write(<span class="code-string">"&lt;br&gt;"</span>);<br>
+                }
+            </div>
+            
+            <h3>while和do-while循环</h3>
+            <p>while循环在条件为真时重复执行代码块。do-while循环至少执行一次，然后检查条件。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// while循环</span><br>
+                <span class="code-keyword">let</span> count = <span class="code-number">0</span>;<br><br>
+                
+                <span class="code-keyword">while</span> (count < <span class="code-number">5</span>) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`计数: ${count}`</span>);<br>
+                &nbsp;&nbsp;count++;<br>
+                }<br><br>
+                
+                <span class="code-comment">// do-while循环 - 至少执行一次</span><br>
+                <span class="code-keyword">let</span> i = <span class="code-number">10</span>; <span class="code-comment">// 即使初始条件不满足</span><br>
+                <span class="code-keyword">do</span> {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`do-while: ${i}`</span>);<br>
+                &nbsp;&nbsp;i++;<br>
+                } <span class="code-keyword">while</span> (i < <span class="code-number">5</span>); <span class="code-comment">// 条件为false，但循环体已执行一次</span><br><br>
+                
+                <span class="code-comment">// 使用while循环遍历数组</span><br>
+                <span class="code-keyword">const</span> colors = [<span class="code-string">"红"</span>, <span class="code-string">"绿"</span>, <span class="code-string">"蓝"</span>];<br>
+                <span class="code-keyword">let</span> index = <span class="code-number">0</span>;<br><br>
+                
+                <span class="code-keyword">while</span> (index < colors.length) {<br>
+                &nbsp;&nbsp;console.log(colors[index]);<br>
+                &nbsp;&nbsp;index++;<br>
+                }
+            </div>
+            
+            <div class="flow-example">
+                <div class="flow-example-title">循环控制语句</div>
+                <div class="code-block">
+                    <span class="code-comment">// break语句 - 跳出循环</span><br>
+                    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">10</span>; i++) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">if</span> (i === <span class="code-number">5</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>; <span class="code-comment">// 当i等于5时跳出循环</span><br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;console.log(i); <span class="code-comment">// 输出: 0, 1, 2, 3, 4</span><br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// continue语句 - 跳过当前迭代</span><br>
+                    <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">5</span>; i++) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">if</span> (i === <span class="code-number">2</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">continue</span>; <span class="code-comment">// 跳过i等于2的迭代</span><br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;console.log(i); <span class="code-comment">// 输出: 0, 1, 3, 4</span><br>
+                    }<br><br>
+                    
+                    <span class="code-comment">// 带标签的break和continue</span><br>
+                    outer: <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < <span class="code-number">3</span>; i++) {<br>
+                    &nbsp;&nbsp;inner: <span class="code-keyword">for</span> (<span class="code-keyword">let</span> j = <span class="code-number">0</span>; j < <span class="code-number">3</span>; j++) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (i === <span class="code-number">1</span> && j === <span class="code-number">1</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span> outer; <span class="code-comment">// 跳出外层循环</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`i: ${i}, j: ${j}`</span>);<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br>
+                    <span class="code-comment">// 输出: i: 0, j: 0</span><br>
+                    <span class="code-comment">//      i: 0, j: 1</span><br>
+                    <span class="code-comment">//      i: 0, j: 2</span><br>
+                    <span class="code-comment">//      i: 1, j: 0</span>
+                </div>
+            </div>
+            
+            <h3>for...in和for...of循环</h3>
+            <p>ES6引入了更简洁的迭代方式，for...in用于遍历对象的属性，for...of用于遍历可迭代对象的值。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// for...in - 遍历对象的属性或数组的索引</span><br>
+                <span class="code-keyword">const</span> person = {<br>
+                &nbsp;&nbsp;name: <span class="code-string">"张三"</span>,<br>
+                &nbsp;&nbsp;age: <span class="code-number">30</span>,<br>
+                &nbsp;&nbsp;job: <span class="code-string">"开发者"</span><br>
+                };<br><br>
+                
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> key <span class="code-keyword">in</span> person) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`${key}: ${person[key]}`</span>);<br>
+                }<br><br>
+                
+                <span class="code-comment">// for...in遍历数组（遍历索引）</span><br>
+                <span class="code-keyword">const</span> fruits = [<span class="code-string">"苹果"</span>, <span class="code-string">"香蕉"</span>, <span class="code-string">"橙子"</span>];<br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> index <span class="code-keyword">in</span> fruits) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`索引${index}: ${fruits[index]}`</span>);<br>
+                }<br><br>
+                
+                <span class="code-comment">// for...of - 遍历可迭代对象的值</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> fruit <span class="code-keyword">of</span> fruits) {<br>
+                &nbsp;&nbsp;console.log(fruit);<br>
+                }<br><br>
+                
+                <span class="code-comment">// for...of遍历字符串</span><br>
+                <span class="code-keyword">const</span> text = <span class="code-string">"Hello"</span>;<br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> char <span class="code-keyword">of</span> text) {<br>
+                &nbsp;&nbsp;console.log(char); <span class="code-comment">// H, e, l, l, o</span><br>
+                }<br><br>
+                
+                <span class="code-comment">// for...of遍历Map</span><br>
+                <span class="code-keyword">const</span> map = <span class="code-keyword">new</span> Map();<br>
+                map.set(<span class="code-string">"name"</span>, <span class="code-string">"李四"</span>);<br>
+                map.set(<span class="code-string">"age"</span>, <span class="code-number">25</span>);<br><br>
+                
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> [key, value] <span class="code-keyword">of</span> map) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`${key} = ${value}`</span>);<br>
+                }
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个函数，使用if/else判断一个数字是正数、负数还是零</li>
+                    <li>使用for循环计算1到100的和</li>
+                    <li>创建一个switch语句，根据月份输出季节</li>
+                    <li>使用while循环实现一个猜数字游戏</li>
+                    <li>使用for...of遍历一个数组并找出最大值</li>
+                    <li>使用嵌套循环创建一个星号三角形图案</li>
+                </ul>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>控制流语句在实际开发中的应用非常广泛：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 表单验证示例</span><br>
+                <span class="code-keyword">function</span> validateForm(formData) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">if</span> (!formData.email) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"邮箱不能为空"</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-boolean">false</span>;<br>
+                &nbsp;&nbsp;} <span class="code-keyword">else</span> <span class="code-keyword">if</span> (!formData.email.includes(<span class="code-string">"@"</span>)) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"邮箱格式不正确"</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-boolean">false</span>;<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">if</span> (!formData.password) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"密码不能为空"</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-boolean">false</span>;<br>
+                &nbsp;&nbsp;} <span class="code-keyword">else</span> <span class="code-keyword">if</span> (formData.password.length < <span class="code-number">6</span>) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"密码长度至少6位"</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-boolean">false</span>;<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;console.log(<span class="code-string">"表单验证通过"</span>);<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-boolean">true</span>;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 数组处理示例</span><br>
+                <span class="code-keyword">const</span> numbers = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>, <span class="code-number">6</span>, <span class="code-number">7</span>, <span class="code-number">8</span>, <span class="code-number">9</span>, <span class="code-number">10</span>];<br><br>
+                
+                <span class="code-comment">// 使用循环和条件语句筛选偶数</span><br>
+                <span class="code-keyword">const</span> evenNumbers = [];<br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> number <span class="code-keyword">of</span> numbers) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">if</span> (number % <span class="code-number">2</span> === <span class="code-number">0</span>) { <span class="code-comment">// 如果是偶数</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;evenNumbers.push(number);<br>
+                &nbsp;&nbsp;}<br>
+                }<br>
+                console.log(evenNumbers); <span class="code-comment">// [2, 4, 6, 8, 10]</span><br><br>
+                
+                <span class="code-comment">// 使用switch处理用户操作</span><br>
+                <span class="code-keyword">function</span> handleUserAction(action, data) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">switch</span> (action) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"CREATE"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"创建新项目"</span>, data);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"UPDATE"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"更新项目"</span>, data);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"DELETE"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"删除项目"</span>, data);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">break</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">default</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"未知操作"</span>);<br>
+                &nbsp;&nbsp;}<br>
+                }
+            </div>
+        </div>
+        
+        <nav>
+            <a href="operators.html" class="nav-link">← 上一课：运算符</a>
+            <a href="functions.html" class="nav-link">下一课：函数定义与调用 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

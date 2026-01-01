@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>性能优化 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>性能优化</h1>
+            <p class="subtitle">优化策略、工具和技巧</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./rendering.html" class="nav-link">上一课：渲染函数</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../tooling/testing.html" class="nav-link">下一课：测试</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>性能优化核心概念</h3>
+                <ul>
+                    <li><strong>响应式优化</strong>：优化响应式系统的性能</li>
+                    <li><strong>渲染优化</strong>：减少不必要的渲染</li>
+                    <li><strong>组件优化</strong>：优化组件的性能</li>
+                    <li><strong>列表优化</strong>：优化长列表渲染</li>
+                    <li><strong>懒加载</strong>：按需加载组件和资源</li>
+                    <li><strong>缓存策略</strong>：使用缓存提高性能</li>
+                </ul>
+            </div>
+            
+            <h2>Vue.js性能优化概述</h2>
+            <p>Vue.js应用的性能优化是一个多方面的过程，涉及响应式系统、渲染性能、组件设计、网络请求等多个方面。通过合理的优化策略，可以显著提升应用的响应速度和用户体验。</p>
+            
+            <h2>响应式系统优化</h2>
+            <p>Vue的响应式系统是其核心特性，但不当使用可能导致性能问题。以下是优化响应式系统的方法：</p>
+            
+            <h3>1. 使用Object.freeze()冻结大型不可变数据</h3>
+            <p>对于大型的不可变数据，使用[Object.freeze()](file:///e:\FrontendTeach\VUE快速上手\api\options-data.html#L42-L42)可以避免Vue将其转换为响应式数据，从而提升性能：</p>
+            
+            <div class="code-block">
+// 对于大型不可变数据，使用freeze避免响应式转换
+export default {
+  data() {
+    return {
+      // 假设largeList是一个大型不可变数据集
+      largeList: Object.freeze(largeDataSet)
+    }
+  }
+}
+            </div>
+            
+            <h3>2. 使用v-memo（Vue 3.2+）</h3>
+            <p>[v-memo](file:///e:\FrontendTeach\VUE快速上手\api\built-in-directives.html#L111-L111)是一个新的内置指令，用于缓存昂贵的子树，只有在依赖项发生变化时才重新渲染：</p>
+            
+            <div class="code-block">
+&lt;!-- 只有在id和name发生变化时才重新渲染 --&gt;
+&lt;div v-for="item in list" :key="item.id"&gt;
+  &lt;div v-memo="[item.id === selectedId, item.name]"&gt;
+    &lt;!-- 复杂的子树 --&gt;
+    &lt; expensive-component :item="item" /&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+            </div>
+            
+            <h2>渲染优化</h2>
+            <p>渲染优化主要关注减少不必要的DOM操作和提高渲染效率。</p>
+            
+            <h3>1. 正确使用key</h3>
+            <p>在使用v-for时，提供唯一的key值可以帮助Vue更高效地追踪每个节点的变化：</p>
+            
+            <div class="code-block">
+// 不推荐 - 使用数组索引作为key
+&lt;div v-for="(item, index) in items" :key="index"&gt;
+  {{ item.name }}
+&lt;/div&gt;
+
+// 推荐 - 使用唯一ID作为key
+&lt;div v-for="item in items" :key="item.id"&gt;
+  {{ item.name }}
+&lt;/div&gt;
+            </div>
+            
+            <h3>2. 使用v-show vs v-if</h3>
+            <p>根据使用场景选择合适的条件渲染指令：</p>
+            
+            <div class="code-block">
+// 频繁切换使用v-show
+&lt;button @click="toggleSidebar"&gt;切换侧边栏&lt;/button&gt;
+&lt;div v-show="showSidebar" class="sidebar"&gt;
+  &lt;!-- 侧边栏内容 --&gt;
+&lt;/div&gt;
+
+// 条件渲染且不常切换使用v-if
+&lt;div v-if="user.isAdmin" class="admin-panel"&gt;
+  &lt;!-- 管理员面板内容 --&gt;
+&lt;/div&gt;
+            </div>
+            
+            <h2>组件优化</h2>
+            <p>组件层面的优化策略可以显著提升应用性能。</p>
+            
+            <h3>1. 使用keep-alive缓存组件</h3>
+            <p>[keep-alive](file:///e:\FrontendTeach\VUE快速上手\api\built-ins.html#L10-L10)是一个内置组件，用于缓存组件实例，避免重复创建和销毁：</p>
+            
+            <div class="code-block">
+&lt;!-- 缓存动态组件 --&gt;
+&lt;keep-alive&gt;
+  &lt;component :is="currentView"&gt;&lt;/component&gt;
+&lt;/keep-alive&gt;
+
+&lt;!-- 缓存路由组件 --&gt;
+&lt;keep-alive :include="['a', 'b']" :exclude="['c']"&gt;
+  &lt;router-view /&gt;
+&lt;/keep-alive&gt;
+            </div>
+            
+            <h3>2. 使用异步组件</h3>
+            <p>通过异步组件实现代码分割，减少初始加载时间：</p>
+            
+            <div class="code-block">
+import { defineAsyncComponent } from 'vue'
+
+export default {
+  components: {
+    // 普通异步组件
+    AsyncComponent: defineAsyncComponent(() => import('./AsyncComponent.vue')),
+    
+    // 带加载和错误状态的异步组件
+    AsyncComponentWithStatus: defineAsyncComponent({
+      loader: () => import('./AsyncComponent.vue'),
+      loadingComponent: LoadingComponent,
+      errorComponent: ErrorComponent,
+      delay: 200,
+      timeout: 10000
+    })
+  }
+}
+            </div>
+            
+            <h2>列表优化</h2>
+            <p>长列表渲染是性能优化的重点场景。</p>
+            
+            <h3>1. 虚拟滚动</h3>
+            <p>对于大量数据的列表，使用虚拟滚动只渲染可见区域的元素：</p>
+            
+            <div class="code-block">
+// 虚拟滚动组件示例
+export default {
+  name: 'VirtualList',
+  props: {
+    items: Array,
+    itemHeight: Number,
+    containerHeight: Number
+  },
+  data() {
+    return {
+      start: 0,
+      end: 0
+    }
+  },
+  computed: {
+    visibleItems() {
+      return this.items.slice(this.start, this.end)
+    },
+    offset() {
+      return this.start * this.itemHeight
+    }
+  },
+  mounted() {
+    this.updateVisibleItems()
+    this.$refs.container.addEventListener('scroll', this.handleScroll)
+  },
+  methods: {
+    handleScroll() {
+      this.updateVisibleItems()
+    },
+    updateVisibleItems() {
+      const scrollTop = this.$refs.container.scrollTop
+      const containerHeight = this.containerHeight
+      const itemHeight = this.itemHeight
+      
+      const start = Math.floor(scrollTop / itemHeight)
+      const visibleCount = Math.ceil(containerHeight / itemHeight)
+      const end = Math.min(start + visibleCount + 5, this.items.length) // 多渲染几个以防滚动
+      
+      this.start = Math.max(0, start - 5) // 前后多渲染几个以防滚动
+      this.end = end
+    }
+  }
+}
+            </div>
+            
+            <h3>2. 使用计算属性优化列表过滤</h3>
+            <p>使用计算属性缓存过滤结果，避免重复计算：</p>
+            
+            <div class="code-block">
+export default {
+  data() {
+    return {
+      allItems: [], // 大量数据
+      searchTerm: ''
+    }
+  },
+  computed: {
+    // 使用计算属性缓存过滤结果
+    filteredItems() {
+      if (!this.searchTerm) return this.allItems
+      
+      return this.allItems.filter(item => 
+        item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      )
+    }
+  }
+}
+            </div>
+            
+            <h2>懒加载和代码分割</h2>
+            <p>通过懒加载减少初始包大小，提高首屏加载速度。</p>
+            
+            <h3>1. 路由懒加载</h3>
+            <div class="code-block">
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: () => import('../views/Home.vue') // 懒加载
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: () => import('../views/About.vue') // 懒加载
+    }
+  ]
+})
+            </div>
+            
+            <h3>2. 组件懒加载</h3>
+            <div class="code-block">
+export default {
+  components: {
+    // 懒加载重型组件
+    HeavyComponent: () => import('./HeavyComponent.vue'),
+    
+    // 带分组的懒加载组件
+    AnotherComponent: () => import(
+      /* webpackChunkName: "group-components" */ 
+      './AnotherComponent.vue'
+    )
+  }
+}
+            </div>
+            
+            <h2>事件处理优化</h2>
+            <p>优化事件处理可以减少不必要的性能开销。</p>
+            
+            <h3>1. 防抖和节流</h3>
+            <div class="code-block">
+import { debounce, throttle } from 'lodash'
+
+export default {
+  methods: {
+    // 防抖处理搜索输入
+    debouncedSearch: debounce(function() {
+      this.performSearch()
+    }, 300),
+    
+    // 节流处理滚动事件
+    throttledScroll: throttle(function() {
+      this.handleScroll()
+    }, 16) // 约60fps
+  },
+  mounted() {
+    window.addEventListener('scroll', this.throttledScroll)
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.throttledScroll)
+  }
+}
+            </div>
+            
+            <h2>性能分析工具</h2>
+            <p>使用Vue DevTools和其他工具分析应用性能。</p>
+            
+            <div class="code-block">
+// 在生产构建中禁用性能分析
+export default {
+  performance: process.env.NODE_ENV === 'development'
+}
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例：高性能列表组件</h3>
+                <p>以下是一个结合多种优化策略的高性能列表组件示例：</p>
+                
+                <div class="code-block">
+&lt;template&gt;
+  &lt;div class="optimized-list"&gt;
+    &lt;div class="search-box"&gt;
+      &lt;input 
+        v-model="searchTerm" 
+        placeholder="搜索项目..." 
+        @input="debouncedSearch"
+      /&gt;
+    &lt;/div&gt;
+    
+    &lt;div 
+      ref="container" 
+      class="list-container"
+      @scroll="handleScroll"
+    &gt;
+      &lt;div :style="{ height: totalHeight + 'px', position: 'relative' }"&gt;
+        &lt;div 
+          v-for="item in visibleItems" 
+          :key="item.id"
+          :style="{ 
+            position: 'absolute', 
+            top: item.index * itemHeight + 'px', 
+            height: itemHeight + 'px',
+            width: '100%'
+          }"
+          class="list-item"
+        &gt;
+          &lt;div class="item-content"&gt;
+            &lt;h3&gt;{{ item.name }}&lt;/h3&gt;
+            &lt;p&gt;{{ item.description }}&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { debounce } from 'lodash-es'
+
+// 模拟大数据集
+const allItems = ref(
+  Array.from({ length: 10000 }, (_, i) => ({
+    id: i,
+    name: `项目 ${i}`,
+    description: `这是第 ${i} 个项目的描述信息`
+  }))
+)
+
+const searchTerm = ref('')
+const containerHeight = 400
+const itemHeight = 60
+const visibleCount = Math.ceil(containerHeight / itemHeight)
+const scrollTop = ref(0)
+
+// 计算属性：过滤后的项目
+const filteredItems = computed(() => {
+  if (!searchTerm.value) return allItems.value
+  
+  return allItems.value.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  )
+})
+
+// 计算属性：可见项目
+const visibleItems = computed(() => {
+  const start = Math.floor(scrollTop.value / itemHeight)
+  const end = Math.min(start + visibleCount + 5, filteredItems.value.length)
+  
+  return filteredItems.value
+    .slice(Math.max(0, start - 5), end)
+    .map((item, index) => ({
+      ...item,
+      index: Math.max(0, start - 5) + index
+    }))
+})
+
+const totalHeight = computed(() => filteredItems.value.length * itemHeight)
+
+// 防抖搜索
+const debouncedSearch = debounce(() => {
+  // 搜索逻辑
+  console.log('执行搜索:', searchTerm.value)
+}, 300)
+
+// 处理滚动
+const handleScroll = (event) => {
+  scrollTop.value = event.target.scrollTop
+}
+
+onMounted(() => {
+  // 初始化
+  console.log('组件已挂载')
+})
+
+onUnmounted(() => {
+  // 清理
+  console.log('组件已卸载')
+})
+&lt;/script&gt;
+
+&lt;style&gt;
+.optimized-list {
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-box {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.list-container {
+  height: 400px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.list-item {
+  padding: 10px;
+  border-bottom: 1px solid #f5f5f5;
+  box-sizing: border-box;
+}
+
+.list-item:hover {
+  background-color: #f9f9f9;
+}
+
+.item-content h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.item-content p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9em;
+}
+&lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>性能优化检查清单</h2>
+            <p>以下是Vue.js应用性能优化的检查清单：</p>
+            
+            <ul>
+                <li>使用[Object.freeze()](file:///e:\FrontendTeach\VUE快速上手\api\options-data.html#L42-L42)冻结大型不可变数据</li>
+                <li>为v-for提供唯一的key值</li>
+                <li>合理选择v-show和v-if</li>
+                <li>使用keep-alive缓存组件</li>
+                <li>使用异步组件和路由懒加载</li>
+                <li>对事件处理器使用防抖和节流</li>
+                <li>使用计算属性缓存复杂计算</li>
+                <li>对于长列表使用虚拟滚动</li>
+                <li>避免在模板中进行复杂计算</li>
+                <li>使用v-memo缓存昂贵的子树（Vue 3.2+）</li>
+                <li>监控组件更新性能</li>
+                <li>优化第三方库的使用</li>
+            </ul>
+        </div>
+        
+        <div class="navigation">
+            <a href="./rendering.html" class="nav-link">上一课：渲染函数</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../tooling/testing.html" class="nav-link">下一课：测试</a>
+        </div>
+        
+        <footer>
+            <p>性能优化 - Vue.js应用开发的关键环节</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

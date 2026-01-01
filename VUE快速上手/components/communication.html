@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件通信 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>组件通信</h1>
+            <p class="subtitle">父子组件、兄弟组件通信方案</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./lifecycle.html" class="nav-link">上一课：生命周期</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./dynamic-static-components.html" class="nav-link">下一课：动态与静态组件</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>组件通信核心概念</h3>
+                <ul>
+                    <li><strong>Props</strong>：父组件向子组件传递数据</li>
+                    <li><strong>自定义事件</strong>：子组件向父组件传递消息</li>
+                    <li><strong>Ref</strong>：父组件直接访问子组件</li>
+                    <li><strong>事件总线</strong>：任意组件间的通信</li>
+                    <li><strong>Provide/Inject</strong>：跨层级组件通信</li>
+                    <li><strong>状态管理</strong>：全局状态管理方案</li>
+                </ul>
+            </div>
+            
+            <h2>组件通信概述</h2>
+            <p>在Vue应用中，组件是构成UI的基本单元。由于组件是独立的，它们之间需要通信才能协同工作。Vue提供了多种组件通信方式，每种方式适用于不同的场景。</p>
+            
+            <h2>1. Props（父传子）</h2>
+            <p>Props是父组件向子组件传递数据的主要方式。这是单向数据流的一部分，确保了组件的独立性。</p>
+            
+            <div class="code-block">
+// 子组件
+const ChildComponent = {
+  props: ['message', 'user'], // 声明接收的props
+  template: `
+    &lt;div&gt;
+      &lt;p&gt;{{ message }}&lt;/p&gt;
+      &lt;p&gt;用户: {{ user.name }} - {{ user.email }}&lt;/p&gt;
+    &lt;/div&gt;
+  `
+}
+
+// 父组件
+const ParentComponent = {
+  template: `
+    &lt;div&gt;
+      &lt;child-component 
+        :message="greeting" 
+        :user="currentUser"
+      &gt;&lt;/child-component&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      greeting: 'Hello from parent!',
+      currentUser: {
+        name: 'Alice',
+        email: 'alice@example.com'
+      }
+    }
+  },
+  components: {
+    'child-component': ChildComponent
+  }
+}
+            </div>
+            
+            <h2>2. 自定义事件（子传父）</h2>
+            <p>子组件通过$emit触发自定义事件，父组件监听这些事件来接收数据。</p>
+            
+            <div class="code-block">
+// 子组件
+const ChildComponent = {
+  data() {
+    return {
+      localValue: ''
+    }
+  },
+  template: `
+    &lt;div&gt;
+      &lt;input v-model="localValue" @input="onInput" /&gt;
+    &lt;/div&gt;
+  `,
+  methods: {
+    onInput() {
+      // 触发自定义事件，向父组件传递数据
+      this.$emit('input-change', this.localValue)
+    }
+  }
+}
+
+// 父组件
+const ParentComponent = {
+  template: `
+    &lt;div&gt;
+      &lt;p&gt;父组件接收到: {{ childData }}&lt;/p&gt;
+      &lt;child-component @input-change="handleChildData"&gt;&lt;/child-component&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      childData: ''
+    }
+  },
+  methods: {
+    handleChildData(value) {
+      this.childData = value
+    }
+  },
+  components: {
+    'child-component': ChildComponent
+  }
+}
+            </div>
+            
+            <h2>3. Refs（父访问子）</h2>
+            <p>通过ref特性，父组件可以直接访问子组件的属性和方法。</p>
+            
+            <div class="code-block">
+// 子组件
+const ChildComponent = {
+  data() {
+    return {
+      childValue: 'child data'
+    }
+  },
+  methods: {
+    childMethod() {
+      return 'Method called from child'
+    }
+  },
+  template: `&lt;div&gt;子组件内容&lt;/div&gt;`
+}
+
+// 父组件
+const ParentComponent = {
+  template: `
+    &lt;div&gt;
+      &lt;child-component ref="childRef"&gt;&lt;/child-component&gt;
+      &lt;button @click="accessChild"&gt;访问子组件&lt;/button&gt;
+      &lt;p&gt;子组件数据: {{ childData }}&lt;/p&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      childData: ''
+    }
+  },
+  methods: {
+    accessChild() {
+      // 通过$refs访问子组件的数据和方法
+      this.childData = this.$refs.childRef.childValue
+      console.log(this.$refs.childRef.childMethod())
+    }
+  },
+  components: {
+    'child-component': ChildComponent
+  }
+}
+            </div>
+            
+            <h2>4. 事件总线（Event Bus）</h2>
+            <p>事件总线允许任意组件之间进行通信，但仅适用于简单场景，复杂应用应使用状态管理库。</p>
+            
+            <div class="code-block">
+// 创建事件总线
+const EventBus = new Vue()
+
+// 组件A - 发送事件
+const ComponentA = {
+  template: `&lt;button @click="sendData"&gt;发送数据&lt;/button&gt;`,
+  methods: {
+    sendData() {
+      EventBus.$emit('data-shared', { message: 'Hello from Component A' })
+    }
+  }
+}
+
+// 组件B - 监听事件
+const ComponentB = {
+  template: `&lt;div&gt;接收到: {{ receivedMessage }}&lt;/div&gt;`,
+  data() {
+    return {
+      receivedMessage: ''
+    }
+  },
+  mounted() {
+    // 监听事件
+    EventBus.$on('data-shared', (data) => {
+      this.receivedMessage = data.message
+    })
+  },
+  beforeDestroy() {
+    // 移除事件监听器
+    EventBus.$off('data-shared')
+  }
+}
+
+// 在Vue 3中，事件总线不再是内置功能，需要使用第三方库如mitt
+            </div>
+            
+            <h2>5. Provide/Inject（跨层级通信）</h2>
+            <p>Provide/Inject允许祖先组件向其所有子孙后代注入一个依赖，无论组件层级有多深。</p>
+            
+            <div class="code-block">
+// 祖先组件
+const AncestorComponent = {
+  provide() {
+    return {
+      theme: 'dark',
+      user: this.user,
+      // 提供方法
+      updateUser: this.updateUser
+    }
+  },
+  data() {
+    return {
+      user: { name: 'John', role: 'admin' }
+    }
+  },
+  methods: {
+    updateUser(newUserData) {
+      this.user = { ...this.user, ...newUserData }
+    }
+  },
+  template: `&lt;div&gt;&lt;slot&gt;&lt;/slot&gt;&lt;/div&gt;`
+}
+
+// 后代组件
+const DescendantComponent = {
+  inject: ['theme', 'user', 'updateUser'],
+  template: `
+    &lt;div :class="theme"&gt;
+      &lt;p&gt;主题: {{ theme }}&lt;/p&gt;
+      &lt;p&gt;用户: {{ user.name }} - {{ user.role }}&lt;/p&gt;
+      &lt;button @click="changeUser"&gt;更改用户&lt;/button&gt;
+    &lt;/div&gt;
+  `,
+  methods: {
+    changeUser() {
+      this.updateUser({ name: 'Jane', role: 'user' })
+    }
+  }
+}
+            </div>
+            
+            <h2>6. Vuex/Pinia（全局状态管理）</h2>
+            <p>对于复杂应用，全局状态管理是最有效的组件通信方式。</p>
+            
+            <div class="code-block">
+// 使用Pinia作为示例
+import { defineStore } from 'pinia'
+
+// 定义store
+export const useMainStore = defineStore('main', {
+  state: () => ({
+    user: { name: 'John', role: 'admin' },
+    theme: 'light'
+  }),
+  actions: {
+    updateUser(userData) {
+      this.user = { ...this.user, ...userData }
+    },
+    toggleTheme() {
+      this.theme = this.theme === 'light' ? 'dark' : 'light'
+    }
+  }
+})
+
+// 任意组件中使用
+const SomeComponent = {
+  setup() {
+    const store = useMainStore()
+    
+    return {
+      user: computed(() => store.user),
+      theme: computed(() => store.theme),
+      updateUser: store.updateUser,
+      toggleTheme: store.toggleTheme
+    }
+  }
+}
+            </div>
+            
+            <h2>7. $parent/$children（不推荐）</h2>
+            <p>虽然Vue提供了$parent和$children访问父/子组件，但这种方式耦合性强，不推荐使用。</p>
+            
+            <div class="code-block">
+// 不推荐的用法
+const ChildComponent = {
+  methods: {
+    accessParent() {
+      // 直接访问父组件数据（不推荐）
+      this.$parent.parentData = 'changed from child'
+    }
+  }
+}
+            </div>
+            
+            <h2>8. 通过共同父组件通信（兄弟组件）</h2>
+            <p>兄弟组件可以通过共同的父组件进行通信。</p>
+            
+            <div class="code-block">
+// 兄弟组件A
+const SiblingA = {
+  template: `&lt;button @click="sendToSibling"&gt;发送给兄弟组件&lt;/button&gt;`,
+  methods: {
+    sendToSibling() {
+      // 通过$emit发送到父组件
+      this.$emit('data-from-a', 'Data from Sibling A')
+    }
+  }
+}
+
+// 兄弟组件B
+const SiblingB = {
+  props: ['dataFromSibling'],
+  template: `&lt;div&gt;来自兄弟组件的数据: {{ dataFromSibling }}&lt;/div&gt;`
+}
+
+// 父组件
+const Parent = {
+  template: `
+    &lt;div&gt;
+      &lt;sibling-a @data-from-a="receiveDataFromA"&gt;&lt;/sibling-a&gt;
+      &lt;sibling-b :data-from-sibling="sharedData"&gt;&lt;/sibling-b&gt;
+    &lt;/div&gt;
+  `,
+  data() {
+    return {
+      sharedData: ''
+    }
+  },
+  methods: {
+    receiveDataFromA(data) {
+      this.sharedData = data
+    }
+  },
+  components: {
+    'sibling-a': SiblingA,
+    'sibling-b': SiblingB
+  }
+}
+            </div>
+            
+            <h2>Vue 3中的新通信方式</h2>
+            <p>Vue 3引入了一些新的通信方式和改进：</p>
+            
+            <div class="code-block">
+// 使用Composition API进行通信
+&lt;script setup&gt;
+import { provide, inject, ref } from 'vue'
+
+// 祖先组件
+const theme = ref('light')
+provide('theme', theme)
+
+// 后代组件
+const injectedTheme = inject('theme')
+&lt;/script&gt;
+
+// 使用Teleport进行组件内容传送
+&lt;template&gt;
+  &lt;teleport to="body"&gt;
+    &lt;div class="modal"&gt;模态框内容&lt;/div&gt;
+  &lt;/teleport&gt;
+&lt;/template&gt;
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例：用户管理应用</h3>
+                <p>下面是一个综合使用多种通信方式的示例：</p>
+                
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;组件通信示例&lt;/title&gt;
+  &lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+    &lt;user-manager&gt;&lt;/user-manager&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    // 用户卡片组件 - 使用props接收数据
+    const UserCard = {
+      template: `
+        &lt;div class="user-card" :class="{ selected: isSelected }"&gt;
+          &lt;h3&gt;{{ user.name }}&lt;/h3&gt;
+          &lt;p&gt;{{ user.email }}&lt;/p&gt;
+          &lt;p&gt;{{ user.role }}&lt;/p&gt;
+          &lt;button @click="selectUser" class="select-btn"&gt;选择&lt;/button&gt;
+          &lt;button @click="editUser" class="edit-btn"&gt;编辑&lt;/button&gt;
+          &lt;button @click="deleteUser" class="delete-btn"&gt;删除&lt;/button&gt;
+        &lt;/div&gt;
+      `,
+      props: ['user', 'isSelected'],
+      methods: {
+        selectUser() {
+          // 通过自定义事件通知父组件
+          this.$emit('user-selected', this.user.id)
+        },
+        editUser() {
+          this.$emit('user-edit', this.user)
+        },
+        deleteUser() {
+          this.$emit('user-delete', this.user.id)
+        }
+      }
+    }
+
+    // 用户表单组件
+    const UserForm = {
+      template: `
+        &lt;div class="user-form"&gt;
+          &lt;h3&gt;{{ editingUser ? '编辑用户' : '添加用户' }}&lt;/h3&gt;
+          &lt;div class="form-group"&gt;
+            &lt;input v-model="formData.name" placeholder="姓名" /&gt;
+          &lt;/div&gt;
+          &lt;div class="form-group"&gt;
+            &lt;input v-model="formData.email" placeholder="邮箱" /&gt;
+          &lt;/div&gt;
+          &lt;div class="form-group"&gt;
+            &lt;select v-model="formData.role"&gt;
+              &lt;option value="user"&gt;用户&lt;/option&gt;
+              &lt;option value="admin"&gt;管理员&lt;/option&gt;
+              &lt;option value="moderator"&gt;版主&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;button @click="saveUser" class="save-btn"&gt;保存&lt;/button&gt;
+          &lt;button @click="cancelEdit" v-if="editingUser" class="cancel-btn"&gt;取消&lt;/button&gt;
+        &lt;/div&gt;
+      `,
+      props: ['editingUser'],
+      data() {
+        return {
+          formData: {
+            name: '',
+            email: '',
+            role: 'user'
+          }
+        }
+      },
+      watch: {
+        editingUser: {
+          handler(newUser) {
+            if (newUser) {
+              this.formData = { ...newUser }
+            } else {
+              this.resetForm()
+            }
+          },
+          immediate: true
+        }
+      },
+      methods: {
+        saveUser() {
+          this.$emit('user-saved', { ...this.formData })
+          this.resetForm()
+        },
+        cancelEdit() {
+          this.$emit('edit-cancelled')
+          this.resetForm()
+        },
+        resetForm() {
+          this.formData = { name: '', email: '', role: 'user' }
+        }
+      }
+    }
+
+    // 用户管理组件
+    const UserManager = {
+      template: `
+        &lt;div class="user-manager"&gt;
+          &lt;h2&gt;用户管理系统&lt;/h2&gt;
+          
+          &lt;div class="manager-content"&gt;
+            &lt;div class="user-list"&gt;
+              &lt;h3&gt;用户列表&lt;/h3&gt;
+              &lt;user-card
+                v-for="user in users"
+                :key="user.id"
+                :user="user"
+                :is-selected="selectedUserId === user.id"
+                @user-selected="selectUser"
+                @user-edit="startEdit"
+                @user-delete="deleteUser"
+              &gt;&lt;/user-card&gt;
+            &lt;/div&gt;
+            
+            &lt;div class="user-form-section"&gt;
+              &lt;user-form
+                :editing-user="editingUser"
+                @user-saved="saveUser"
+                @edit-cancelled="cancelEdit"
+              &gt;&lt;/user-form&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          
+          &lt;p class="status"&gt;已选择用户: {{ selectedUserId ? getUserById(selectedUserId).name : '无' }}&lt;/p&gt;
+        &lt;/div&gt;
+      `,
+      data() {
+        return {
+          users: [
+            { id: 1, name: '张三', email: 'zhangsan@example.com', role: 'admin' },
+            { id: 2, name: '李四', email: 'lisi@example.com', role: 'user' },
+            { id: 3, name: '王五', email: 'wangwu@example.com', role: 'moderator' }
+          ],
+          selectedUserId: null,
+          editingUser: null
+        }
+      },
+      methods: {
+        selectUser(userId) {
+          this.selectedUserId = userId
+        },
+        getUserById(id) {
+          return this.users.find(user => user.id === id) || {}
+        },
+        startEdit(user) {
+          this.editingUser = user
+        },
+        saveUser(userData) {
+          if (this.editingUser) {
+            // 编辑现有用户
+            const index = this.users.findIndex(u => u.id === this.editingUser.id)
+            if (index !== -1) {
+              this.users[index] = { ...userData, id: this.editingUser.id }
+            }
+            this.editingUser = null
+          } else {
+            // 添加新用户
+            const newUser = {
+              ...userData,
+              id: Date.now() // 简单的ID生成
+            }
+            this.users.push(newUser)
+          }
+        },
+        deleteUser(userId) {
+          this.users = this.users.filter(user => user.id !== userId)
+          if (this.selectedUserId === userId) {
+            this.selectedUserId = null
+          }
+        },
+        cancelEdit() {
+          this.editingUser = null
+        }
+      },
+      components: {
+        UserCard,
+        UserForm
+      }
+    }
+
+    const { createApp } = Vue
+    createApp({
+      components: { UserManager }
+    }).mount('#app')
+  &lt;/script&gt;
+  
+  &lt;style&gt;
+    .user-manager {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .manager-content {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .user-list {
+      flex: 1;
+    }
+    
+    .user-form-section {
+      flex: 1;
+      max-width: 400px;
+    }
+    
+    .user-card {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .user-card.selected {
+      border-color: #42b983;
+      background-color: #f0f9ff;
+    }
+    
+    .user-card h3 {
+      margin: 0;
+    }
+    
+    .user-card .select-btn {
+      background: #42b983;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    
+    .user-card .edit-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    
+    .user-card .delete-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    
+    .user-form .form-group {
+      margin-bottom: 10px;
+    }
+    
+    .user-form input,
+    .user-form select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    .user-form .save-btn {
+      background: #42b983;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    
+    .user-form .cancel-btn {
+      background: #95a5a6;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+    @media (max-width: 768px) {
+      .manager-content {
+        flex-direction: column;
+      }
+    }
+  &lt;/style&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </div>
+            </div>
+            
+            <h2>通信方式选择指南</h2>
+            <p>根据不同的场景选择合适的通信方式：</p>
+            
+            <ul>
+                <li><strong>父子组件通信</strong>：使用Props和自定义事件</li>
+                <li><strong>跨多层组件通信</strong>：使用Provide/Inject</li>
+                <li><strong>兄弟组件通信</strong>：通过共同父组件或状态管理</li>
+                <li><strong>任意组件通信</strong>：使用状态管理库（Vuex/Pinia）</li>
+                <li><strong>简单应用</strong>：可使用事件总线（Vue 2）或mitt库（Vue 3）</li>
+            </ul>
+        </div>
+        
+        <div class="navigation">
+            <a href="./lifecycle.html" class="nav-link">上一课：生命周期</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./dynamic-static-components.html" class="nav-link">下一课：动态与静态组件</a>
+        </div>
+        
+        <footer>
+            <p>组件通信 - Vue.js组件协作的核心机制</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

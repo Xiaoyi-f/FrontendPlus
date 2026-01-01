@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .test-section {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>测试</h1>
+            <p class="subtitle">单元测试、E2E测试</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./vite.html" class="nav-link">上一课：Vite构建工具</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./ssr.html" class="nav-link">下一课：服务端渲染</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>Vue.js测试类型</h3>
+                <ul>
+                    <li><strong>单元测试</strong>：测试单个组件或函数</li>
+                    <li><strong>集成测试</strong>：测试组件间的交互</li>
+                    <li><strong>E2E测试</strong>：端到端测试用户交互流程</li>
+                    <li><strong>快照测试</strong>：捕获组件渲染输出并比较</li>
+                    <li><strong>组件测试</strong>：专门针对Vue组件的测试</li>
+                    <li><strong>API测试</strong>：测试后端接口</li>
+                </ul>
+            </div>
+            
+            <h2>为什么需要测试？</h2>
+            <p>测试是软件开发的重要环节，它能：</p>
+            <ul>
+                <li>确保代码按预期工作</li>
+                <li>防止回归错误（新代码破坏旧功能）</li>
+                <li>提供代码质量保证</li>
+                <li>加快开发速度（减少调试时间）</li>
+                <li>增强重构信心</li>
+            </ul>
+            
+            <h2>Vue Test Utils</h2>
+            <p>Vue Test Utils是Vue.js官方的测试工具库，用于测试Vue组件。Vue 3中使用@vue/test-utils 2.x版本。</p>
+            
+            <div class="code-block">
+npm install -D @vue/test-utils
+</div>
+            
+            <h2>单元测试示例</h2>
+            <p>以下是一个简单的组件和其测试：</p>
+            
+            <div class="code-block">
+// Button.vue
+&lt;template&gt;
+  &lt;button 
+    class="btn" 
+    :class="buttonType"
+    @click="handleClick"
+    :disabled="disabled"
+  &gt;
+    &lt;slot /&gt;
+  &lt;/button&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: 'Button',
+  props: {
+    type: {
+      type: String,
+      default: 'default'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    buttonType() {
+      return `btn-${this.type}`
+    }
+  },
+  emits: ['click'],
+  methods: {
+    handleClick(event) {
+      if (!this.disabled) {
+        this.$emit('click', event)
+      }
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+.btn {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-default { background-color: #fff; }
+.btn-primary { background-color: #007bff; color: white; }
+&lt;/style&gt;
+</div>
+            
+            <p>对应的测试文件：</p>
+            
+            <div class="code-block">
+// Button.test.js
+import { mount } from '@vue/test-utils'
+import Button from './Button.vue'
+
+describe('Button', () => {
+  test('renders correctly with default props', () => {
+    const wrapper = mount(Button, {
+      slots: {
+        default: 'Click me'
+      }
+    })
+    
+    expect(wrapper.text()).toBe('Click me')
+    expect(wrapper.classes()).toContain('btn-default')
+  })
+  
+  test('applies correct class based on type prop', () => {
+    const wrapper = mount(Button, {
+      props: {
+        type: 'primary'
+      }
+    })
+    
+    expect(wrapper.classes()).toContain('btn-primary')
+  })
+  
+  test('emits click event when clicked', async () => {
+    const wrapper = mount(Button)
+    
+    await wrapper.trigger('click')
+    
+    expect(wrapper.emitted('click')).toBeTruthy()
+  })
+  
+  test('does not emit click event when disabled', async () => {
+    const wrapper = mount(Button, {
+      props: {
+        disabled: true
+      }
+    })
+    
+    await wrapper.trigger('click')
+    
+    expect(wrapper.emitted('click')).toBeFalsy()
+  })
+  
+  test('applies disabled attribute when disabled prop is true', () => {
+    const wrapper = mount(Button, {
+      props: {
+        disabled: true
+      }
+    })
+    
+    expect(wrapper.attributes('disabled')).toBe('')
+  })
+})
+</div>
+            
+            <h2>使用Vitest进行单元测试</h2>
+            <p>Vitest是Vite生态系统的测试框架，与Vite和Vue 3集成良好：</p>
+            
+            <div class="code-block">
+npm install -D vitest jsdom @vue/test-utils
+</div>
+            
+            <p>在[vite.config.js](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-elements.html#L134-L134)中配置Vitest：</p>
+            
+            <div class="code-block">
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    environment: 'jsdom',  // 使用jsdom环境
+    globals: true,         // 全局访问测试API
+    setupFiles: ['./tests/setup.js']  // 设置文件
+  }
+})
+</div>
+            
+            <p>在package.json中添加测试脚本：</p>
+            
+            <div class="code-block">
+{
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:ui": "vitest --ui"
+  }
+}
+</div>
+            
+            <h2>模拟和存根</h2>
+            <p>在测试中，我们经常需要模拟某些功能或组件：</p>
+            
+            <div class="code-block">
+// ComponentWithAPI.vue
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;div v-if="loading"&gt;加载中...&lt;/div&gt;
+    &lt;div v-else&gt;{{ data }}&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      data: null,
+      loading: false
+    }
+  },
+  async mounted() {
+    this.loading = true
+    try {
+      this.data = await this.fetchData()
+    } finally {
+      this.loading = false
+    }
+  },
+  methods: {
+    async fetchData() {
+      const response = await fetch('/api/data')
+      return response.json()
+    }
+  }
+}
+&lt;/script&gt;
+</div>
+            
+            <p>测试文件：</p>
+            
+            <div class="code-block">
+import { mount, flushPromises } from '@vue/test-utils'
+import { vi } from 'vitest'
+import ComponentWithAPI from './ComponentWithAPI.vue'
+
+vi.mock('axios') // 如果使用axios
+
+describe('ComponentWithAPI', () => {
+  test('fetches and displays data', async () => {
+    // 模拟fetch函数
+    global.fetch = vi.fn().mockResolvedValue({
+      json: vi.fn().mockResolvedValue({ message: 'Hello!' })
+    })
+    
+    const wrapper = mount(ComponentWithAPI)
+    
+    // 等待异步操作完成
+    await flushPromises()
+    
+    expect(wrapper.text()).toContain('Hello!')
+    expect(global.fetch).toHaveBeenCalledWith('/api/data')
+  })
+  
+  test('shows loading state', async () => {
+    const mockFetch = vi.fn(() => new Promise(resolve => {
+      setTimeout(() => resolve({ json: () => ({ message: 'Delayed!' }) }), 100)
+    }))
+    
+    global.fetch = mockFetch
+    
+    const wrapper = mount(ComponentWithAPI)
+    
+    // 检查是否显示加载状态
+    expect(wrapper.text()).toContain('加载中...')
+    
+    // 等待异步操作完成
+    await new Promise(resolve => setTimeout(resolve, 150))
+    await flushPromises()
+    
+    expect(wrapper.text()).toContain('Delayed!')
+  })
+})
+</div>
+            
+            <h2>组件测试最佳实践</h2>
+            <div class="test-section">
+                <h3>测试策略</h3>
+                <ul>
+                    <li><strong>黑盒测试</strong>：只测试组件的公共接口（props、events、slots）</li>
+                    <li><strong>浅渲染</strong>：只测试当前组件，不渲染子组件</li>
+                    <li><strong>测试用户行为</strong>：测试用户如何与组件交互，而不是实现细节</li>
+                    <li><strong>测试边界情况</li>
+                </ul>
+            </div>
+            
+            <div class="test-section">
+                <h3>常用测试技巧</h3>
+                <div class="code-block">
+// 浅渲染
+import { shallowMount } from '@vue/test-utils'
+const wrapper = shallowMount(MyComponent)
+
+// 深度渲染
+import { mount } from '@vue/test-utils'
+const wrapper = mount(MyComponent)
+
+// 测试响应式数据变化
+await wrapper.setData({ count: 10 })
+expect(wrapper.find('.count').text()).toBe('10')
+
+// 测试props
+const wrapper = mount(MyComponent, {
+  props: {
+    title: 'My Title'
+  }
+})
+
+// 测试事件
+await wrapper.get('button').trigger('click')
+expect(wrapper.emitted('click')).toHaveLength(1)
+
+// 测试插槽
+const wrapper = mount(MyComponent, {
+  slots: {
+    default: 'Default slot content',
+    header: 'Header slot content'
+  }
+})
+                </div>
+            </div>
+            
+            <h2>E2E测试</h2>
+            <p>端到端测试模拟真实用户在浏览器中的操作。Cypress和Playwright是两个流行的E2E测试工具。</p>
+            
+            <h3>使用Cypress</h3>
+            <div class="code-block">
+npm install -D cypress
+</div>
+            
+            <p>创建Cypress配置文件：</p>
+            
+            <div class="code-block">
+// cypress.config.js
+import { defineConfig } from 'cypress'
+
+export default defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      // implement node event listeners here
+    },
+    baseUrl: 'http://localhost:3000'
+  }
+})
+</div>
+            
+            <p>创建E2E测试：</p>
+            
+            <div class="code-block">
+// cypress/e2e/homepage.cy.js
+describe('Homepage', () => {
+  beforeEach(() => {
+    cy.visit('/')
+  })
+
+  it('should display welcome message', () => {
+    cy.get('h1').should('contain', 'Welcome')
+  })
+
+  it('should allow user to submit form', () => {
+    cy.get('[data-testid="email-input"]').type('user@example.com')
+    cy.get('[data-testid="password-input"]').type('password123')
+    cy.get('[data-testid="submit-button"]').click()
+    
+    cy.url().should('include', '/dashboard')
+    cy.get('[data-testid="welcome-message"]').should('contain', 'Welcome back')
+  })
+})
+</div>
+            
+            <h3>使用Playwright</h3>
+            <div class="code-block">
+npm install -D @playwright/test
+npx playwright install
+</div>
+            
+            <p>创建Playwright测试：</p>
+            
+            <div class="code-block">
+// e2e/example.spec.js
+import { test, expect } from '@playwright/test'
+
+test.describe('Homepage', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
+
+  test('should display welcome message', async ({ page }) => {
+    const heading = page.locator('h1')
+    await expect(heading).toHaveText('Welcome')
+  })
+
+  test('should allow user to submit form', async ({ page }) => {
+    await page.locator('[data-testid="email-input"]').fill('user@example.com')
+    await page.locator('[data-testid="password-input"]').fill('password123')
+    await page.locator('[data-testid="submit-button"]').click()
+    
+    await expect(page).toHaveURL('/dashboard')
+    await expect(page.locator('[data-testid="welcome-message"]')).toContainText('Welcome back')
+  })
+})
+</div>
+            
+            <h2>测试驱动开发(TDD)</h2>
+            <p>测试驱动开发是一种开发方法，要求先写测试再写实现代码：</p>
+            
+            <div class="code-block">
+// 1. 先写测试
+test('should calculate total price', () => {
+  const items = [
+    { name: 'Item 1', price: 10 },
+    { name: 'Item 2', price: 20 }
+  ]
+  
+  const result = calculateTotal(items)
+  expect(result).toBe(30)
+})
+
+// 2. 实现功能使测试通过
+function calculateTotal(items) {
+  return items.reduce((total, item) => total + item.price, 0)
+}
+
+// 3. 重构优化
+function calculateTotal(items) {
+  return items.reduce((total, { price }) => total + price, 0)
+}
+</div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./vite.html" class="nav-link">上一课：Vite构建工具</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./ssr.html" class="nav-link">下一课：服务端渲染</a>
+        </div>
+        
+        <footer>
+            <p>测试 - 确保Vue.js应用质量</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

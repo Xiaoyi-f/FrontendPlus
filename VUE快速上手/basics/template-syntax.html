@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模板语法 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .syntax-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .syntax-table th, .syntax-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .syntax-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .syntax-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 基础语法篇 > 模板语法</div>
+            <h1>Vue模板语法</h1>
+        </header>
+        
+        <div class="content">
+            <p>Vue.js使用基于HTML的模板语法，允许开发者声明式地将DOM绑定到底层Vue实例的数据。所有Vue.js模板都是合法的HTML，所以能被遵循规范的浏览器和HTML解析器解析。</p>
+            
+            <div class="key-features">
+                <h3>模板语法核心概念</h3>
+                <ul>
+                    <li><strong>插值</strong>：使用双大括号{{}}进行文本插值</li>
+                    <li><strong>指令</strong>：带有v-前缀的特殊属性，用于执行DOM操作</li>
+                    <li><strong>事件处理</strong>：使用v-on指令处理DOM事件</li>
+                    <li><strong>条件渲染</strong>：根据条件展示或隐藏元素</li>
+                    <li><strong>列表渲染</strong>：基于数据数组渲染列表项</li>
+                    <li><strong>表单输入绑定</strong>：使用v-model实现双向数据绑定</li>
+                </ul>
+            </div>
+            
+            <h2>文本插值</h2>
+            <p>文本插值是最基本的模板语法，使用双大括号{{}}进行数据绑定。插值内容会被解析为文本内容。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">文本插值示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;h1&gt;{{ title }}&lt;/h1&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;欢迎来到{{ framework }}的世界！&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;当前计数: {{ count }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: <span class="code-string">'Vue模板语法'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;framework: <span class="code-string">'Vue.js'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>使用JavaScript表达式</h2>
+            <p>在插值中可以使用JavaScript表达式，但只能是单个表达式，不能是语句。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">JavaScript表达式示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;{{ message.split('').reverse().join('') }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;{{ count > 5 ? '大于5' : '小于等于5' }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;{{ user.firstName + ' ' + user.lastName }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message: <span class="code-string">'Hello Vue'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">8</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;firstName: <span class="code-string">'张'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lastName: <span class="code-string">'三'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>指令</h2>
+            <p>指令是带有v-前缀的特殊属性，其职责是当表达式的值改变时响应式地作用于DOM。</p>
+            
+            <table class="syntax-table">
+                <thead>
+                    <tr>
+                        <th>指令</th>
+                        <th>描述</th>
+                        <th>示例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>v-text</td>
+                        <td>更新元素的文本内容</td>
+                        <td>v-text="message"</td>
+                    </tr>
+                    <tr>
+                        <td>v-html</td>
+                        <td>更新元素的innerHTML</td>
+                        <td>v-html="rawHtml"</td>
+                    </tr>
+                    <tr>
+                        <td>v-show</td>
+                        <td>根据条件显示/隐藏元素</td>
+                        <td>v-show="isVisible"</td>
+                    </tr>
+                    <tr>
+                        <td>v-if</td>
+                        <td>条件性渲染元素</td>
+                        <td>v-if="condition"</td>
+                    </tr>
+                    <tr>
+                        <td>v-else</td>
+                        <td>v-if的else分支</td>
+                        <td>v-else</td>
+                    </tr>
+                    <tr>
+                        <td>v-else-if</td>
+                        <td>v-if的else-if分支</td>
+                        <td>v-else-if="condition2"</td>
+                    </tr>
+                    <tr>
+                        <td>v-for</td>
+                        <td>基于数组/对象渲染列表</td>
+                        <td>v-for="item in items"</td>
+                    </tr>
+                    <tr>
+                        <td>v-on</td>
+                        <td>绑定事件监听器</td>
+                        <td>v-on:click="handleClick"</td>
+                    </tr>
+                    <tr>
+                        <td>v-bind</td>
+                        <td>动态绑定HTML属性</td>
+                        <td>v-bind:href="url"</td>
+                    </tr>
+                    <tr>
+                        <td>v-model</td>
+                        <td>创建双向数据绑定</td>
+                        <td>v-model="value"</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>v-bind指令</h3>
+            <p>v-bind用于动态绑定HTML属性，可以缩写为:。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">v-bind示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;a v-bind:href="url"&gt;访问网站&lt;/a&gt;<br>
+                    &nbsp;&nbsp;&lt;img v-bind:src="imageSrc" v-bind:alt="imageAlt"&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-bind:class="{ active: isActive, 'text-danger': hasError }"&gt;动态类名&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-bind:style="{ color: textColor, fontSize: fontSize + 'px' }"&gt;动态样式&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;url: <span class="code-string">'https://vuejs.org'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imageSrc: <span class="code-string">'/path/to/image.jpg'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imageAlt: <span class="code-string">'示例图片'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isActive: <span class="code-boolean">true</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hasError: <span class="code-boolean">false</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;textColor: <span class="code-string">'red'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fontSize: <span class="code-number">16</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h3>v-on指令</h3>
+            <p>v-on用于监听DOM事件，可以缩写为@。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">v-on示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;button v-on:click="increment"&gt;计数 +1&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click="decrement"&gt;计数 -1&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click="reset"&gt;重置&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;计数: {{ count }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;input @keyup.enter="submit" placeholder="按回车提交"&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;decrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;reset() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count = <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;submit() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'提交数据: '</span> + <span class="code-keyword">this</span>.count);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>修饰符</h2>
+            <p>修饰符是以半角句号.指明的特殊后缀，用于指出一个指令应该以特殊方式绑定。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">事件修饰符</div>
+                    <div class="code-block">
+                        &lt;!-- 阻止冒泡 --&gt;<br>
+                        &lt;button @click.stop="doThis"&gt;&lt;/button&gt;<br><br>
+                        
+                        &lt;!-- 阻止默认行为 --&gt;<br>
+                        &lt;form @submit.prevent="onSubmit"&gt;&lt;/form&gt;<br><br>
+                        
+                        &lt;!-- 修饰符可以串联 --&gt;<br>
+                        &lt;button @click.stop.prevent="doThat"&gt;&lt;/button&gt;<br><br>
+                        
+                        &lt;!-- 添加事件监听器时使用 capture 模式 --&gt;<br>
+                        &lt;div @click.capture="doThis"&gt;&lt;/div&gt;<br><br>
+                        
+                        &lt;!-- 只触发一次 --&gt;<br>
+                        &lt;button @click.once="doThis"&gt;&lt;/button&gt;<br><br>
+                        
+                        &lt;!-- 滚动事件的默认行为 (即滚动行为) 将会立即触发 --&gt;<br>
+                        &lt;div @scroll.passive="onScroll"&gt;&lt;/div&gt;
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">按键修饰符</div>
+                    <div class="code-block">
+                        &lt;!-- 按回车键触发 --&gt;<br>
+                        &lt;input @keyup.enter="submit"&gt;<br><br>
+                        
+                        &lt;!-- 按空格键触发 --&gt;<br>
+                        &lt;input @keyup.space="handleSpace"&gt;<br><br>
+                        
+                        &lt;!-- 按删除键触发 (包括退格键和删除键) --&gt;<br>
+                        &lt;input @keyup.delete="handleDelete"&gt;<br><br>
+                        
+                        &lt;!-- 按下Ctrl + Enter触发 --&gt;<br>
+                        &lt;input @keydown.ctrl.enter="submit"&gt;<br><br>
+                        
+                        &lt;!-- 按下Alt + C触发 --&gt;<br>
+                        &lt;input @keydown.alt.c="clear"&gt;<br><br>
+                        
+                        &lt;!-- 按下Shift + PageUp触发 --&gt;<br>
+                        &lt;input @keydown.shift.page-up="onPageUp"&gt;
+                    </div>
+                </div>
+            </div>
+            
+            <h2>条件渲染</h2>
+            <p>Vue提供了v-if、v-else、v-else-if和v-show指令来条件性地渲染内容。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">条件渲染示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-if="type === 'A'"&gt;A&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-else-if="type === 'B'"&gt;B&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-else-if="type === 'C'"&gt;C&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-else&gt;Not A/B/C&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div v-show="isVisible"&gt;v-show控制的元素&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: <span class="code-string">'A'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isVisible: <span class="code-boolean">true</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h3>v-if vs v-show 的区别</h3>
+            <ul>
+                <li><strong>v-if</strong>：条件性渲染，如果条件为假，则不会渲染元素，切换时会销毁和重建元素</li>
+                <li><strong>v-show</strong>：始终渲染并保留在DOM中，只是切换CSS的display属性</li>
+                <li><strong>使用场景</strong>：v-if适合条件很少改变的场景，v-show适合频繁切换的场景</li>
+            </ul>
+            
+            <h2>列表渲染</h2>
+            <p>使用v-for指令可以基于数组/对象来渲染列表。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">列表渲染示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li v-for="(item, index) in items" :key="item.id"&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ index }} - {{ item.name }} ({{ item.age }}岁)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&lt;/ul&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div v-for="(value, key, index) in object" :key="key"&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{ index }}. {{ key }}: {{ value }}<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;button @click="addItem"&gt;添加项目&lt;/button&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items: [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'张三'</span>, age: <span class="code-number">25</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'李四'</span>, age: <span class="code-number">30</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'王五'</span>, age: <span class="code-number">28</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;object: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">'Vue'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version: <span class="code-string">'3.0'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author: <span class="code-string">'尤雨溪'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;addItem() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> id = <span class="code-keyword">this</span>.items.length + <span class="code-number">1</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.items.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: id,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">'新用户' + id,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;age: <span class="code-number">20</span> + (id % <span class="code-number">10</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个使用插值和JavaScript表达式的Vue应用</li>
+                    <li>使用v-bind绑定元素的属性、类名和样式</li>
+                    <li>实现一个带有事件处理的应用，使用不同的事件修饰符</li>
+                    <li>创建一个使用v-if/v-show条件渲染的列表</li>
+                    <li>实现一个使用v-for渲染的可交互列表（添加、删除、修改）</li>
+                    <li>结合使用条件渲染和列表渲染创建一个任务管理应用</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="instance.html" class="nav-link">← 上一课：Vue实例</a>
+            <a href="computed-watch.html" class="nav-link">下一课：计算属性与侦听器 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

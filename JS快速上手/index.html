@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript快速上手 - 从零到大神</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .progress-path {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .path-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .path-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .path-step {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .path-step:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-number {
+            display: block;
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .module {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .module:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .module-title {
+            font-size: 1.4rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #edf2f7;
+        }
+        
+        .module-list {
+            list-style: none;
+        }
+        
+        .module-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .module-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .module-link {
+            color: #4299e1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .module-link:hover {
+            color: #2b6cb0;
+            text-decoration: underline;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+        
+        .feature-desc {
+            color: #4a5568;
+            font-size: 0.95rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .path-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript快速上手</h1>
+            <p class="subtitle">从零基础到JS大神，系统化学习路径，掌握企业级开发技能</p>
+        </header>
+        
+        <div class="progress-path">
+            <h2 class="path-title">学习路径 - 从基础到高级</h2>
+            <div class="path-steps">
+                <div class="path-step">
+                    <span class="step-number">1</span>
+                    <div class="step-title">基础语法</div>
+                    <div>变量、数据类型、运算符、流程控制</div>
+                </div>
+                <div class="path-step">
+                    <span class="step-number">2</span>
+                    <div class="step-title">函数与作用域</div>
+                    <div>函数定义、闭包、this指向、高阶函数</div>
+                </div>
+                <div class="path-step">
+                    <span class="step-number">3</span>
+                    <div class="step-title">对象与原型</div>
+                    <div>对象操作、原型链、继承机制</div>
+                </div>
+                <div class="path-step">
+                    <span class="step-number">4</span>
+                    <div class="step-title">异步编程</div>
+                    <div>Promise、async/await、事件循环</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modules">
+            <div class="module">
+                <h3 class="module-title">JavaScript基础语法</h3>
+                <ul class="module-list">
+                    <li><a href="basics/variables.html" class="module-link">变量与常量 (var, let, const)</a></li>
+                    <li><a href="basics/datatypes.html" class="module-link">数据类型与类型检测</a></li>
+                    <li><a href="basics/operators.html" class="module-link">运算符与表达式</a></li>
+                    <li><a href="basics/control-flow.html" class="module-link">条件语句与循环</a></li>
+                    <li><a href="basics/functions.html" class="module-link">函数定义与调用</a></li>
+                    <li><a href="basics/arrays.html" class="module-link">数组操作与方法</a></li>
+                    <li><a href="basics/objects.html" class="module-link">对象基础与属性操作</a></li>
+                    <li><a href="basics/strings.html" class="module-link">字符串处理</a></li>
+                </ul>
+            </div>
+            
+            <div class="module">
+                <h3 class="module-title">进阶特性</h3>
+                <ul class="module-list">
+                    <li><a href="advanced/hoisting.html" class="module-link">变量提升与暂时性死区</a></li>
+                    <li><a href="advanced/scope-closure.html" class="module-link">作用域与闭包</a></li>
+                    <li><a href="advanced/this-binding.html" class="module-link">this绑定机制</a></li>
+                    <li><a href="advanced/prototypes.html" class="module-link">原型与原型链</a></li>
+                    <li><a href="advanced/classes.html" class="module-link">ES6类与继承</a></li>
+                    <li><a href="advanced/modules.html" class="module-link">模块化开发</a></li>
+                    <li><a href="advanced/destructuring.html" class="module-link">解构赋值</a></li>
+                    <li><a href="advanced/promises.html" class="module-link">Promise与异步处理</a></li>
+                </ul>
+            </div>
+            
+            <div class="module">
+                <h3 class="module-title">高级应用</h3>
+                <ul class="module-list">
+                    <li><a href="advanced/async-await.html" class="module-link">async/await详解</a></li>
+                    <li><a href="advanced/event-loop.html" class="module-link">事件循环机制</a></li>
+                    <li><a href="advanced/error-handling.html" class="module-link">错误处理与调试</a></li>
+                    <li><a href="advanced/performance.html" class="module-link">性能优化技巧</a></li>
+                    <li><a href="advanced/es2022-2023.html" class="module-link">ES2022/2023新特性</a></li>
+                    <li><a href="advanced/design-patterns.html" class="module-link">设计模式应用</a></li>
+                    <li><a href="advanced/security.html" class="module-link">安全与最佳实践</a></li>
+                    <li><a href="advanced/testing.html" class="module-link">单元测试</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📚</div>
+                <h3 class="feature-title">系统学习</h3>
+                <p class="feature-desc">从基础语法到高级特性，循序渐进的学习路径</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🔧</div>
+                <h3 class="feature-title">实战练习</h3>
+                <p class="feature-desc">每个知识点都配有实际示例和练习</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title">进阶提升</h3>
+                <p class="feature-desc">包含现代JS框架必备知识和高级技巧</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+            <p>© 2026 - 所有内容仅供学习使用</p>
+        </footer>
+    </div>
+</body>
+</html>

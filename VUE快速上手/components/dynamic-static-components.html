@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态与静态组件 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .component-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .component-table th, .component-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .component-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .component-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin: 20px 0;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .tab.active {
+            background-color: #42b983;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 组件系统篇 > 动态与静态组件</div>
+            <h1>动态与静态组件</h1>
+        </header>
+        
+        <div class="content">
+            <p>Vue.js提供了两种方式来处理组件：静态组件和动态组件。静态组件在模板中预先定义，而动态组件可以根据数据或条件在运行时切换。理解这两种组件的使用方式对于构建灵活的Vue应用至关重要。</p>
+            
+            <div class="key-features">
+                <h3>动态与静态组件核心概念</h3>
+                <ul>
+                    <li><strong>静态组件</strong>：在模板中直接声明的组件</li>
+                    <li><strong>动态组件</strong>：使用component元素和is属性动态渲染的组件</li>
+                    <li><strong>keep-alive</strong>：缓存动态组件的状态</li>
+                    <li><strong>异步组件</strong>：按需加载的组件</li>
+                    <li><strong>组件注册</strong>：全局和局部组件注册方式</li>
+                    <li><strong>组件切换</strong>：在不同组件间切换的实现方式</li>
+                </ul>
+            </div>
+            
+            <h2>静态组件</h2>
+            <p>静态组件是在模板中直接声明的组件，它们在应用初始化时就会被加载。静态组件适用于那些始终需要显示或很少变化的组件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">静态组件示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;header-component&gt;&lt;/header-component&gt;<br>
+                    &nbsp;&nbsp;&lt;sidebar-component&gt;&lt;/sidebar-component&gt;<br>
+                    &nbsp;&nbsp;&lt;main-content&gt;&lt;/main-content&gt;<br>
+                    &nbsp;&nbsp;&lt;footer-component&gt;&lt;/footer-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'header-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;header class=<span class="code-string">"header"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;网站标题&lt;/h1&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/header&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'sidebar-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;aside class=<span class="code-string">"sidebar"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;菜单项 1&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;菜单项 2&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;菜单项 3&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/aside&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'main-content'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;main class=<span class="code-string">"main"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;这里是主要内容区域&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/main&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'footer-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;footer class=<span class="code-string">"footer"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;© 2023 版权信息&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/footer&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>动态组件</h2>
+            <p>动态组件允许我们在运行时根据数据切换不同的组件。通过使用[component](file:///Users/lijiao/Downloads/vue-3.3.4/%E6%89%93%E5%8C%85%E7%89%88%E6%9C%AC/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/components.html#component)元素和[is](file:///Users/lijiao/Downloads/vue-3.3.4/%E6%89%93%E5%8C%85%E7%89%88%E6%9C%AC/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/built-ins.html#is)属性，我们可以实现组件的动态切换。</p>
+            
+            <table class="component-table">
+                <thead>
+                    <tr>
+                        <th>组件类型</th>
+                        <th>语法</th>
+                        <th>特点</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>静态组件</td>
+                        <td>&lt;component-name&gt;&lt;/component-name&gt;</td>
+                        <td>固定渲染，初始化时加载</td>
+                        <td>始终显示的组件</td>
+                    </tr>
+                    <tr>
+                        <td>动态组件</td>
+                        <td>&lt;component :is="componentName"&gt;&lt;/component&gt;</td>
+                        <td>运行时切换，按需加载</td>
+                        <td>需要切换的组件</td>
+                    </tr>
+                    <tr>
+                        <td>异步组件</td>
+                        <td>defineAsyncComponent(() => import('./Component.vue'))</td>
+                        <td>懒加载，分包处理</td>
+                        <td>大型组件，按需加载</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">动态组件示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"controls"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentTab = 'profile'"</span> :class=<span class="code-string">"{ active: currentTab === 'profile' }"</span>&gt;个人信息&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentTab = 'settings'"</span> :class=<span class="code-string">"{ active: currentTab === 'settings' }"</span>&gt;设置&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentTab = 'messages'"</span> :class=<span class="code-string">"{ active: currentTab === 'messages' }"</span>&gt;消息&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;component :is=<span class="code-string">"currentTabComponent"</span> class=<span class="code-string">"tab-content"</span>&gt;&lt;/component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> currentTab = ref(<span class="code-string">'profile'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> currentTabComponent = computed(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (currentTab.value === <span class="code-string">'profile'</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">'profile-tab'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> <span class="code-keyword">if</span> (currentTab.value === <span class="code-string">'settings'</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">'settings-tab'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">'messages-tab'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentTab,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentTabComponent<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'profile-tab'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"tab"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;个人信息&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;姓名: 张三&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;年龄: 28&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;职业: 软件工程师&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'settings-tab'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"tab"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;设置&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;通知: 开启&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;隐私: 标准&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;主题: 亮色&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'messages-tab'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"tab"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;消息&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;消息1: 您有新的通知&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;消息2: 系统更新提醒&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;消息3: 会议安排&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .controls {<br>
+                    &nbsp;&nbsp;margin-bottom: <span class="code-number">20</span>px;<br>
+                    }<br><br>
+                    
+                    .controls button {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">10</span>px <span class="code-number">20</span>px;<br>
+                    &nbsp;&nbsp;margin-right: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;background-color: #f8f9fa;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;cursor: pointer;<br>
+                    }<br><br>
+                    
+                    .controls button.active {<br>
+                    &nbsp;&nbsp;background-color: #42b983;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    }<br><br>
+                    
+                    .tab {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">20</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;background-color: #f8f9fa;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>keep-alive组件</h2>
+            <p>keep-alive是Vue的一个内置组件，它可以缓存动态组件的实例，避免重复渲染。当在动态组件外部包裹keep-alive时，切换组件不会销毁组件实例，而是将其缓存起来。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">使用keep-alive缓存组件示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"controls"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentView = 'about'"</span> :class=<span class="code-string">"{ active: currentView === 'about' }"</span>&gt;关于&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentView = 'posts'"</span> :class=<span class="code-string">"{ active: currentView === 'posts' }"</span>&gt;文章&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentView = 'archive'"</span> :class=<span class="code-string">"{ active: currentView === 'archive' }"</span>&gt;归档&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;!-- 使用keep-alive缓存组件 --&gt;<br>
+                    &nbsp;&nbsp;&lt;keep-alive&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;component :is=<span class="code-string">"currentView"</span> class=<span class="code-string">"tab-content"</span>&gt;&lt;/component&gt;<br>
+                    &nbsp;&nbsp;&lt;/keep-alive&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> currentView = ref(<span class="code-string">'about'</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentView<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'about'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;counter: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"tab"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;关于页面&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;访问次数: {{ counter }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"counter++"</span>&gt;增加计数&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'posts'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;posts: [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, title: <span class="code-string">'Vue基础'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, title: <span class="code-string">'组件开发'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, title: <span class="code-string">'状态管理'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"tab"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;文章列表&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li v-for=<span class="code-string">"post in posts"</span> :key=<span class="code-string">"post.id"</span>&gt;{{ post.title }}&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'archive'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year: <span class="code-number">2023</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"tab"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;归档 - {{ year }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;这里有归档内容&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input v-model=<span class="code-string">"year"</span> type=<span class="code-string">"number"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>异步组件</h2>
+            <p>异步组件允许我们将组件定义为一个工厂函数，该函数返回一个Promise。这种组件会在需要时才加载，有助于减少初始包大小。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">异步组件示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"showHeavyComponent = !showHeavyComponent"</span>&gt;{{ showHeavyComponent ? '隐藏' : '显示' }} 重型组件&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;heavy-component v-if=<span class="code-string">"showHeavyComponent"</span>&gt;&lt;/heavy-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 模拟异步组件加载</span><br>
+                    <span class="code-keyword">const</span> loadHeavyComponent = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">new</span> <span class="code-function">Promise(</span><span class="code-function">resolve</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 模拟网络延迟</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"heavy-component"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;重型组件&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;这个组件包含大量数据和复杂逻辑&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li v-for=<span class="code-string">"i in 100"</span> :key=<span class="code-string">"i"</span>&gt;项目 {{ i }}&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}, <span class="code-number">1000</span>);<br>
+                    &nbsp;&nbsp;});<br>
+                    };<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> showHeavyComponent = ref(<span class="code-boolean">false</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showHeavyComponent<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'heavy-component'</span>, loadHeavyComponent)<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>动态组件与组合式API</h2>
+            <p>在组合式API中，动态组件的使用方式基本相同，但可以结合响应式数据进行更灵活的控制。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">选项式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> MyComponent = {<br>
+                        &nbsp;&nbsp;data() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentTab: <span class="code-string">'home'</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;template: `<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentTab = 'home'"</span>&gt;首页&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"currentTab = 'about'"</span>&gt;关于&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;component :is=<span class="code-string">"currentTab"</span>&gt;&lt;/component&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;`<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">组合式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">import</span> { ref } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>;<br><br>
+                        
+                        <span class="code-keyword">const</span> MyComponent = {<br>
+                        &nbsp;&nbsp;setup() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> currentTab = ref(<span class="code-string">'home'</span>);<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> switchTab = <span class="code-function">tabName</span> =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentTab.value = tabName;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentTab,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switchTab<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;template: `<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"switchTab('home')"</span>&gt;首页&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"switchTab('about')"</span>&gt;关于&lt;/button&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;component :is=<span class="code-string">"currentTab"</span>&gt;&lt;/component&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                        &nbsp;&nbsp;`<br>
+                        };
+                    </div>
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>动态与静态组件在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>选项卡界面</strong>：在多个面板之间切换</li>
+                    <li><strong>步骤向导</strong>：根据步骤显示不同的内容</li>
+                    <li><strong>路由系统</strong>：根据URL显示不同组件</li>
+                    <li><strong>主题切换</strong>：根据主题显示不同的组件</li>
+                    <li><strong>权限控制</strong>：根据用户权限显示不同组件</li>
+                    <li><strong>表单向导</strong>：根据用户选择显示不同的表单</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">实际应用示例 - 步骤向导组件</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;wizard-component&gt;&lt;/wizard-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'wizard-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> currentStep = ref(<span class="code-number">1</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> maxStep = ref(<span class="code-number">3</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> nextStep = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (currentStep.value &lt; maxStep.value) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentStep.value++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> prevStep = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (currentStep.value &gt; <span class="code-number">1</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentStep.value--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentStep,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nextStep,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prevStep<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"wizard"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"wizard-header"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-for=<span class="code-string">"step in 3"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:key=<span class="code-string">"step"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:class=<span class="code-string">"{ active: step === currentStep }"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"step"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;步骤 {{ step }}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"wizard-content"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;keep-alive&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;component :is=<span class="code-string">"'step-' + currentStep"</span>&gt;&lt;/component&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/keep-alive&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"wizard-footer"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"prevStep"</span> :disabled=<span class="code-string">"currentStep === 1"</span>&gt;上一步&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"nextStep"</span> :disabled=<span class="code-string">"currentStep === 3"</span>&gt;下一步&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'step-1'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"step-content"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;步骤 1: 用户信息&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;请输入您的用户名&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input v-model=<span class="code-string">"username"</span> placeholder=<span class="code-string">"用户名"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'step-2'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"step-content"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;步骤 2: 联系方式&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;请输入您的邮箱地址&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input v-model=<span class="code-string">"email"</span> type=<span class="code-string">"email"</span> placeholder=<span class="code-string">"邮箱"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'step-3'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"step-content"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;步骤 3: 完成&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;恭喜您完成了向导！&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;点击"下一步"按钮提交表单&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .wizard {<br>
+                    &nbsp;&nbsp;max-width: <span class="code-number">600</span>px;<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">0</span> auto;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">8</span>px;<br>
+                    &nbsp;&nbsp;overflow: hidden;<br>
+                    }<br><br>
+                    
+                    .wizard-header {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;border-bottom: <span class="code-number">1</span>px solid #ddd;<br>
+                    }<br><br>
+                    
+                    .step {<br>
+                    &nbsp;&nbsp;flex: <span class="code-number">1</span>;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;text-align: center;<br>
+                    &nbsp;&nbsp;background-color: #f8f9fa;<br>
+                    &nbsp;&nbsp;border-right: <span class="code-number">1</span>px solid #ddd;<br>
+                    }<br><br>
+                    
+                    .step:last-child {<br>
+                    &nbsp;&nbsp;border-right: none;<br>
+                    }<br><br>
+                    
+                    .step.active {<br>
+                    &nbsp;&nbsp;background-color: #42b983;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    }<br><br>
+                    
+                    .wizard-content {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">20</span>px;<br>
+                    &nbsp;&nbsp;min-height: <span class="code-number">200</span>px;<br>
+                    }<br><br>
+                    
+                    .step-content h3 {<br>
+                    &nbsp;&nbsp;margin-top: <span class="code-number">0</span>;<br>
+                    }<br><br>
+                    
+                    .step-content input {<br>
+                    &nbsp;&nbsp;width: <span class="code-number">100</span>%;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">8</span>px;<br>
+                    &nbsp;&nbsp;margin-top: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    }<br><br>
+                    
+                    .wizard-footer {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;text-align: right;<br>
+                    &nbsp;&nbsp;border-top: <span class="code-number">1</span>px solid #ddd;<br>
+                    }<br><br>
+                    
+                    .wizard-footer button {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">8</span>px <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;margin-left: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;background-color: #42b983;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;border: none;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    &nbsp;&nbsp;cursor: pointer;<br>
+                    }<br><br>
+                    
+                    .wizard-footer button:disabled {<br>
+                    &nbsp;&nbsp;background-color: #ccc;<br>
+                    &nbsp;&nbsp;cursor: not-allowed;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h3>最佳实践建议</h3>
+            <p>在使用动态与静态组件时，有一些最佳实践建议：</p>
+            
+            <ul>
+                <li>使用keep-alive缓存需要保持状态的动态组件</li>
+                <li>对大型组件使用异步加载以减少初始包大小</li>
+                <li>在切换组件时考虑使用过渡效果提升用户体验</li>
+                <li>合理使用include和exclude属性控制keep-alive缓存</li>
+                <li>异步组件加载时提供加载和错误状态</li>
+                <li>避免在动态组件中使用内联对象，这会导致不必要的重新渲染</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个选项卡组件，使用动态组件实现内容切换</li>
+                    <li>创建一个表单向导，使用动态组件实现步骤切换</li>
+                    <li>实现一个组件切换器，可以动态切换不同类型的组件</li>
+                    <li>创建一个带缓存的动态组件，使用keep-alive保持组件状态</li>
+                    <li>实现一个异步组件加载器，按需加载重型组件</li>
+                    <li>创建一个主题切换器，根据主题动态加载不同组件</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="component-life-cycle.html" class="nav-link">← 上一课：组件生命周期</a>
+            <a href="component-communication.html" class="nav-link">下一课：组件间通信 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

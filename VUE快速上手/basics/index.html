@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基础语法篇 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        ul {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .topic-link {
+            display: block;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            text-decoration: none;
+            border-radius: 5px;
+            border-left: 4px solid #42b983;
+            transition: all 0.3s ease;
+        }
+        
+        .topic-link:hover {
+            background: #e8f5e9;
+            padding-left: 18px;
+        }
+        
+        .topic-link:visited {
+            color: #333;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 基础语法篇</div>
+            <h1>基础语法篇</h1>
+        </header>
+        
+        <div class="content">
+            <p>本部分将从零开始介绍Vue.js的基础概念和语法，帮助你建立对Vue.js框架的初步认识。这些内容是学习Vue.js的基石，掌握后可以构建简单的交互式应用。</p>
+            
+            <div class="key-features">
+                <h3>基础语法篇学习目标</h3>
+                <ul>
+                    <li>理解Vue.js的核心概念和基本用法</li>
+                    <li>掌握数据绑定、指令、事件处理等基础功能</li>
+                    <li>学会使用条件渲染和列表渲染</li>
+                    <li>了解组件的基本概念和使用方法</li>
+                    <li>能够构建简单的Vue.js应用</li>
+                </ul>
+            </div>
+            
+            <h2>基础语法篇教程目录</h2>
+            <ul>
+                <li><a class="topic-link" href="introduction.html">1. Vue.js简介与安装</a></li>
+                <li><a class="topic-link" href="instance.html">2. Vue实例</a></li>
+                <li><a class="topic-link" href="template-syntax.html">3. 模板语法</a></li>
+                <li><a class="topic-link" href="computed-watch.html">4. 计算属性与侦听器</a></li>
+                <li><a class="topic-link" href="class-style.html">5. Class与Style绑定</a></li>
+                <li><a class="topic-link" href="conditional-rendering.html">6. 条件渲染</a></li>
+                <li><a class="topic-link" href="list-rendering.html">7. 列表渲染</a></li>
+                <li><a class="topic-link" href="events.html">8. 事件处理</a></li>
+            </ul>
+            
+            <h2>学习建议</h2>
+            <p>建议按照目录顺序逐步学习，每个概念都要充分理解和实践。每个章节都包含丰富的代码示例，可以复制尝试，加深理解。</p>
+            
+            <ul>
+                <li>理论学习与实践操作相结合</li>
+                <li>多动手编写代码，加深理解</li>
+                <li>尝试修改示例代码，观察结果变化</li>
+                <li>遇到问题及时查阅文档</li>
+            </ul>
+        </div>
+        
+        <nav>
+            <a href="../index.html" class="nav-link">← 返回首页</a>
+            <a href="introduction.html" class="nav-link">开始学习 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

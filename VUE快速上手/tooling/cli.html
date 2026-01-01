@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue CLI - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vue CLI</h1>
+            <p class="subtitle">项目脚手架、配置管理</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="../routing/advanced.html" class="nav-link">上一课：Vue Router进阶</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./vite.html" class="nav-link">下一课：Vite构建工具</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>Vue CLI核心概念</h3>
+                <ul>
+                    <li><strong>项目脚手架</strong>：快速创建Vue项目结构</li>
+                    <li><strong>插件系统</strong>：丰富的插件生态系统</li>
+                    <li><strong>图形界面</strong>：可视化项目管理工具</li>
+                    <li><strong>配置管理</strong>：灵活的配置选项</li>
+                    <li><strong>构建优化</strong>：自动化的构建和优化</li>
+                    <li><strong>开发服务器</strong>：热重载、代理等开发功能</li>
+                </ul>
+            </div>
+            
+            <h2>什么是Vue CLI？</h2>
+            <p>Vue CLI（Command Line Interface）是Vue.js官方提供的项目脚手架工具，它为Vue.js应用程序提供了完整的构建设置，无需手动配置构建工具。Vue CLI抽象了webpack的复杂配置，让开发者可以专注于编写应用程序代码。</p>
+            
+            <h2>安装Vue CLI</h2>
+            <p>首先安装Vue CLI：</p>
+            <div class="code-block">
+npm install -g @vue/cli
+# 或者使用yarn
+yarn global add @vue/cli
+            </div>
+            
+            <h2>创建新项目</h2>
+            <p>使用Vue CLI创建新项目非常简单：</p>
+            
+            <div class="code-block">
+vue create my-project
+            </div>
+            
+            <p>执行此命令后，Vue CLI会提供一个交互式界面，让你选择预设配置或手动选择功能：</p>
+            
+            <div class="code-block">
+? Please pick a preset:
+  Default ([Vue 2] babel, eslint) 
+  Default (Vue 3) ([Vue 3] babel, eslint) 
+❯ Manually select features  # 手动选择功能
+            </div>
+            
+            <p>如果选择手动配置，会看到以下选项：</p>
+            
+            <div class="code-block">
+? Check the features needed for your project: 
+❯◉ Choose Vue version
+ ◉ Babel
+ ◯ TypeScript
+ ◯ PWA Support
+ ◉ Router
+ ◉ Vuex
+ ◉ CSS Pre-processors
+ ◉ Linter / Formatter
+ ◯ Unit Testing
+ ◯ E2E Testing
+</div>
+            
+            <h2>Vue CLI图形界面</h2>
+            <p>Vue CLI还提供了一个图形用户界面，可以通过以下命令启动：</p>
+            
+            <div class="code-block">
+vue ui
+</div>
+            
+            <p>这将打开一个浏览器窗口，提供可视化的项目创建和管理界面。</p>
+            
+            <h2>项目结构</h2>
+            <p>Vue CLI创建的项目具有标准的目录结构：</p>
+            
+            <div class="code-block">
+my-project/
+├── public/
+│   ├── index.html          # 主页面模板
+│   └── favicon.ico         # 网站图标
+├── src/
+│   ├── assets/             # 静态资源
+│   ├── components/         # 组件
+│   ├── views/              # 页面组件
+│   ├── router/             # 路由配置
+│   ├── store/              # Vuex状态管理
+│   ├── App.vue             # 根组件
+│   └── main.js             # 应用入口
+├── tests/                  # 测试文件
+├── node_modules/           # 依赖包
+├── package.json            # 项目配置
+├── babel.config.js         # Babel配置
+├── vue.config.js           # Vue CLI配置（可选）
+└── README.md               # 项目说明
+</div>
+            
+            <h2>配置文件</h2>
+            <p>Vue CLI项目可以通过多种方式配置：</p>
+            
+            <h3>vue.config.js</h3>
+            <p>在项目根目录创建[vue.config.js](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-elements.html#L134-L134)文件来自定义配置：</p>
+            
+            <div class="code-block">
+module.exports = {
+  // 基本路径
+  publicPath: process.env.NODE_ENV === 'production' 
+    ? '/production-path/' 
+    : '/',
+  
+  // 输出目录
+  outputDir: 'dist',
+  
+  // 静态资源目录
+  assetsDir: 'static',
+  
+  // 开发服务器配置
+  devServer: {
+    port: 8080,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+  },
+  
+  // webpack配置
+  configureWebpack: {
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src')
+      }
+    }
+  },
+  
+  // CSS相关配置
+  css: {
+    // 启用CSS modules
+    modules: false,
+    // 是否提取CSS到单独文件
+    extract: process.env.NODE_ENV === 'production',
+    // 是否开启source map
+    sourceMap: false,
+    // CSS预处理器配置
+    loaderOptions: {
+      sass: {
+        additionalData: `@import "@/styles/variables.scss";`
+      }
+    }
+  }
+}
+</div>
+            
+            <h2>常用命令</h2>
+            <p>Vue CLI项目提供了多种命令来管理项目：</p>
+            
+            <div class="code-block">
+# 启动开发服务器
+npm run serve
+
+# 构建生产版本
+npm run build
+
+# 运行测试
+npm run test:unit
+
+# 检查和修复文件
+npm run lint
+</div>
+            
+            <h2>插件系统</h2>
+            <p>Vue CLI的强大之处在于其插件系统，可以轻松扩展功能：</p>
+            
+            <div class="code-block">
+# 安装插件
+vue add router      # 添加Vue Router
+vue add vuex        # 添加Vuex
+vue add eslint      # 添加ESLint
+vue add babel       # 添加Babel
+</div>
+            
+            <p>插件系统遵循约定优于配置的原则，为项目提供最佳实践。</p>
+            
+            <h2>插件开发</h2>
+            <p>你也可以开发自己的Vue CLI插件：</p>
+            
+            <div class="code-block">
+# 创建插件项目
+vue add @vue/cli-plugin-eslint
+</div>
+            
+            <p>一个典型的插件结构如下：</p>
+            
+            <div class="code-block">
+my-cli-plugin/
+├── package.json
+├── generator/          # 生成器
+│   ├── index.js        # 生成器主文件
+│   └── template/       # 模板文件
+└── prompts.js          # 交互式提示
+</div>
+            
+            <h2>环境变量和模式</h2>
+            <p>Vue CLI支持环境变量和模式配置：</p>
+            
+            <div class="code-block">
+# .env                # 全局环境变量
+# .env.local          # 本地环境变量（被git忽略）
+# .env.[mode]         # 指定模式的环境变量
+# .env.[mode].local   # 指定模式的本地环境变量
+</div>
+            
+            <p>环境变量示例：</p>
+            
+            <div class="code-block">
+NODE_ENV=production
+VUE_APP_TITLE=My App
+VUE_APP_API_URL=https://api.example.com
+</div>
+            
+            <p>在代码中使用环境变量：</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  data() {
+    return {
+      title: process.env.VUE_APP_TITLE
+    }
+  }
+}
+&lt;/script&gt;
+</div>
+            
+            <h2>构建优化</h2>
+            <p>Vue CLI提供了多种构建优化选项：</p>
+            
+            <div class="code-block">
+module.exports = {
+  configureWebpack: {
+    // 使用webpack-bundle-analyzer分析包大小
+    plugins: process.env.NODE_ENV === 'production' ? [
+      new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)()
+    ] : []
+  },
+  
+  chainWebpack: config => {
+    // 配置代码分割
+    config.optimization.splitChunks({
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: 10,
+          chunks: 'initial'
+        }
+      }
+    })
+    
+    // 预加载和预获取
+    config.plugin('preload').tap(options => {
+      options[0] = {
+        rel: 'preload',
+        include: 'initial',
+        fileBlacklist: [/\.map$/, /hot-update\.js$/]
+      }
+      return options
+    })
+  }
+}
+</div>
+        </div>
+        
+        <div class="navigation">
+            <a href="../routing/advanced.html" class="nav-link">上一课：Vue Router进阶</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./vite.html" class="nav-link">下一课：Vite构建工具</a>
+        </div>
+        
+        <footer>
+            <p>Vue CLI - 项目脚手架与配置管理</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

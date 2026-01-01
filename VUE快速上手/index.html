@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js快速上手 - 从零到大神</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+
+        .vue-features ul {
+            padding-left: 25px;
+        }
+
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .learning-path {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .path-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+
+        .path-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .path-description {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .course-list {
+            margin: 25px 0;
+        }
+
+        .course-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .course-section h3 {
+            color: #42b983;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .course-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .course-link {
+            display: block;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .course-link:hover {
+            background: #e8f5e9;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-link .course-title {
+            font-weight: bold;
+            color: #42b983;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .course-link .course-desc {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .vue-logo {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .vue-logo img {
+            max-width: 150px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="vue-logo">
+                <h1>Vue.js快速上手</h1>
+                <p class="subtitle">从零基础到大厂专家，成为Vue.js高手</p>
+            </div>
+        </header>
+
+        <div class="content">
+            <div class="vue-features">
+                <h3>Vue.js学习路线概览</h3>
+                <ul>
+                    <li><strong>基础语法</strong>：Vue实例、模板语法、计算属性、事件处理</li>
+                    <li><strong>组件系统</strong>：组件注册、Props、插槽、生命周期</li>
+                    <li><strong>状态管理</strong>：Vuex、Pinia状态管理</li>
+                    <li><strong>路由管理</strong>：Vue Router深度应用</li>
+                    <li><strong>进阶特性</strong>：响应式原理、虚拟DOM、性能优化</li>
+                    <li><strong>工程化</strong>：Vue CLI、Vite、构建部署</li>
+                    <li><strong>生态体系</strong>：Nuxt.js、相关工具和库</li>
+                    <li><strong>项目实战</strong>：完整项目开发流程</li>
+                </ul>
+            </div>
+
+            <div class="learning-path">
+                <div class="path-item">
+                    <div class="path-title">第一阶段：基础入门</div>
+                    <div class="path-description">掌握Vue核心概念，学会使用Vue开发简单应用</div>
+                </div>
+
+                <div class="path-item">
+                    <div class="path-title">第二阶段：组件开发</div>
+                    <div class="path-description">深入学习组件化开发，构建可复用组件</div>
+                </div>
+
+                <div class="path-item">
+                    <div class="path-title">第三阶段：工程实践</div>
+                    <div class="path-description">项目构建、状态管理、路由管理等</div>
+                </div>
+            </div>
+
+            <h2>课程大纲</h2>
+
+            <div class="course-section">
+                <h3>基础语法篇</h3>
+                <div class="course-links">
+                    <a href="basics/introduction.html" class="course-link">
+                        <span class="course-title">Vue简介与安装</span>
+                        <span class="course-desc">Vue.js介绍、安装方式、Hello World</span>
+                    </a>
+
+                    <a href="basics/instance.html" class="course-link">
+                        <span class="course-title">Vue实例</span>
+                        <span class="course-desc">创建Vue实例、生命周期钩子函数</span>
+                    </a>
+
+                    <a href="basics/template-syntax.html" class="course-link">
+                        <span class="course-title">模板语法</span>
+                        <span class="course-desc">插值、指令、修饰符的使用</span>
+                    </a>
+
+                    <a href="basics/computed-watch.html" class="course-link">
+                        <span class="course-title">计算属性与侦听器</span>
+                        <span class="course-desc">computed、watch的使用场景</span>
+                    </a>
+
+                    <a href="basics/class-style.html" class="course-link">
+                        <span class="course-title">Class与Style绑定</span>
+                        <span class="course-desc">动态绑定class和style</span>
+                    </a>
+
+                    <a href="basics/conditional-rendering.html" class="course-link">
+                        <span class="course-title">条件渲染</span>
+                        <span class="course-desc">v-if、v-show等条件渲染指令</span>
+                    </a>
+
+                    <a href="basics/list-rendering.html" class="course-link">
+                        <span class="course-title">列表渲染</span>
+                        <span class="course-desc">v-for渲染列表、key的重要性</span>
+                    </a>
+
+                    <a href="basics/events.html" class="course-link">
+                        <span class="course-title">事件处理</span>
+                        <span class="course-desc">事件绑定、修饰符、事件对象</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="course-section">
+                <h3>组件系统篇</h3>
+                <div class="course-links">
+                    <a href="components/basics.html" class="course-link">
+                        <span class="course-title">组件基础</span>
+                        <span class="course-desc">组件注册、使用、嵌套</span>
+                    </a>
+
+                    <a href="components/props.html" class="course-link">
+                        <span class="course-title">Props传递数据</span>
+                        <span class="course-desc">Props验证、单向数据流</span>
+                    </a>
+
+                    <a href="components/events.html" class="course-link">
+                        <span class="course-title">组件事件</span>
+                        <span class="course-desc">自定义事件、事件透传</span>
+                    </a>
+
+                    <a href="components/slots.html" class="course-link">
+                        <span class="course-title">插槽Slots</span>
+                        <span class="course-desc">默认插槽、具名插槽、作用域插槽</span>
+                    </a>
+
+                    <a href="components/lifecycle.html" class="course-link">
+                        <span class="course-title">生命周期</span>
+                        <span class="course-desc">组件生命周期详解</span>
+                    </a>
+
+                    <a href="components/communication.html" class="course-link">
+                        <span class="course-title">组件通信</span>
+                        <span class="course-desc">父子组件、兄弟组件通信方案</span>
+                    </a>
+
+                    <a href="components/advanced.html" class="course-link">
+                        <span class="course-title">高级组件</span>
+                        <span class="course-desc">异步组件、动态组件、边界组件</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="course-section">
+                <h3>进阶特性篇</h3>
+                <div class="course-links">
+                    <a href="advanced/reactivity.html" class="course-link">
+                        <span class="course-title">响应式系统</span>
+                        <span class="course-desc">Vue响应式原理深度解析</span>
+                    </a>
+
+                    <a href="advanced/composition-api.html" class="course-link">
+                        <span class="course-title">组合式API</span>
+                        <span class="course-desc">setup函数、ref、reactive等</span>
+                    </a>
+
+                    <a href="advanced/directives.html" class="course-link">
+                        <span class="course-title">自定义指令</span>
+                        <span class="course-desc">创建和使用自定义指令</span>
+                    </a>
+
+                    <a href="advanced/mixins.html" class="course-link">
+                        <span class="course-title">混入Mixins</span>
+                        <span class="course-desc">复用组件逻辑</span>
+                    </a>
+
+                    <a href="advanced/rendering.html" class="course-link">
+                        <span class="course-title">渲染函数</span>
+                        <span class="course-desc">JSX、虚拟DOM</span>
+                    </a>
+
+                    <a href="advanced/performance.html" class="course-link">
+                        <span class="course-title">性能优化</span>
+                        <span class="course-desc">优化策略、工具和技巧</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="course-section">
+                <h3>状态管理与路由</h3>
+                <div class="course-links">
+                    <a href="state/vuex.html" class="course-link">
+                        <span class="course-title">Vuex状态管理</span>
+                        <span class="course-desc">状态管理模式、核心概念</span>
+                    </a>
+
+                    <a href="state/pinia.html" class="course-link">
+                        <span class="course-title">Pinia状态管理</span>
+                        <span class="course-desc">Vue官方推荐的状态管理</span>
+                    </a>
+
+                    <a href="routing/basics.html" class="course-link">
+                        <span class="course-title">Vue Router基础</span>
+                        <span class="course-desc">路由配置、导航、参数</span>
+                    </a>
+
+                    <a href="routing/advanced.html" class="course-link">
+                        <span class="course-title">Vue Router进阶</span>
+                        <span class="course-desc">路由守卫、懒加载、嵌套路由</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="course-section">
+                <h3>工程化与工具</h3>
+                <div class="course-links">
+                    <a href="tooling/cli.html" class="course-link">
+                        <span class="course-title">Vue CLI</span>
+                        <span class="course-desc">项目脚手架、配置管理</span>
+                    </a>
+
+                    <a href="tooling/vite.html" class="course-link">
+                        <span class="course-title">Vite构建工具</span>
+                        <span class="course-desc">现代化构建工具</span>
+                    </a>
+
+                    <a href="tooling/testing.html" class="course-link">
+                        <span class="course-title">测试</span>
+                        <span class="course-desc">单元测试、E2E测试</span>
+                    </a>
+
+                    <a href="tooling/ssr.html" class="course-link">
+                        <span class="course-title">服务端渲染</span>
+                        <span class="course-desc">Nuxt.js、SSR/SSG</span>
+                    </a>
+
+                    <a href="tooling/typescript.html" class="course-link">
+                        <span class="course-title">TypeScript集成</span>
+                        <span class="course-desc">Vue+TS开发</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="course-section">
+                <h3>项目实战</h3>
+                <div class="course-links">
+                    <a href="projects/todo.html" class="course-link">
+                        <span class="course-title">待办事项应用</span>
+                        <span class="course-desc">入门级项目实践</span>
+                    </a>
+
+                    <a href="projects/ecommerce.html" class="course-link">
+                        <span class="course-title">电商项目</span>
+                        <span class="course-desc">完整电商系统开发</span>
+                    </a>
+
+                    <a href="projects/dashboard.html" class="course-link">
+                        <span class="course-title">管理后台</span>
+                        <span class="course-desc">后台管理系统开发</span>
+                    </a>
+
+                    <a href="projects/crm.html" class="course-link">
+                        <span class="course-title">CRM系统</span>
+                        <span class="course-desc">客户关系管理系统</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+
+</html>

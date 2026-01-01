@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商项目 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .project-steps {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>电商项目</h1>
+            <p class="subtitle">完整电商系统开发</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./todo.html" class="nav-link">上一课：待办事项应用</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./dashboard.html" class="nav-link">下一课：管理后台</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>电商项目目标</h3>
+                <ul>
+                    <li><strong>商品展示</strong>：商品列表、分类、详情页</li>
+                    <li><strong>购物车系统</strong>：添加商品、修改数量、删除商品</li>
+                    <li><strong>用户系统</strong>：登录、注册、用户信息管理</li>
+                    <li><strong>订单管理</strong>：创建订单、订单状态跟踪</li>
+                    <li><strong>搜索过滤</strong>：商品搜索、价格过滤、分类筛选</li>
+                    <li><strong>响应式设计</strong>：适配不同设备屏幕</li>
+                </ul>
+            </div>
+            
+            <h2>项目概述</h2>
+            <p>我们将构建一个功能完整的电商系统，包含商品展示、购物车、用户系统和订单管理等核心功能。这是一个综合性的项目，将运用Vue 3的高级特性、状态管理、路由和API集成。</p>
+            
+            <h2>项目结构规划</h2>
+            <div class="code-block">
+ecommerce-app/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/           # 可复用组件
+│   │   ├── ProductCard.vue   # 商品卡片组件
+│   │   ├── CartItem.vue      # 购物车项目组件
+│   │   ├── ProductFilter.vue # 商品过滤组件
+│   │   ├── Header.vue        # 页面头部组件
+│   │   └── Footer.vue        # 页面底部组件
+│   ├── views/               # 页面组件
+│   │   ├── Home.vue         # 首页
+│   │   ├── ProductList.vue  # 商品列表页
+│   │   ├── ProductDetail.vue # 商品详情页
+│   │   ├── Cart.vue         # 购物车页
+│   │   ├── Checkout.vue     # 结账页
+│   │   ├── Login.vue        # 登录页
+│   │   └── Profile.vue      # 用户资料页
+│   ├── stores/              # Pinia状态管理
+│   │   ├── products.js      # 商品状态
+│   │   ├── cart.js          # 购物车状态
+│   │   ├── user.js          # 用户状态
+│   │   └── orders.js        # 订单状态
+│   ├── composables/         # 可复用逻辑
+│   │   ├── useApi.js        # API请求逻辑
+│   │   └── useValidation.js # 表单验证逻辑
+│   ├── services/            # API服务
+│   │   └── api.js           # API请求封装
+│   ├── router/              # 路由配置
+│   │   └── index.js         # 路由配置
+│   ├── styles/              # 样式文件
+│   │   └── main.css
+│   ├── utils/               # 工具函数
+│   │   └── helpers.js       # 辅助函数
+│   ├── App.vue              # 根组件
+│   └── main.js              # 入口文件
+├── package.json
+└── vite.config.js
+</div>
+            
+            <h2>创建项目和安装依赖</h2>
+            <div class="code-block">
+# 创建项目
+npm create vue@latest ecommerce-app
+cd ecommerce-app
+
+# 选择特性：TypeScript, Router, Pinia, ESLint, Prettier
+# 安装依赖
+npm install
+
+# 安装额外依赖
+npm install axios vue-router@4
+</div>
+            
+            <h2>创建商品状态管理(store)</h2>
+            <p>创建管理商品状态的store：</p>
+            
+            <div class="code-block">
+// src/stores/products.js
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useProductsStore = defineStore('products', () => {
+  // 定义状态
+  const products = ref([
+    { 
+      id: 1, 
+      name: 'iPhone 13', 
+      price: 6999, 
+      description: '最新款iPhone，性能强劲', 
+      image: 'https://via.placeholder.com/300x300',
+      category: '手机',
+      rating: 4.8,
+      stock: 50
+    },
+    { 
+      id: 2, 
+      name: 'MacBook Pro', 
+      price: 12999, 
+      description: '专业级笔记本电脑', 
+      image: 'https://via.placeholder.com/300x300',
+      category: '电脑',
+      rating: 4.9,
+      stock: 20
+    },
+    { 
+      id: 3, 
+      name: 'AirPods Pro', 
+      price: 1999, 
+      description: '无线降噪耳机', 
+      image: 'https://via.placeholder.com/300x300',
+      category: '配件',
+      rating: 4.7,
+      stock: 100
+    },
+    { 
+      id: 4, 
+      name: 'iPad Air', 
+      price: 4399, 
+      description: '轻薄便携的平板电脑', 
+      image: 'https://via.placeholder.com/300x300',
+      category: '平板',
+      rating: 4.6,
+      stock: 30
+    }
+  ])
+  
+  const categories = computed(() => {
+    return [...new Set(products.value.map(p => p.category))]
+  })
+  
+  const featuredProducts = computed(() => {
+    return products.value.filter(p => p.rating >= 4.7)
+  })
+  
+  // 方法
+  const getProductById = (id) => {
+    return products.value.find(product => product.id === id)
+  }
+  
+  const getProductsByCategory = (category) => {
+    return products.value.filter(product => product.category === category)
+  }
+  
+  const searchProducts = (query) => {
+    if (!query) return products.value
+    return products.value.filter(product => 
+      product.name.toLowerCase().includes(query.toLowerCase()) ||
+      product.description.toLowerCase().includes(query.toLowerCase())
+    )
+  }
+  
+  return {
+    products,
+    categories,
+    featuredProducts,
+    getProductById,
+    getProductsByCategory,
+    searchProducts
+  }
+})
+</div>
+            
+            <h2>创建购物车状态管理</h2>
+            <p>创建管理购物车状态的store：</p>
+            
+            <div class="code-block">
+// src/stores/cart.js
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useCartStore = defineStore('cart', () => {
+  const items = ref([])
+  
+  const addItem = (product, quantity = 1) => {
+    const existingItem = items.value.find(item => item.product.id === product.id)
+    
+    if (existingItem) {
+      existingItem.quantity += quantity
+    } else {
+      items.value.push({
+        product,
+        quantity
+      })
+    }
+  }
+  
+  const removeItem = (productId) => {
+    const index = items.value.findIndex(item => item.product.id === productId)
+    if (index !== -1) {
+      items.value.splice(index, 1)
+    }
+  }
+  
+  const updateQuantity = (productId, quantity) => {
+    if (quantity <= 0) {
+      removeItem(productId)
+      return
+    }
+    
+    const item = items.value.find(item => item.product.id === productId)
+    if (item) {
+      item.quantity = quantity
+    }
+  }
+  
+  const clearCart = () => {
+    items.value = []
+  }
+  
+  const totalItems = computed(() => {
+    return items.value.reduce((total, item) => total + item.quantity, 0)
+  })
+  
+  const subtotal = computed(() => {
+    return items.value.reduce((total, item) => {
+      return total + (item.product.price * item.quantity)
+    }, 0)
+  })
+  
+  const total = computed(() => {
+    const shipping = subtotal.value > 0 ? 50 : 0
+    return subtotal.value + shipping
+  })
+  
+  return {
+    items,
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart,
+    totalItems,
+    subtotal,
+    total
+  }
+})
+</div>
+            
+            <h2>创建商品卡片组件</h2>
+            <p>创建显示单个商品的组件：</p>
+            
+            <div class="code-block">
+// src/components/ProductCard.vue
+&lt;template&gt;
+  &lt;div class="product-card"&gt;
+    &lt;div class="product-image"&gt;
+      &lt;img :src="product.image" :alt="product.name" /&gt;
+      &lt;div class="product-actions"&gt;
+        &lt;button @click="addToCart" class="add-to-cart"&gt;加入购物车&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="product-info"&gt;
+      &lt;h3 class="product-name"&gt;{{ product.name }}&lt;/h3&gt;
+      &lt;p class="product-category"&gt;{{ product.category }}&lt;/p&gt;
+      &lt;div class="product-rating"&gt;
+        &lt;span v-for="star in 5" :key="star" class="star" 
+              :class="{ filled: star &lt;= Math.floor(product.rating) }"&gt;
+          ★
+        &lt;/span&gt;
+        &lt;span class="rating-value"&gt;{{ product.rating }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;p class="product-description"&gt;{{ product.description }}&lt;/p&gt;
+      &lt;div class="product-price"&gt;
+        ¥{{ product.price }}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { useCartStore } from '@/stores/cart'
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
+  }
+})
+
+const cartStore = useCartStore()
+const router = useRouter()
+
+const addToCart = () => {
+  cartStore.addItem(props.product)
+  router.push('/cart')
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.product-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.product-actions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-actions {
+  opacity: 1;
+}
+
+.add-to-cart {
+  padding: 10px 20px;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.product-info {
+  padding: 15px;
+}
+
+.product-name {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.product-category {
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 10px 0;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.star {
+  color: #ddd;
+  font-size: 16px;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.rating-value {
+  margin-left: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.product-description {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #e74c3c;
+  margin-top: 10px;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建商品列表页面</h2>
+            <p>创建显示商品列表的页面组件：</p>
+            
+            <div class="code-block">
+// src/views/ProductList.vue
+&lt;template&gt;
+  &lt;div class="product-list"&gt;
+    &lt;div class="filters"&gt;
+      &lt;select v-model="selectedCategory" class="category-select"&gt;
+        &lt;option value=""&gt;所有分类&lt;/option&gt;
+        &lt;option 
+          v-for="category in categories" 
+          :key="category" 
+          :value="category"&gt;
+          {{ category }}
+        &lt;/option&gt;
+      &lt;/select&gt;
+      
+      &lt;input 
+        v-model="searchQuery" 
+        type="text" 
+        placeholder="搜索商品..." 
+        class="search-input"
+      /&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="products-grid"&gt;
+      &lt;ProductCard 
+        v-for="product in filteredProducts" 
+        :key="product.id" 
+        :product="product" 
+      /&gt;
+    &lt;/div&gt;
+    
+    &lt;div v-if="filteredProducts.length === 0" class="no-products"&gt;
+      没有找到匹配的商品
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { computed, ref } from 'vue'
+import { useProductsStore } from '@/stores/products'
+import ProductCard from '@/components/ProductCard.vue'
+
+const productsStore = useProductsStore()
+
+const selectedCategory = ref('')
+const searchQuery = ref('')
+
+const filteredProducts = computed(() => {
+  let result = productsStore.products
+  
+  if (selectedCategory.value) {
+    result = result.filter(product => 
+      product.category === selectedCategory.value
+    )
+  }
+  
+  if (searchQuery.value) {
+    result = productsStore.searchProducts(searchQuery.value)
+  }
+  
+  return result
+})
+
+const categories = computed(() => {
+  return [''].concat(productsStore.categories)
+})
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.product-list {
+  padding: 20px 0;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.category-select, .search-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.category-select {
+  min-width: 150px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.no-products {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-size: 18px;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建购物车页面</h2>
+            <p>创建购物车页面组件：</p>
+            
+            <div class="code-block">
+// src/views/Cart.vue
+&lt;template&gt;
+  &lt;div class="cart"&gt;
+    &lt;h2&gt;购物车 ({{ cartStore.totalItems }})&lt;/h2&gt;
+    
+    &lt;div v-if="cartStore.items.length === 0" class="empty-cart"&gt;
+      <p>购物车是空的</p>
+      <router-link to="/" class="continue-shopping">继续购物</router-link>
+    &lt;/div&gt;
+    
+    &lt;div v-else class="cart-content"&gt;
+      &lt;div class="cart-items"&gt;
+        &lt;div 
+          v-for="item in cartStore.items" 
+          :key="item.product.id" 
+          class="cart-item"
+        &gt;
+          &lt;img :src="item.product.image" :alt="item.product.name" class="item-image" /&gt;
+          
+          &lt;div class="item-details"&gt;
+            &lt;h3&gt;{{ item.product.name }}&lt;/h3&gt;
+            &lt;p class="item-price"&gt;¥{{ item.product.price }}&lt;/p&gt;
+          &lt;/div&gt;
+          
+          &lt;div class="item-quantity"&gt;
+            &lt;button 
+              @click="updateQuantity(item.product.id, item.quantity - 1)" 
+              class="quantity-btn"
+            &gt;-&lt;/button&gt;
+            &lt;span class="quantity"&gt;{{ item.quantity }}&lt;/span&gt;
+            &lt;button 
+              @click="updateQuantity(item.product.id, item.quantity + 1)" 
+              class="quantity-btn"
+            &gt;+&lt;/button&gt;
+          &lt;/div&gt;
+          
+          &lt;div class="item-total"&gt;
+            ¥{{ item.product.price * item.quantity }}
+          &lt;/div&gt;
+          
+          &lt;button 
+            @click="removeItem(item.product.id)" 
+            class="remove-btn"
+          &gt;删除&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      &lt;div class="cart-summary"&gt;
+        &lt;h3&gt;订单摘要&lt;/h3&gt;
+        &lt;div class="summary-row"&gt;
+          &lt;span&gt;小计:&lt;/span&gt;
+          &lt;span&gt;¥{{ cartStore.subtotal }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="summary-row"&gt;
+          &lt;span&gt;运费:&lt;/span&gt;
+          &lt;span&gt;¥{{ cartStore.subtotal > 0 ? 50 : 0 }}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="summary-row total-row"&gt;
+          &lt;strong&gt;总计:&lt;/strong&gt;
+          &lt;strong&gt;¥{{ cartStore.total }}&lt;/strong&gt;
+        &lt;/div&gt;
+        
+        &lt;router-link to="/checkout" class="checkout-btn"&gt;
+          去结算
+        &lt;/router-link&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { useCartStore } from '@/stores/cart'
+
+const cartStore = useCartStore()
+
+const updateQuantity = (productId, quantity) => {
+  cartStore.updateQuantity(productId, quantity)
+}
+
+const removeItem = (productId) => {
+  cartStore.removeItem(productId)
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.cart {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.cart-content {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 40px;
+}
+
+.continue-shopping {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #42b983;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 15px;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h3 {
+  margin: 0 0 5px 0;
+}
+
+.item-price {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.item-quantity {
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.quantity-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity {
+  margin: 0 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.item-total {
+  font-weight: bold;
+  color: #e74c3c;
+  min-width: 80px;
+  text-align: right;
+}
+
+.remove-btn {
+  margin-left: 15px;
+  padding: 5px 10px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-summary {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  align-self: start;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.total-row {
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+  font-size: 18px;
+}
+
+.checkout-btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background: #42b983;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .cart-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .cart-item {
+    flex-wrap: wrap;
+  }
+  
+  .item-quantity {
+    order: 3;
+    margin: 10px 0 0;
+    justify-content: center;
+  }
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建路由配置</h2>
+            <p>配置应用路由：</p>
+            
+            <div class="code-block">
+// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '@/views/Home.vue'
+import ProductList from '@/views/ProductList.vue'
+import ProductDetail from '@/views/ProductDetail.vue'
+import Cart from '@/views/Cart.vue'
+import Checkout from '@/views/Checkout.vue'
+import Login from '@/views/Login.vue'
+import Profile from '@/views/Profile.vue'
+
+const routes = [
+  { path: '/', name: 'Home', component: Home },
+  { path: '/products', name: 'ProductList', component: ProductList },
+  { path: '/product/:id', name: 'ProductDetail', component: ProductDetail },
+  { path: '/cart', name: 'Cart', component: Cart },
+  { path: '/checkout', name: 'Checkout', component: Checkout },
+  { path: '/login', name: 'Login', component: Login },
+  { path: '/profile', name: 'Profile', component: Profile }
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+export default router
+</div>
+            
+            <h2>创建主应用组件</h2>
+            <p>整合所有组件到主应用：</p>
+            
+            <div class="code-block">
+// src/App.vue
+&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;Header /&gt;
+    &lt;main&gt;
+      &lt;router-view /&gt;
+    &lt;/main&gt;
+    &lt;Footer /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+&lt;/script&gt;
+
+&lt;style&gt;
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 20px 0;
+}
+&lt;/style&gt;
+</div>
+            
+            <div class="project-steps">
+                <h3>项目扩展建议</h3>
+                <ul>
+                    <li><strong>支付集成</strong>：集成支付网关如支付宝、微信支付</li>
+                    <li><strong>用户评论系统</strong>：允许用户对商品进行评价</li>
+                    <li><strong>商品推荐系统</strong>：基于用户浏览历史推荐商品</li>
+                    <li><strong>优惠券系统</strong>：实现优惠券的发放和使用</li>
+                    <li><strong>库存管理</strong>：实时库存跟踪和低库存提醒</li>
+                    <li><strong>订单状态跟踪</strong>：完整的订单生命周期管理</li>
+                    <li><strong>后台管理系统</strong>：商品管理、订单处理、用户管理</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./todo.html" class="nav-link">上一课：待办事项应用</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./dashboard.html" class="nav-link">下一课：管理后台</a>
+        </div>
+        
+        <footer>
+            <p>电商项目 - Vue.js实战项目</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组操作与方法 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .array-methods-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .array-methods-table th, .array-methods-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .array-methods-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .array-methods-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .method-category {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .method-category-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .array-visual {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f1f8ff;
+            border-radius: 8px;
+        }
+        
+        .array-element {
+            display: inline-block;
+            padding: 10px;
+            margin: 0 5px;
+            background: #2196f3;
+            color: white;
+            border-radius: 4px;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .array-index {
+            font-size: 0.8em;
+            color: #666;
+            text-align: center;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 基础语法 > 数组操作与方法</div>
+            <h1>数组操作与方法</h1>
+        </header>
+        
+        <div class="content">
+            <p>数组是JavaScript中最重要的数据结构之一，用于存储有序的元素集合。JavaScript数组是动态的，可以包含任何类型的元素，并提供了丰富的内置方法来操作数组。掌握数组操作是JavaScript编程的关键技能。</p>
+            
+            <div class="key-features">
+                <h3>数组概览</h3>
+                <ul>
+                    <li><strong>创建数组</strong>：字面量、构造函数、Array.of()、Array.from()</li>
+                    <li><strong>访问元素</strong>：索引访问、解构赋值</li>
+                    <li><strong>修改数组</strong>：添加、删除、替换元素</li>
+                    <li><strong>遍历数组</strong>：for循环、forEach、for...of等</li>
+                    <li><strong>转换数组</strong>：map、filter、reduce等</li>
+                    <li><strong>ES2022/2023新方法</strong>：at()、findLast()、findLastIndex()等</li>
+                </ul>
+            </div>
+            
+            <h2>创建数组</h2>
+            <p>有多种方式可以创建数组：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 1. 数组字面量（推荐）</span><br>
+                <span class="code-keyword">const</span> fruits = [<span class="code-string">'apple'</span>, <span class="code-string">'banana'</span>, <span class="code-string">'orange'</span>];<br><br>
+                
+                <span class="code-comment">// 2. Array构造函数</span><br>
+                <span class="code-keyword">const</span> numbers = <span class="code-keyword">new</span> Array(<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>);<br>
+                <span class="code-keyword">const</span> emptyArray = <span class="code-keyword">new</span> Array(<span class="code-number">5</span>); <span class="code-comment">// 创建长度为5的空数组</span><br><br>
+                
+                <span class="code-comment">// 3. Array.of() - 创建包含指定元素的数组</span><br>
+                <span class="code-keyword">const</span> arr1 = Array.of(<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>); <span class="code-comment">// [1, 2, 3]</span><br>
+                <span class="code-keyword">const</span> arr2 = Array.of(<span class="code-number">3</span>); <span class="code-comment">// [3]，而不是长度为3的数组</span><br><br>
+                
+                <span class="code-comment">// 4. Array.from() - 从类数组对象或可迭代对象创建数组</span><br>
+                <span class="code-keyword">const</span> arr3 = Array.from(<span class="code-string">'hello'</span>); <span class="code-comment">// ['h', 'e', 'l', 'l', 'o']</span><br>
+                <span class="code-keyword">const</span> arr4 = Array.from({length: <span class="code-number">5</span>}, (_, index) => index * <span class="code-number">2</span>); <span class="code-comment">// [0, 2, 4, 6, 8]</span><br><br>
+                
+                <span class="code-comment">// 5. 使用扩展运算符</span><br>
+                <span class="code-keyword">const</span> original = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>];<br>
+                <span class="code-keyword">const</span> copy = [...original]; <span class="code-comment">// 创建副本</span><br>
+                <span class="code-keyword">const</span> combined = [...original, <span class="code-number">4</span>, <span class="code-number">5</span>, <span class="code-number">6</span>]; <span class="code-comment">// [1, 2, 3, 4, 5, 6]</span>
+            </div>
+            
+            <h2>访问数组元素</h2>
+            <p>可以使用索引访问数组中的特定元素，也可以使用ES2022的at()方法访问元素：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> colors = [<span class="code-string">'red'</span>, <span class="code-string">'green'</span>, <span class="code-string">'blue'</span>, <span class="code-string">'yellow'</span>];<br><br>
+                
+                <span class="code-comment">// 使用索引访问</span><br>
+                console.log(colors[<span class="code-number">0</span>]); <span class="code-comment">// 'red'</span><br>
+                console.log(colors[<span class="code-number">2</span>]); <span class="code-comment">// 'blue'</span><br>
+                console.log(colors[<span class="code-number">10</span>]); <span class="code-comment">// undefined（不存在的元素）</span><br><br>
+                
+                <span class="code-comment">// ES2022的at()方法 - 支持负索引</span><br>
+                console.log(colors.at(<span class="code-number">0</span>)); <span class="code-comment">// 'red'</span><br>
+                console.log(colors.at(-<span class="code-number">1</span>)); <span class="code-comment">// 'yellow'（最后一个元素）</span><br>
+                console.log(colors.at(-<span class="code-number">2</span>)); <span class="code-comment">// 'blue'（倒数第二个元素）</span><br><br>
+                
+                <span class="code-comment">// 解构赋值</span><br>
+                <span class="code-keyword">const</span> [first, second, ...rest] = colors;<br>
+                console.log(first); <span class="code-comment">// 'red'</span><br>
+                console.log(second); <span class="code-comment">// 'green'</span><br>
+                console.log(rest); <span class="code-comment">// ['blue', 'yellow']</span><br><br>
+                
+                <span class="code-comment">// 使用解构赋值跳过元素</span><br>
+                <span class="code-keyword">const</span> [, , third,] = colors; <span class="code-comment">// 跳过第一个和第二个元素</span><br>
+                console.log(third); <span class="code-comment">// 'blue'</span>
+            </div>
+            
+            <h2>数组基本操作</h2>
+            <p>数组的添加、删除、替换等基本操作：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> fruits = [<span class="code-string">'apple'</span>, <span class="code-string">'banana'</span>];<br><br>
+                
+                <span class="code-comment">// 添加元素</span><br>
+                fruits.push(<span class="code-string">'orange'</span>); <span class="code-comment">// 在末尾添加 - ['apple', 'banana', 'orange']</span><br>
+                fruits.unshift(<span class="code-string">'mango'</span>); <span class="code-comment">// 在开头添加 - ['mango', 'apple', 'banana', 'orange']</span><br><br>
+                
+                <span class="code-comment">// 删除元素</span><br>
+                <span class="code-keyword">const</span> last = fruits.pop(); <span class="code-comment">// 删除最后一个元素 - 'orange'</span><br>
+                <span class="code-keyword">const</span> first = fruits.shift(); <span class="code-comment">// 删除第一个元素 - 'mango'</span><br><br>
+                
+                <span class="code-comment">// 替换元素</span><br>
+                fruits[<span class="code-number">0</span>] = <span class="code-string">'grape'</span>; <span class="code-comment">// 替换索引0的元素</span><br><br>
+                
+                <span class="code-comment">// 使用splice()方法添加/删除/替换元素</span><br>
+                <span class="code-keyword">const</span> vegetables = [<span class="code-string">'carrot'</span>, <span class="code-string">'potato'</span>, <span class="code-string">'tomato'</span>, <span class="code-string">'onion'</span>];<br><br>
+                
+                <span class="code-comment">// 删除：从索引1开始删除2个元素</span><br>
+                <span class="code-keyword">const</span> removed = vegetables.splice(<span class="code-number">1</span>, <span class="code-number">2</span>); <span class="code-comment">// ['potato', 'tomato']</span><br>
+                console.log(vegetables); <span class="code-comment">// ['carrot', 'onion']</span><br><br>
+                
+                <span class="code-comment">// 添加：从索引1开始删除0个元素，然后添加新元素</span><br>
+                vegetables.splice(<span class="code-number">1</span>, <span class="code-number">0</span>, <span class="code-string">'cucumber'</span>, <span class="code-string">'lettuce'</span>); <span class="code-comment">// ['carrot', 'cucumber', 'lettuce', 'onion']</span><br><br>
+                
+                <span class="code-comment">// 替换：从索引2开始删除1个元素，然后添加新元素</span><br>
+                vegetables.splice(<span class="code-number">2</span>, <span class="code-number">1</span>, <span class="code-string">'spinach'</span>); <span class="code-comment">// ['carrot', 'cucumber', 'spinach', 'onion']</span>
+            </div>
+            
+            <h2>数组遍历方法</h2>
+            <p>JavaScript提供了多种遍历数组的方法：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> numbers = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>];<br><br>
+                
+                <span class="code-comment">// 1. 传统的for循环</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < numbers.length; i++) {<br>
+                &nbsp;&nbsp;console.log(numbers[i]);<br>
+                }<br><br>
+                
+                <span class="code-comment">// 2. for...of循环</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">const</span> num <span class="code-keyword">of</span> numbers) {<br>
+                &nbsp;&nbsp;console.log(num);<br>
+                }<br><br>
+                
+                <span class="code-comment">// 3. forEach()方法</span><br>
+                numbers.forEach(<span class="code-keyword">function</span>(num, index, arr) {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`索引 ${index}: ${num}`</span>);<br>
+                });<br><br>
+                
+                <span class="code-comment">// 使用箭头函数的forEach</span><br>
+                numbers.forEach(num => console.log(num * <span class="code-number">2</span>));<br><br>
+                
+                <span class="code-comment">// 4. entries(), keys(), values()迭代器</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">const</span> [index, value] <span class="code-keyword">of</span> numbers.entries()) {<br>
+                &nbsp;&nbsp;console.log(index, value); <span class="code-comment">// 索引和值</span><br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用keys()获取所有索引</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">const</span> index <span class="code-keyword">of</span> numbers.keys()) {<br>
+                &nbsp;&nbsp;console.log(index); <span class="code-comment">// 0, 1, 2, 3, 4</span><br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用values()获取所有值</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">const</span> value <span class="code-keyword">of</span> numbers.values()) {<br>
+                &nbsp;&nbsp;console.log(value); <span class="code-comment">// 1, 2, 3, 4, 5</span><br>
+                }
+            </div>
+            
+            <h2>数组转换方法</h2>
+            <p>数组转换方法会返回新数组，不修改原数组：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> numbers = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>];<br><br>
+                
+                <span class="code-comment">// map() - 创建一个新数组，包含对原数组每个元素调用函数后的结果</span><br>
+                <span class="code-keyword">const</span> doubled = numbers.map(num => num * <span class="code-number">2</span>);<br>
+                console.log(doubled); <span class="code-comment">// [2, 4, 6, 8, 10]</span><br>
+                console.log(numbers); <span class="code-comment">// [1, 2, 3, 4, 5] - 原数组不变</span><br><br>
+                
+                <span class="code-comment">// filter() - 创建一个新数组，包含满足条件的元素</span><br>
+                <span class="code-keyword">const</span> evens = numbers.filter(num => num % <span class="code-number">2</span> === <span class="code-number">0</span>);<br>
+                console.log(evens); <span class="code-comment">// [2, 4]</span><br><br>
+                
+                <span class="code-comment">// map()和filter()链式调用</span><br>
+                <span class="code-keyword">const</span> result = numbers<br>
+                &nbsp;&nbsp;.filter(num => num > <span class="code-number">2</span>)<br>
+                &nbsp;&nbsp;.map(num => num * <span class="code-number">2</span>);<br>
+                console.log(result); <span class="code-comment">// [6, 8, 10]</span><br><br>
+                
+                <span class="code-comment">// reduce() - 将数组缩减为单个值</span><br>
+                <span class="code-keyword">const</span> sum = numbers.reduce((acc, curr) => acc + curr, <span class="code-number">0</span>);<br>
+                console.log(sum); <span class="code-comment">// 15</span><br><br>
+                
+                <span class="code-keyword">const</span> product = numbers.reduce((acc, curr) => acc * curr, <span class="code-number">1</span>);<br>
+                console.log(product); <span class="code-comment">// 120</span><br><br>
+                
+                <span class="code-comment">// 使用reduce()实现复杂操作</span><br>
+                <span class="code-keyword">const</span> students = [<br>
+                &nbsp;&nbsp;{ name: <span class="code-string">'Alice'</span>, grade: <span class="code-number">85</span> },<br>
+                &nbsp;&nbsp;{ name: <span class="code-string">'Bob'</span>, grade: <span class="code-number">92</span> },<br>
+                &nbsp;&nbsp;{ name: <span class="code-string">'Charlie'</span>, grade: <span class="code-number">78</span> }<br>
+                ];<br><br>
+                
+                <span class="code-comment">// 计算平均分</span><br>
+                <span class="code-keyword">const</span> average = students<br>
+                &nbsp;&nbsp;.reduce((acc, student) => acc + student.grade, <span class="code-number">0</span>) / students.length;<br>
+                console.log(average); <span class="code-comment">// 85</span><br><br>
+                
+                <span class="code-comment">// 按条件分组</span><br>
+                <span class="code-keyword">const</span> grouped = students.reduce((acc, student) => {<br>
+                &nbsp;&nbsp;<span class="code-keyword">const</span> key = student.grade >= <span class="code-number">80</span> ? <span class="code-string">'pass'</span> : <span class="code-string">'fail'</span>;<br>
+                &nbsp;&nbsp;acc[key] = acc[key] || [];<br>
+                &nbsp;&nbsp;acc[key].push(student);<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> acc;<br>
+                }, {});<br>
+                console.log(grouped); <span class="code-comment">// { pass: [...], fail: [...] }</span>
+            </div>
+            
+            <h2>数组检测方法</h2>
+            <p>用于检测数组是否满足特定条件的方法：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> numbers = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>];<br><br>
+                
+                <span class="code-comment">// some() - 检测是否至少有一个元素满足条件</span><br>
+                console.log(numbers.some(num => num > <span class="code-number">4</span>)); <span class="code-comment">// true</span><br>
+                console.log(numbers.some(num => num > <span class="code-number">10</span>)); <span class="code-comment">// false</span><br><br>
+                
+                <span class="code-comment">// every() - 检测是否所有元素都满足条件</span><br>
+                console.log(numbers.every(num => num > <span class="code-number">0</span>)); <span class="code-comment">// true</span><br>
+                console.log(numbers.every(num => num > <span class="code-number">3</span>)); <span class="code-comment">// false</span><br><br>
+                
+                <span class="code-comment">// includes() - 检测数组是否包含特定值</span><br>
+                console.log(numbers.includes(<span class="code-number">3</span>)); <span class="code-comment">// true</span><br>
+                console.log(numbers.includes(<span class="code-number">10</span>)); <span class="code-comment">// false</span><br><br>
+                
+                <span class="code-comment">// find() - 找到第一个满足条件的元素</span><br>
+                <span class="code-keyword">const</span> found = numbers.find(num => num > <span class="code-number">3</span>);<br>
+                console.log(found); <span class="code-comment">// 4</span><br><br>
+                
+                <span class="code-comment">// findIndex() - 找到第一个满足条件的元素的索引</span><br>
+                <span class="code-keyword">const</span> foundIndex = numbers.findIndex(num => num > <span class="code-number">3</span>);<br>
+                console.log(foundIndex); <span class="code-comment">// 3</span><br><br>
+                
+                <span class="code-comment">// ES2023新方法：findLast()和findLastIndex()</span><br>
+                <span class="code-keyword">const</span> symmetricArray = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>, <span class="code-number">4</span>, <span class="code-number">3</span>, <span class="code-number">2</span>, <span class="code-number">1</span>];<br>
+                console.log(symmetricArray.findLast(num => num <span class="code-number">4</span>)); <span class="code-comment">// 1 (从末尾开始找到的第一个小于4的数)</span><br>
+                console.log(symmetricArray.findLastIndex(num => num <span class="code-number">4</span>)); <span class="code-comment">// 8 (从末尾开始找到的第一个小于4的数的索引)</span><br><br>
+                
+                <span class="code-comment">// indexOf()和lastIndexOf()</span><br>
+                <span class="code-keyword">const</span> repeated = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">2</span>, <span class="code-number">4</span>, <span class="code-number">2</span>];<br>
+                console.log(repeated.indexOf(<span class="code-number">2</span>)); <span class="code-comment">// 1 (第一次出现的位置)</span><br>
+                console.log(repeated.lastIndexOf(<span class="code-number">2</span>)); <span class="code-comment">// 5 (最后一次出现的位置)</span>
+            </div>
+            
+            <table class="array-methods-table">
+                <thead>
+                    <tr>
+                        <th>方法</th>
+                        <th>返回值</th>
+                        <th>修改原数组</th>
+                        <th>用途</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>push()</td>
+                        <td>新数组长度</td>
+                        <td>是</td>
+                        <td>在末尾添加元素</td>
+                    </tr>
+                    <tr>
+                        <td>pop()</td>
+                        <td>删除的元素</td>
+                        <td>是</td>
+                        <td>删除末尾元素</td>
+                    </tr>
+                    <tr>
+                        <td>unshift()</td>
+                        <td>新数组长度</td>
+                        <td>是</td>
+                        <td>在开头添加元素</td>
+                    </tr>
+                    <tr>
+                        <td>shift()</td>
+                        <td>删除的元素</td>
+                        <td>是</td>
+                        <td>删除开头元素</td>
+                    </tr>
+                    <tr>
+                        <td>splice()</td>
+                        <td>被删除的元素数组</td>
+                        <td>是</td>
+                        <td>添加/删除/替换元素</td>
+                    </tr>
+                    <tr>
+                        <td>slice()</td>
+                        <td>新数组</td>
+                        <td>否</td>
+                        <td>提取部分元素</td>
+                    </tr>
+                    <tr>
+                        <td>concat()</td>
+                        <td>新数组</td>
+                        <td>否</td>
+                        <td>合并数组</td>
+                    </tr>
+                    <tr>
+                        <td>map()</td>
+                        <td>新数组</td>
+                        <td>否</td>
+                        <td>转换数组元素</td>
+                    </tr>
+                    <tr>
+                        <td>filter()</td>
+                        <td>新数组</td>
+                        <td>否</td>
+                        <td>筛选满足条件的元素</td>
+                    </tr>
+                    <tr>
+                        <td>reduce()</td>
+                        <td>累计结果</td>
+                        <td>否</td>
+                        <td>将数组缩减为单个值</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>数组排序和反转</h2>
+            <p>数组的排序和反转操作会修改原数组：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> numbers = [<span class="code-number">3</span>, <span class="code-number">1</span>, <span class="code-number">4</span>, <span class="code-number">1</span>, <span class="code-number">5</span>, <span class="code-number">9</span>, <span class="code-number">2</span>, <span class="code-number">6</span>];<br><br>
+                
+                <span class="code-comment">// sort() - 排序（默认按字符串排序）</span><br>
+                <span class="code-keyword">const</span> stringSorted = [...numbers].sort(); <span class="code-comment">// 使用扩展运算符创建副本</span><br>
+                console.log(stringSorted); <span class="code-comment">// [1, 1, 2, 3, 4, 5, 6, 9]</span><br><br>
+                
+                <span class="code-comment">// 数字排序需要提供比较函数</span><br>
+                <span class="code-keyword">const</span> numSorted = [...numbers].sort((a, b) => a - b); <span class="code-comment">// 升序</span><br>
+                console.log(numSorted); <span class="code-comment">// [1, 1, 2, 3, 4, 5, 6, 9]</span><br><br>
+                
+                <span class="code-keyword">const</span> descSorted = [...numbers].sort((a, b) => b - a); <span class="code-comment">// 降序</span><br>
+                console.log(descSorted); <span class="code-comment">// [9, 6, 5, 4, 3, 2, 1, 1]</span><br><br>
+                
+                <span class="code-comment">// 按字符串长度排序</span><br>
+                <span class="code-keyword">const</span> words = [<span class="code-string">'banana'</span>, <span class="code-string">'apple'</span>, <span class="code-string">'cherry'</span>, <span class="code-string">'date'</span>];<br>
+                <span class="code-keyword">const</span> sortedByLength = [...words].sort((a, b) => a.length - b.length);<br>
+                console.log(sortedByLength); <span class="code-comment">// ['date', 'apple', 'cherry', 'banana']</span><br><br>
+                
+                <span class="code-comment">// reverse() - 反转数组</span><br>
+                <span class="code-keyword">const</span> reversed = [...numbers].reverse();<br>
+                console.log(reversed); <span class="code-comment">// [6, 2, 9, 5, 1, 4, 1, 3]</span>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">修改原数组 vs 返回新数组</div>
+                    <ul>
+                        <li><strong>修改原数组</strong>：push/pop, unshift/shift, splice, sort, reverse</li>
+                        <li><strong>返回新数组</strong>：concat, slice, map, filter, flat, flatMap</li>
+                        <li><strong>返回其他值</strong>：reduce, some, every, find, findIndex, indexOf</li>
+                        <li>使用不可变方法有助于避免副作用，使代码更可预测</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">ES2022/ES2023新数组方法</div>
+                    <ul>
+                        <li><strong>at()</strong>：使用正负索引访问元素</li>
+                        <li><strong>findLast()</strong>：从末尾开始查找满足条件的元素</li>
+                        <li><strong>findLastIndex()</strong>：从末尾开始查找满足条件的元素索引</li>
+                        <li><strong>toReversed()</strong>：返回反转后的新数组</li>
+                        <li><strong>toSorted()</strong>：返回排序后的新数组</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>多维数组</h2>
+            <p>数组的元素也可以是数组，形成多维数组：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 二维数组</span><br>
+                <span class="code-keyword">const</span> matrix = [<br>
+                &nbsp;&nbsp;[<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>],<br>
+                &nbsp;&nbsp;[<span class="code-number">4</span>, <span class="code-number">5</span>, <span class="code-number">6</span>],<br>
+                &nbsp;&nbsp;[<span class="code-number">7</span>, <span class="code-number">8</span>, <span class="code-number">9</span>]<br>
+                ];<br><br>
+                
+                console.log(matrix[<span class="code-number">1</span>][<span class="code-number">2</span>]); <span class="code-comment">// 6 (第2行第3列)</span><br><br>
+                
+                <span class="code-comment">// 遍历二维数组</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = <span class="code-number">0</span>; i < matrix.length; i++) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> j = <span class="code-number">0</span>; j < matrix[i].length; j++) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(matrix[i][j]);<br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用flat()将多维数组扁平化</span><br>
+                <span class="code-keyword">const</span> nested = [<span class="code-number">1</span>, [<span class="code-number">2</span>, <span class="code-number">3</span>], [<span class="code-number">4</span>, [<span class="code-number">5</span>, <span class="code-number">6</span>]]];<br>
+                console.log(nested.flat()); <span class="code-comment">// [1, 2, 3, 4, [5, 6]]</span><br>
+                console.log(nested.flat(<span class="code-number">2</span>)); <span class="code-comment">// [1, 2, 3, 4, 5, 6] - 指定深度</span><br>
+                console.log(nested.flat(Infinity)); <span class="code-comment">// [1, 2, 3, 4, 5, 6] - 完全扁平化</span><br><br>
+                
+                <span class="code-comment">// 使用flatMap() - 先map再flat</span><br>
+                <span class="code-keyword">const</span> sentences = [<span class="code-string">"Hello world"</span>, <span class="code-string">"JavaScript is great"</span>];<br>
+                <span class="code-keyword">const</span> words = sentences.flatMap(sentence => sentence.split(<span class="code-string">' '</span>));<br>
+                console.log(words); <span class="code-comment">// ['Hello', 'world', 'JavaScript', 'is', 'great']</span>
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个函数，接收一个数组并返回其中的唯一值（去重）</li>
+                    <li>实现一个函数，将数组按指定大小分块</li>
+                    <li>编写一个函数，找出数组中出现次数最多的元素</li>
+                    <li>使用reduce()实现数组的map()和filter()功能</li>
+                    <li>创建一个函数，将多维数组转换为一维数组（不使用flat()）</li>
+                </ul>
+            </div>
+            
+            <h2>实际应用示例</h2>
+            <p>以下是数组在实际开发中的应用示例：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 电商产品过滤和排序示例</span><br>
+                <span class="code-keyword">const</span> products = [<br>
+                &nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">"iPhone"</span>, price: <span class="code-number">999</span>, category: <span class="code-string">"Electronics"</span> },<br>
+                &nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">"Laptop"</span>, price: <span class="code-number">1200</span>, category: <span class="code-string">"Electronics"</span> },<br>
+                &nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">"Book"</span>, price: <span class="code-number">20</span>, category: <span class="code-string">"Education"</span> },<br>
+                &nbsp;&nbsp;{ id: <span class="code-number">4</span>, name: <span class="code-string">"Headphones"</span>, price: <span class="code-number">150</span>, category: <span class="code-string">"Electronics"</span> }<br>
+                ];<br><br>
+                
+                <span class="code-comment">// 筛选电子产品</span><br>
+                <span class="code-keyword">const</span> electronics = products.filter(product => product.category === <span class="code-string">"Electronics"</span>);<br><br>
+                
+                <span class="code-comment">// 按价格排序</span><br>
+                <span class="code-keyword">const</span> sortedByPrice = [...products].sort((a, b) => a.price - b.price);<br><br>
+                
+                <span class="code-comment">// 获取产品名称</span><br>
+                <span class="code-keyword">const</span> productNames = products.map(product => product.name);<br><br>
+                
+                <span class="code-comment">// 计算平均价格</span><br>
+                <span class="code-keyword">const</span> avgPrice = products.reduce((sum, product) => sum + product.price, <span class="code-number">0</span>) / products.length;<br><br>
+                
+                <span class="code-comment">// 查找特定产品</span><br>
+                <span class="code-keyword">const</span> expensiveProduct = products.find(product => product.price > <span class="code-number">1000</span>);<br><br>
+                
+                console.log(<span class="code-string">"电子产品:"</span>, electronics);<br>
+                console.log(<span class="code-string">"按价格排序:"</span>, sortedByPrice);<br>
+                console.log(<span class="code-string">"产品名称:"</span>, productNames);<br>
+                console.log(<span class="code-string">"平均价格:"</span>, avgPrice);<br>
+                console.log(<span class="code-string">"昂贵产品:"</span>, expensiveProduct);<br><br>
+                
+                <span class="code-comment">// 数组去重示例</span><br>
+                <span class="code-keyword">const</span> numbersWithDuplicates = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">4</span>, <span class="code-number">5</span>];<br>
+                <span class="code-keyword">const</span> uniqueNumbers = [...<span class="code-keyword">new</span> Set(numbersWithDuplicates)];<br>
+                console.log(<span class="code-string">"去重后:"</span>, uniqueNumbers); <span class="code-comment">// [1, 2, 3, 4, 5]</span>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="functions.html" class="nav-link">← 上一课：函数定义与调用</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="objects.html" class="nav-link">下一课：对象基础与属性操作 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

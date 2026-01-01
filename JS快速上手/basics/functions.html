@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数定义与调用 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .function-types-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .function-types-table th, .function-types-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .function-types-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .function-types-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .function-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .function-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 基础语法 > 函数定义与调用</div>
+            <h1>函数定义与调用</h1>
+        </header>
+        
+        <div class="content">
+            <p>函数是JavaScript中最重要的概念之一，它是可重用的代码块，可以接收输入参数并返回结果。函数使代码更加模块化、可维护和可重用。</p>
+            
+            <div class="key-features">
+                <h3>函数概览</h3>
+                <ul>
+                    <li><strong>函数声明</strong>：使用function关键字声明</li>
+                    <li><strong>函数表达式</strong>：将函数赋值给变量</li>
+                    <li><strong>箭头函数</strong>：ES6引入的简洁语法</li>
+                    <li><strong>参数处理</strong>：默认参数、剩余参数、参数解构</li>
+                    <li><strong>作用域</strong>：函数作用域、块作用域、闭包</li>
+                    <li><strong>调用方式</strong>：普通调用、方法调用、构造函数调用</li>
+                </ul>
+            </div>
+            
+            <h2>函数定义方式</h2>
+            <p>JavaScript提供了多种定义函数的方式，每种方式都有其特定的用途和特点。</p>
+            
+            <table class="function-types-table">
+                <thead>
+                    <tr>
+                        <th>定义方式</th>
+                        <th>语法</th>
+                        <th>特点</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>函数声明</td>
+                        <td>function name() {}</td>
+                        <td>函数提升，可立即调用</td>
+                        <td>通用，主要定义方式</td>
+                    </tr>
+                    <tr>
+                        <td>函数表达式</td>
+                        <td>const name = function() {}</td>
+                        <td>不提升，需先定义后调用</td>
+                        <td>作为参数传递，匿名函数</td>
+                    </tr>
+                    <tr>
+                        <td>箭头函数</td>
+                        <td>const name = () => {}</td>
+                        <td>不绑定this，简洁语法</td>
+                        <td>回调函数，保持this上下文</td>
+                    </tr>
+                    <tr>
+                        <td>构造函数</td>
+                        <td>new Function('a', 'b', 'return a+b')</td>
+                        <td>动态创建，性能较低</td>
+                        <td>动态函数创建</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>函数声明</h3>
+            <p>函数声明是定义函数的最常见方式，使用function关键字。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 函数声明</span><br>
+                <span class="code-keyword">function</span> greet(name) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`你好, ${name}!`</span>;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 函数声明会被提升到作用域顶部，所以可以在声明前调用</span><br>
+                console.log(greet(<span class="code-string">"张三"</span>)); <span class="code-comment">// "你好, 张三!"</span><br><br>
+                
+                <span class="code-comment">// 带默认参数的函数声明</span><br>
+                <span class="code-keyword">function</span> multiply(a, b = <span class="code-number">1</span>) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> a * b;<br>
+                }<br>
+                console.log(multiply(<span class="code-number">5</span>, <span class="code-number">3</span>)); <span class="code-comment">// 15</span><br>
+                console.log(multiply(<span class="code-number">5</span>)); <span class="code-comment">// 5 (使用默认参数)</span><br><br>
+                
+                <span class="code-comment">// 函数声明可以包含多个参数和复杂逻辑</span><br>
+                <span class="code-keyword">function</span> calculateArea(shape, ...dimensions) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">switch</span> (shape) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"rectangle"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> dimensions[<span class="code-number">0</span>] * dimensions[<span class="code-number">1</span>]; <span class="code-comment">// 长×宽</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">case</span> <span class="code-string">"circle"</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> Math.PI * dimensions[<span class="code-number">0</span>] * dimensions[<span class="code-number">0</span>]; <span class="code-comment">// πr²</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">default</span>:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-number">0</span>;<br>
+                &nbsp;&nbsp;}<br>
+                }<br>
+                console.log(calculateArea(<span class="code-string">"rectangle"</span>, <span class="code-number">5</span>, <span class="code-number">3</span>)); <span class="code-comment">// 15</span><br>
+                console.log(calculateArea(<span class="code-string">"circle"</span>, <span class="code-number">4</span>)); <span class="code-comment">// 约50.27</span>
+            </div>
+            
+            <h3>函数表达式</h3>
+            <p>函数表达式将函数赋值给一个变量，也可以是匿名函数。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 函数表达式</span><br>
+                <span class="code-keyword">const</span> add = <span class="code-keyword">function</span>(a, b) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> a + b;<br>
+                };<br><br>
+                
+                <span class="code-comment">// 函数表达式不会被提升，不能在定义前调用</span><br>
+                <span class="code-comment">// console.log(add(2, 3)); // TypeError: Cannot access 'add' before initialization</span><br>
+                console.log(add(<span class="code-number">2</span>, <span class="code-number">3</span>)); <span class="code-comment">// 5</span><br><br>
+                
+                <span class="code-comment">// 立即执行函数表达式 (IIFE)</span><br>
+                (<span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">"这个函数立即执行"</span>);<br>
+                })();<br><br>
+                
+                <span class="code-comment">// 使用IIFE创建私有作用域</span><br>
+                <span class="code-keyword">const</span> counter = (<span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> count = <span class="code-number">0</span>;<br><br>
+                
+                &nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;increment: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count++;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> count;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;decrement: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count--;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> count;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;getCount: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> count;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;};<br>
+                })();<br><br>
+                
+                console.log(counter.increment()); <span class="code-comment">// 1</span><br>
+                console.log(counter.increment()); <span class="code-comment">// 2</span><br>
+                console.log(counter.decrement()); <span class="code-comment">// 1</span><br>
+                console.log(counter.getCount()); <span class="code-comment">// 1</span>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">函数声明 vs 函数表达式</div>
+                    <div class="code-block">
+                        <span class="code-comment">// 函数声明 - 会被提升</span><br>
+                        hoistedFunc(); <span class="code-comment">// "我是被提升的函数"</span><br><br>
+                        
+                        <span class="code-keyword">function</span> hoistedFunc() {<br>
+                        &nbsp;&nbsp;console.log(<span class="code-string">"我是被提升的函数"</span>);<br>
+                        }<br><br>
+                        
+                        <span class="code-comment">// 函数表达式 - 不会被提升</span><br>
+                        <span class="code-comment">// notHoistedFunc(); // TypeError: Cannot access 'notHoistedFunc' before initialization</span><br><br>
+                        
+                        <span class="code-keyword">const</span> notHoistedFunc = <span class="code-keyword">function</span>() {<br>
+                        &nbsp;&nbsp;console.log(<span class="code-string">"我不是被提升的函数"</span>);<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">函数的命名</div>
+                    <ul>
+                        <li><strong>函数声明</strong>：必须有名称</li>
+                        <li><strong>函数表达式</strong>：可以是匿名函数或命名函数</li>
+                        <li><strong>命名函数表达式</strong>：有助于调试和递归</li>
+                        <li><strong>最佳实践</strong>：使用有意义的函数名</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>箭头函数</h3>
+            <p>箭头函数是ES6引入的简洁语法，有独特的特性和限制。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 基本箭头函数</span><br>
+                <span class="code-keyword">const</span> square = (x) => {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> x * x;<br>
+                };<br><br>
+                
+                <span class="code-comment">// 单参数可省略括号</span><br>
+                <span class="code-keyword">const</span> double = x => x * <span class="code-number">2</span>;<br><br>
+                
+                <span class="code-comment">// 单表达式可省略return和花括号</span><br>
+                <span class="code-keyword">const</span> add = (a, b) => a + b;<br><br>
+                
+                <span class="code-comment">// 返回对象字面量需要括号</span><br>
+                <span class="code-keyword">const</span> createUser = (name, age) => ({ name, age });<br><br>
+                
+                console.log(square(<span class="code-number">4</span>)); <span class="code-comment">// 16</span><br>
+                console.log(double(<span class="code-number">5</span>)); <span class="code-comment">// 10</span><br>
+                console.log(add(<span class="code-number">3</span>, <span class="code-number">7</span>)); <span class="code-comment">// 10</span><br>
+                console.log(createUser(<span class="code-string">"李四"</span>, <span class="code-number">25</span>)); <span class="code-comment">// {name: "李四", age: 25}</span><br><br>
+                
+                <span class="code-comment">// 箭头函数与this的关系</span><br>
+                <span class="code-keyword">function</span> Timer() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.seconds = <span class="code-number">0</span>;<br><br>
+                
+                &nbsp;&nbsp;setInterval(() => {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.seconds++; <span class="code-comment">// 箭头函数保持this指向Timer实例</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-keyword">this</span>.seconds);<br>
+                &nbsp;&nbsp;}, <span class="code-number">1000</span>);<br>
+                }<br><br>
+                
+                <span class="code-comment">// 普通函数会改变this指向</span><br>
+                <span class="code-keyword">function</span> TimerWithRegularFunction() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.seconds = <span class="code-number">0</span>;<br><br>
+                
+                &nbsp;&nbsp;setInterval(<span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// this不再指向TimerWithRegularFunction实例</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">"this.seconds在普通函数中是:"</span>, <span class="code-keyword">this</span>.seconds);<br>
+                &nbsp;&nbsp;}, <span class="code-number">1000</span>);<br>
+                }
+            </div>
+            
+            <div class="function-example">
+                <div class="function-example-title">参数处理技巧</div>
+                <div class="code-block">
+                    <span class="code-comment">// 默认参数</span><br>
+                    <span class="code-keyword">function</span> greetUser(name = <span class="code-string">"访客"</span>, greeting = <span class="code-string">"你好"</span>) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`${greeting}, ${name}!`</span>;<br>
+                    }<br>
+                    console.log(greetUser()); <span class="code-comment">// "你好, 访客!"</span><br>
+                    console.log(greetUser(<span class="code-string">"王五"</span>)); <span class="code-comment">// "你好, 王五!"</span><br>
+                    console.log(greetUser(<span class="code-string">"赵六"</span>, <span class="code-string">"欢迎"</span>)); <span class="code-comment">// "欢迎, 赵六!"</span><br><br>
+                    
+                    <span class="code-comment">// 剩余参数</span><br>
+                    <span class="code-keyword">function</span> sum(...numbers) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> numbers.reduce((total, num) => total + num, <span class="code-number">0</span>);<br>
+                    }<br>
+                    console.log(sum(<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>)); <span class="code-comment">// 15</span><br>
+                    console.log(sum(<span class="code-number">10</span>, <span class="code-number">20</span>)); <span class="code-comment">// 30</span><br><br>
+                    
+                    <span class="code-comment">// 参数解构</span><br>
+                    <span class="code-keyword">function</span> displayUser({ name, age, email = <span class="code-string">"未提供邮箱"</span> }) {<br>
+                    &nbsp;&nbsp;console.log(<span class="code-string">`姓名: ${name}, 年龄: ${age}, 邮箱: ${email}`</span>);<br>
+                    }<br>
+                    <span class="code-keyword">const</span> user = { name: <span class="code-string">"孙七"</span>, age: <span class="code-number">30</span> };<br>
+                    displayUser(user); <span class="code-comment">// "姓名: 孙七, 年龄: 30, 邮箱: 未提供邮箱"</span><br><br>
+                    
+                    <span class="code-comment">// 解构参数与默认值结合</span><br>
+                    <span class="code-keyword">function</span> createUser({ name = <span class="code-string">"匿名"</span>, role = <span class="code-string">"user"</span>, permissions = [] } = {}) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> { name, role, permissions };<br>
+                    }<br>
+                    console.log(createUser()); <span class="code-comment">// {name: "匿名", role: "user", permissions: []}</span><br>
+                    console.log(createUser({ name: <span class="code-string">"周八"</span> })); <span class="code-comment">// {name: "周八", role: "user", permissions: []}</span>
+                </div>
+            </div>
+            
+            <h2>函数调用方式</h2>
+            <p>函数可以以多种方式调用，每种方式会影响this的绑定。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> person = {<br>
+                &nbsp;&nbsp;name: <span class="code-string">"张三"</span>,<br>
+                &nbsp;&nbsp;age: <span class="code-number">25</span>,<br>
+                &nbsp;&nbsp;greet: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`我是${<span class="code-keyword">this</span>.name}, 今年${<span class="code-keyword">this</span>.age}岁`</span>);<br>
+                &nbsp;&nbsp;}<br>
+                };<br><br>
+                
+                <span class="code-comment">// 方法调用 - this指向对象</span><br>
+                person.greet(); <span class="code-comment">// "我是张三, 今年25岁"</span><br><br>
+                
+                <span class="code-comment">// 普通函数调用 - this在严格模式下是undefined，非严格模式下是全局对象</span><br>
+                <span class="code-keyword">const</span> greetFunc = person.greet;<br>
+                <span class="code-comment">// greetFunc(); // 严格模式下this是undefined，会导致错误</span><br><br>
+                
+                <span class="code-comment">// 使用call、apply、bind调用</span><br>
+                <span class="code-keyword">const</span> otherPerson = { name: <span class="code-string">"李四"</span>, age: <span class="code-number">30</span> };<br>
+                person.greet.call(otherPerson); <span class="code-comment">// "我是李四, 今年30岁"</span><br>
+                person.greet.apply(otherPerson); <span class="code-comment">// "我是李四, 今年30岁"</span><br><br>
+                
+                <span class="code-keyword">const</span> boundGreet = person.greet.bind(otherPerson);<br>
+                boundGreet(); <span class="code-comment">// "我是李四, 今年30岁"</span>
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个函数，计算数组中所有数字的平均值</li>
+                    <li>使用箭头函数重写一个回调函数示例</li>
+                    <li>创建一个函数，接受一个数组并返回其中的最大值</li>
+                    <li>实现一个函数，使用剩余参数接受任意数量的参数并返回它们的乘积</li>
+                    <li>创建一个函数，使用解构参数处理用户配置对象</li>
+                    <li>实现一个函数，使用call或apply方法来改变this上下文</li>
+                </ul>
+            </div>
+            
+            <h2>高阶函数</h2>
+            <p>高阶函数是接受其他函数作为参数或返回函数的函数，是函数式编程的基础。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 高阶函数示例</span><br>
+                <span class="code-keyword">function</span> createMultiplier(multiplier) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">function</span>(number) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> number * multiplier;<br>
+                &nbsp;&nbsp;};<br>
+                }<br><br>
+                
+                <span class="code-keyword">const</span> double = createMultiplier(<span class="code-number">2</span>);<br>
+                <span class="code-keyword">const</span> triple = createMultiplier(<span class="code-number">3</span>);<br><br>
+                
+                console.log(double(<span class="code-number">5</span>)); <span class="code-comment">// 10</span><br>
+                console.log(triple(<span class="code-number">4</span>)); <span class="code-comment">// 12</span><br><br>
+                
+                <span class="code-comment">// 数组方法作为高阶函数</span><br>
+                <span class="code-keyword">const</span> numbers = [<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>, <span class="code-number">4</span>, <span class="code-number">5</span>];<br><br>
+                
+                <span class="code-comment">// map: 对每个元素应用函数</span><br>
+                <span class="code-keyword">const</span> doubled = numbers.map(num => num * <span class="code-number">2</span>);<br>
+                console.log(doubled); <span class="code-comment">// [2, 4, 6, 8, 10]</span><br><br>
+                
+                <span class="code-comment">// filter: 过滤元素</span><br>
+                <span class="code-keyword">const</span> evens = numbers.filter(num => num % <span class="code-number">2</span> === <span class="code-number">0</span>);<br>
+                console.log(evens); <span class="code-comment">// [2, 4]</span><br><br>
+                
+                <span class="code-comment">// reduce: 将数组归约为单个值</span><br>
+                <span class="code-keyword">const</span> sum = numbers.reduce((acc, num) => acc + num, <span class="code-number">0</span>);<br>
+                console.log(sum); <span class="code-comment">// 15</span><br><br>
+                
+                <span class="code-comment">// 自定义高阶函数</span><br>
+                <span class="code-keyword">function</span> executeTwice(func, arg) {<br>
+                &nbsp;&nbsp;func(arg);<br>
+                &nbsp;&nbsp;func(arg);<br>
+                }<br><br>
+                
+                executeTwice(console.log, <span class="code-string">"Hello"</span>); <span class="code-comment">// 输出"Hello"两次</span>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="control-flow.html" class="nav-link">← 上一课：条件语句与循环</a>
+            <a href="arrays.html" class="nav-link">下一课：数组操作与方法 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

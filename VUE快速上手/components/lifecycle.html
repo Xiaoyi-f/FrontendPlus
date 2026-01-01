@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生命周期 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>生命周期</h1>
+            <p class="subtitle">组件生命周期详解</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./slots.html" class="nav-link">上一课：插槽Slots</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./communication.html" class="nav-link">下一课：组件通信</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>组件生命周期核心概念</h3>
+                <ul>
+                    <li><strong>创建阶段</strong>：组件实例被创建</li>
+                    <li><strong>挂载阶段</strong>：组件被挂载到DOM</li>
+                    <li><strong>更新阶段</strong>：组件数据更新</li>
+                    <li><strong>卸载阶段</strong>：组件被销毁</li>
+                    <li><strong>组合式API</strong>：Vue 3的生命周期钩子</li>
+                    <li><strong>错误处理</strong>：生命周期中的错误处理</li>
+                </ul>
+            </div>
+            
+            <h2>什么是生命周期？</h2>
+            <p>每个Vue组件实例在创建时都需要经历一系列的初始化步骤，比如设置数据监听、编译模板、挂载实例到DOM、在数据变化时更新DOM等。同时在这个过程中也会运行一些叫做生命周期钩子的函数，这给了用户在不同阶段添加自己的代码的机会。</p>
+            
+            <h2>选项式API的生命周期钩子</h2>
+            <p>在选项式API中，我们通过声明生命周期钩子选项来注册生命周期钩子函数。</p>
+            
+            <h3>创建阶段（Creation）</h3>
+            <p>这些钩子在实例创建时被调用，此时组件实例已经创建，但尚未挂载到DOM上。</p>
+            
+            <div class="code-block">
+const app = new Vue({
+  data() {
+    return {
+      message: 'Hello Vue!'
+    }
+  },
+  
+  // 在实例创建之前被调用
+  beforeCreate() {
+    console.log('beforeCreate: 实例创建之前')
+    // 此时data、methods、computed等还未初始化
+    console.log(this.message) // undefined
+  },
+  
+  // 在实例创建之后被调用
+  created() {
+    console.log('created: 实例创建之后')
+    // 此时data、methods、computed等已初始化
+    console.log(this.message) // 'Hello Vue!'
+    // 可以访问data、methods等
+    // 但DOM还未生成，$el属性还不存在
+  },
+  
+  // ... 其他选项
+})
+            </div>
+            
+            <h3>挂载阶段（Mounting）</h3>
+            <p>这些钩子在实例挂载到DOM时被调用。</p>
+            
+            <div class="code-block">
+const app = new Vue({
+  data() {
+    return {
+      message: 'Hello Vue!'
+    }
+  },
+  
+  // 在挂载开始之前被调用
+  beforeMount() {
+    console.log('beforeMount: 挂载之前')
+    // 模板编译完成，但尚未挂载到DOM
+    console.log(this.$el) // 此时$el存在，但还未挂载
+  },
+  
+  // 实例被挂载后调用
+  mounted() {
+    console.log('mounted: 挂载之后')
+    // 此时DOM已被挂载，可以访问DOM元素
+    console.log(this.$el) // 现在可以访问DOM元素
+    // 这是发起后端请求、操作DOM、设置事件监听器的理想时机
+  },
+  
+  template: `&lt;div&gt;{{ message }}&lt;/div&gt;`
+})
+            </div>
+            
+            <h3>更新阶段（Updating）</h3>
+            <p>这些钩子在数据更新导致DOM重新渲染和打补丁时被调用。</p>
+            
+            <div class="code-block">
+const app = new Vue({
+  data() {
+    return {
+      count: 0
+    }
+  },
+  
+  // 在数据更新前被调用
+  beforeUpdate() {
+    console.log('beforeUpdate: 数据更新前')
+    // 此时DOM尚未更新
+    console.log('更新前DOM中的值:', document.getElementById('count').textContent)
+  },
+  
+  // 在数据更新后被调用
+  updated() {
+    console.log('updated: 数据更新后')
+    // 此时DOM已更新
+    console.log('更新后DOM中的值:', document.getElementById('count').textContent)
+  },
+  
+  methods: {
+    increment() {
+      this.count++
+    }
+  },
+  
+  template: `
+    &lt;div&gt;
+      &lt;div id="count"&gt;{{ count }}&lt;/div&gt;
+      &lt;button @click="increment"&gt;增加&lt;/button&gt;
+    &lt;/div&gt;
+  `
+})
+            </div>
+            
+            <h3>卸载阶段（Unmounting）</h3>
+            <p>这些钩子在实例销毁时被调用。</p>
+            
+            <div class="code-block">
+const app = new Vue({
+  data() {
+    return {
+      message: 'Hello Vue!'
+    }
+  },
+  
+  // 在实例销毁前被调用
+  beforeUnmount() {
+    console.log('beforeUnmount: 实例销毁前')
+    // 此时实例仍然完全可用
+    // 通常在这里清除定时器、取消事件监听等
+  },
+  
+  // 在实例销毁后被调用
+  unmounted() {
+    console.log('unmounted: 实例销毁后')
+    // 此时组件实例的所有指令都被解绑
+    // 所有事件监听器被移除
+    // 所有子组件实例被销毁
+  },
+  
+  template: `&lt;div&gt;{{ message }}&lt;/div&gt;`
+})
+
+// 销毁组件实例
+app.$destroy() // Vue 2
+// 或
+app.unmount() // Vue 3
+            </div>
+            
+            <h2>完整的生命周期图示</h2>
+            <p>Vue组件的完整生命周期流程：</p>
+            
+            <ol>
+                <li><strong>beforeCreate</strong> - 创建前：实例初始化之后，数据观测和事件配置之前</li>
+                <li><strong>created</strong> - 创建后：实例创建完成，数据观测、属性和方法的运算已完成，挂载阶段还未开始</li>
+                <li><strong>beforeMount</strong> - 挂载前：挂载开始之前被调用，render函数首次被调用</li>
+                <li><strong>mounted</strong> - 挂载后：实例挂载到DOM后调用，mounted不会承诺所有的子组件也都一起被挂载</li>
+                <li><strong>beforeUpdate</strong> - 更新前：数据更新时调用，发生在虚拟DOM重新渲染和打补丁之前</li>
+                <li><strong>updated</strong> - 更新后：数据更新后调用，发生在虚拟DOM重新渲染和打补丁之后</li>
+                <li><strong>beforeUnmount</strong> - 卸载前：实例销毁之前调用，实例仍然可用</li>
+                <li><strong>unmounted</strong> - 卸载后：实例销毁后调用，所有事件监听器被移除</li>
+            </ol>
+            
+            <h2>组合式API中的生命周期钩子</h2>
+            <p>在组合式API中，生命周期钩子以导入函数的形式使用：</p>
+            
+            <div class="code-block">
+&lt;script setup&gt;
+import { 
+  onBeforeMount, 
+  onMounted, 
+  onBeforeUpdate, 
+  onUpdated,
+  onBeforeUnmount, 
+  onUnmounted,
+  ref 
+} from 'vue'
+
+const count = ref(0)
+
+// 等同于 beforeMount
+onBeforeMount(() => {
+  console.log('组件挂载前')
+})
+
+// 等同于 mounted
+onMounted(() => {
+  console.log('组件已挂载')
+  // 在这里可以访问DOM元素
+})
+
+// 等同于 beforeUpdate
+onBeforeUpdate(() => {
+  console.log('组件更新前')
+})
+
+// 等同于 updated
+onUpdated(() => {
+  console.log('组件已更新')
+})
+
+// 等同于 beforeUnmount
+onBeforeUnmount(() => {
+  console.log('组件卸载前')
+  // 清理工作，如清除定时器、取消订阅等
+})
+
+// 等同于 unmounted
+onUnmounted(() => {
+  console.log('组件已卸载')
+})
+
+// 在模板中使用
+const increment = () => {
+  count.value++
+}
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;div&gt;计数: {{ count }}&lt;/div&gt;
+    &lt;button @click="increment"&gt;增加&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+            </div>
+            
+            <h2>错误处理生命周期钩子</h2>
+            <p>Vue提供专门的生命周期钩子来处理错误：</p>
+            
+            <div class="code-block">
+const app = new Vue({
+  // 捕获组件渲染期间的JavaScript错误
+  errorCaptured(err, instance, info) {
+    console.error('捕获到错误:', err)
+    console.error('错误信息:', info)
+    console.error('发生错误的组件实例:', instance)
+    
+    // 返回false可以阻止错误继续向上传播
+    // 默认情况下，错误会继续向上传播
+    return false
+  },
+  
+  // Vue 3中的错误处理
+  setup() {
+    // 在组合式API中也可以使用
+    onErrorCaptured((err, instance, info) => {
+      console.error('组合式API中捕获到错误:', err)
+      return false
+    })
+  }
+})
+            </div>
+            
+            <h2>实际应用示例</h2>
+            <p>以下是一个展示生命周期钩子实际应用的完整示例：</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div class="lifecycle-demo"&gt;
+    &lt;h2&gt;生命周期演示&lt;/h2&gt;
+    &lt;button @click="toggleComponent"&gt;{{ componentVisible ? '隐藏' : '显示' }}组件&lt;/button&gt;
+    &lt;div v-if="componentVisible"&gt;
+      &lt;child-component 
+        :message="message" 
+        @component-mounted="handleMount"
+        @component-updated="handleUpdate"
+      /&gt;
+    &lt;/div&gt;
+    &lt;div class="log"&gt;
+      &lt;h3&gt;生命周期日志:&lt;/h3&gt;
+      &lt;div 
+        v-for="(log, index) in logs" 
+        :key="index"
+        class="log-item"
+      &gt;
+        {{ log }}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, onMounted } from 'vue'
+
+const componentVisible = ref(true)
+const message = ref('初始消息')
+const logs = ref([])
+
+// 模拟子组件
+const ChildComponent = {
+  name: 'ChildComponent',
+  props: ['message'],
+  emits: ['component-mounted', 'component-updated'],
+  
+  data() {
+    return {
+      localMessage: this.message
+    }
+  },
+  
+  beforeCreate() {
+    addLog('子组件: beforeCreate')
+  },
+  
+  created() {
+    addLog('子组件: created')
+    this.localMessage = this.message
+  },
+  
+  beforeMount() {
+    addLog('子组件: beforeMount')
+  },
+  
+  mounted() {
+    addLog('子组件: mounted')
+    this.$emit('component-mounted')
+  },
+  
+  beforeUpdate() {
+    addLog('子组件: beforeUpdate')
+  },
+  
+  updated() {
+    addLog('子组件: updated')
+    this.$emit('component-updated')
+  },
+  
+  beforeUnmount() {
+    addLog('子组件: beforeUnmount')
+  },
+  
+  unmounted() {
+    addLog('子组件: unmounted')
+  },
+  
+  watch: {
+    message(newVal) {
+      this.localMessage = newVal
+    }
+  },
+  
+  template: `
+    &lt;div class="child-component"&gt;
+      &lt;h3&gt;子组件&lt;/h3&gt;
+      &lt;p&gt;消息: {{ localMessage }}&lt;/p&gt;
+      &lt;button @click="$emit('update:message', '更新的消息 ' + Date.now())"&gt;更新消息&lt;/button&gt;
+    &lt;/div&gt;
+  `
+}
+
+const addLog = (message) => {
+  logs.value.unshift(`${new Date().toLocaleTimeString()} - ${message}`)
+  if (logs.value.length > 10) {
+    logs.value.pop()
+  }
+}
+
+const toggleComponent = () => {
+  componentVisible.value = !componentVisible.value
+  addLog(`组件${componentVisible.value ? '显示' : '隐藏'}`)
+}
+
+const handleMount = () => {
+  addLog('父组件: 收到子组件挂载事件')
+}
+
+const handleUpdate = () => {
+  addLog('父组件: 收到子组件更新事件')
+}
+
+onMounted(() => {
+  addLog('父组件: mounted')
+})
+&lt;/script&gt;
+
+&lt;style&gt;
+.lifecycle-demo {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.log {
+  margin-top: 20px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.log-item {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9em;
+}
+
+.child-component {
+  border: 1px solid #42b983;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+button {
+  padding: 8px 15px;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+&lt;/style&gt;
+            </div>
+            
+            <h2>生命周期最佳实践</h2>
+            <p>在使用生命周期钩子时，有一些最佳实践需要注意：</p>
+            
+            <ul>
+                <li><strong>created</strong>：适合进行数据初始化、API请求，此时可以访问data、methods等</li>
+                <li><strong>mounted</strong>：适合进行DOM操作、发起需要DOM的API请求、设置定时器、添加事件监听器</li>
+                <li><strong>updated</strong>：谨慎使用，避免在此钩子中修改数据，可能导致无限循环</li>
+                <li><strong>beforeUnmount</strong>：清理工作，如清除定时器、取消订阅、移除事件监听器</li>
+                <li><strong>错误处理</strong>：使用errorCaptured钩子捕获子组件错误</li>
+            </ul>
+            
+            <h2>注意事项</h2>
+            <p>使用生命周期钩子时需要注意的事项：</p>
+            
+            <ul>
+                <li>不要在beforeCreate和created中访问DOM元素（$el属性不存在）</li>
+                <li>避免在beforeUpdate和updated中修改数据，可能导致无限循环</li>
+                <li>在beforeUnmount中清理资源，防止内存泄漏</li>
+                <li>在updated钩子中访问DOM时要小心，因为子组件可能尚未更新</li>
+                <li>如果需要等待子组件挂载完成，可以使用$nextTick或相应的组合式API</li>
+            </ul>
+        </div>
+        
+        <div class="navigation">
+            <a href="./slots.html" class="nav-link">上一课：插槽Slots</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./communication.html" class="nav-link">下一课：组件通信</a>
+        </div>
+        
+        <footer>
+            <p>生命周期 - Vue.js组件开发的关键概念</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

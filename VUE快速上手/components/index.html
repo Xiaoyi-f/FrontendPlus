@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件系统篇 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        ul {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .topic-link {
+            display: block;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            text-decoration: none;
+            border-radius: 5px;
+            border-left: 4px solid #42b983;
+            transition: all 0.3s ease;
+        }
+        
+        .topic-link:hover {
+            background: #e8f5e9;
+            padding-left: 18px;
+        }
+        
+        .topic-link:visited {
+            color: #333;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 组件系统篇</div>
+            <h1>组件系统篇</h1>
+        </header>
+        
+        <div class="content">
+            <p>组件系统是Vue.js的核心特性之一，它让我们可以将复杂的UI拆分成独立的、可复用的组件。在这一部分，我们将深入学习Vue.js的组件系统，掌握如何创建、使用和管理组件。</p>
+            
+            <div class="key-features">
+                <h3>组件系统篇学习目标</h3>
+                <ul>
+                    <li>理解Vue.js组件的概念和优势</li>
+                    <li>掌握组件的创建和注册方法</li>
+                    <li>学会使用Props进行父子组件通信</li>
+                    <li>掌握组件事件和自定义事件</li>
+                    <li>学习插槽(Slots)的使用方法</li>
+                    <li>了解组件生命周期和高级组件特性</li>
+                    <li>掌握组件间的通信模式</li>
+                    <li>能够构建复杂的组件结构</li>
+                </ul>
+            </div>
+            
+            <h2>组件系统篇教程目录</h2>
+            <ul>
+                <li><a class="topic-link" href="component-basics.html">1. 组件基础</a></li>
+                <li><a class="topic-link" href="props.html">2. Props详解</a></li>
+                <li><a class="topic-link" href="component-events.html">3. 组件事件</a></li>
+                <li><a class="topic-link" href="slots.html">4. 插槽(Slots)</a></li>
+                <li><a class="topic-link" href="component-life-cycle.html">5. 组件生命周期</a></li>
+                <li><a class="topic-link" href="dynamic-static-components.html">6. 动态与静态组件</a></li>
+                <li><a class="topic-link" href="component-communication.html">7. 组件间通信</a></li>
+                <li><a class="topic-link" href="advanced-component-patterns.html">8. 高级组件模式</a></li>
+            </ul>
+            
+            <h2>学习建议</h2>
+            <p>组件系统是Vue.js应用开发的核心，建议在学习过程中多实践，尝试构建自己的组件库。每个概念都要结合实际应用场景来理解。</p>
+            
+            <ul>
+                <li>先理解组件的基本概念，再学习高级特性</li>
+                <li>动手创建多个组件，体会组件化开发的优势</li>
+                <li>掌握组件间通信的各种方式</li>
+                <li>学习如何设计可复用的组件</li>
+                <li>理解组件生命周期，合理使用各个阶段</li>
+            </ul>
+        </div>
+        
+        <nav>
+            <a href="../index.html" class="nav-link">← 返回首页</a>
+            <a href="component-basics.html" class="nav-link">开始学习 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

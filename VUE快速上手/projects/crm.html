@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM系统 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .project-steps {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CRM系统</h1>
+            <p class="subtitle">客户关系管理系统</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./dashboard.html" class="nav-link">上一课：管理后台</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>CRM系统项目目标</h3>
+                <ul>
+                    <li><strong>客户管理</strong>：客户信息的增删改查</li>
+                    <li><strong>联系记录</strong>：跟踪与客户的沟通历史</li>
+                    <li><strong>销售管道</strong>：管理销售机会和阶段</li>
+                    <li><strong>任务管理</strong>：安排和跟踪任务</li>
+                    <li><strong>数据分析</strong>：客户数据统计分析</li>
+                    <li><strong>团队协作</strong>：多用户协同工作</li>
+                </ul>
+            </div>
+            
+            <h2>项目概述</h2>
+            <p>我们将构建一个功能完整的客户关系管理（CRM）系统，包含客户管理、销售管道、联系记录、任务管理等核心功能。这个项目将运用Vue 3的高级特性、状态管理、路由、表单验证和API集成等知识，是一个企业级应用的典型示例。</p>
+            
+            <h2>项目结构规划</h2>
+            <div class="code-block">
+crm-app/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/           # 可复用组件
+│   │   ├── CustomerCard.vue # 客户卡片组件
+│   │   ├── DealPipeline.vue # 销售管道组件
+│   │   ├── ContactHistory.vue # 联系记录组件
+│   │   ├── TaskItem.vue     # 任务项目组件
+│   │   ├── Sidebar.vue      # 侧边栏组件
+│   │   └── Header.vue       # 顶部导航组件
+│   ├── views/               # 页面组件
+│   │   ├── Dashboard.vue    # 仪表盘页
+│   │   ├── Customers.vue    # 客户列表页
+│   │   ├── CustomerDetail.vue # 客户详情页
+│   │   ├── Deals.vue        # 销售机会页
+│   │   ├── Tasks.vue        # 任务管理页
+│   │   ├── Reports.vue      # 报表页
+│   │   └── Settings.vue     # 设置页
+│   ├── stores/              # Pinia状态管理
+│   │   ├── customers.js     # 客户状态
+│   │   ├── deals.js         # 销售机会状态
+│   │   ├── tasks.js         # 任务状态
+│   │   └── contacts.js      # 联系记录状态
+│   ├── composables/         # 可复用逻辑
+│   │   ├── useApi.js        # API请求逻辑
+│   │   └── useValidation.js # 表单验证逻辑
+│   ├── services/            # API服务
+│   │   └── api.js           # API请求封装
+│   ├── router/              # 路由配置
+│   │   └── index.js         # 路由配置
+│   ├── styles/              # 样式文件
+│   │   └── main.css
+│   ├── utils/               # 工具函数
+│   │   └── helpers.js       # 辅助函数
+│   ├── App.vue              # 根组件
+│   └── main.js              # 入口文件
+├── package.json
+└── vite.config.js
+</div>
+            
+            <h2>创建项目和安装依赖</h2>
+            <div class="code-block">
+# 创建项目
+npm create vue@latest crm-app
+cd crm-app
+
+# 选择特性：TypeScript, Router, Pinia, ESLint, Prettier
+# 安装依赖
+npm install
+
+# 安装额外依赖
+npm install axios vue-router@4 date-fns
+</div>
+            
+            <h2>创建客户状态管理(store)</h2>
+            <p>创建管理客户状态的store：</p>
+            
+            <div class="code-block">
+// src/stores/customers.js
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useCustomersStore = defineStore('customers', () => {
+  // 定义状态
+  const customers = ref([
+    { 
+      id: 1, 
+      name: '阿里巴巴集团', 
+      email: 'contact@alibaba.com', 
+      phone: '400-860-8608',
+      company: '阿里巴巴集团',
+      position: '采购经理',
+      status: 'active', // active, inactive, lead
+      industry: '互联网',
+      address: '浙江省杭州市西湖区文一西路969号',
+      notes: '重要客户，需要定期跟进',
+      createdDate: '2025-03-15',
+      lastContact: '2025-12-20',
+      deals: [1, 3] // 关联的销售机会ID
+    },
+    { 
+      id: 2, 
+      name: '腾讯科技', 
+      email: 'info@tencent.com', 
+      phone: '0755-86013388',
+      company: '腾讯科技',
+      position: '产品经理',
+      status: 'lead',
+      industry: '互联网',
+      address: '广东省深圳市南山区科技园科技中一路',
+      notes: '潜在客户，有合作意向',
+      createdDate: '2025-06-10',
+      lastContact: '2025-12-15',
+      deals: []
+    },
+    { 
+      id: 3, 
+      name: '百度公司', 
+      email: 'contact@baidu.com', 
+      phone: '010-59928888',
+      company: '百度公司',
+      position: '技术总监',
+      status: 'inactive',
+      industry: '互联网',
+      address: '北京市海淀区上地十街10号',
+      notes: '暂时无合作意向',
+      createdDate: '2025-01-20',
+      lastContact: '2025-08-10',
+      deals: [2]
+    }
+  ])
+  
+  const statuses = ['lead', 'active', 'inactive']
+  const industries = ['互联网', '金融', '教育', '医疗', '制造', '零售']
+  
+  // 计算属性
+  const activeCustomers = computed(() => {
+    return customers.value.filter(customer => customer.status === 'active')
+  })
+  
+  const leads = computed(() => {
+    return customers.value.filter(customer => customer.status === 'lead')
+  })
+  
+  const customerById = computed(() => {
+    return (id) => customers.value.find(customer => customer.id === id)
+  })
+  
+  // 方法
+  const addCustomer = (customerData) => {
+    const newCustomer = {
+      id: Date.now(),
+      ...customerData,
+      createdDate: new Date().toISOString().split('T')[0],
+      lastContact: new Date().toISOString().split('T')[0],
+      deals: []
+    }
+    customers.value.push(newCustomer)
+  }
+  
+  const updateCustomer = (id, updatedData) => {
+    const index = customers.value.findIndex(customer => customer.id === id)
+    if (index !== -1) {
+      customers.value[index] = { ...customers.value[index], ...updatedData }
+    }
+  }
+  
+  const deleteCustomer = (id) => {
+    const index = customers.value.findIndex(customer => customer.id === id)
+    if (index !== -1) {
+      customers.value.splice(index, 1)
+    }
+  }
+  
+  const searchCustomers = (query) => {
+    if (!query) return customers.value
+    return customers.value.filter(customer => 
+      customer.name.toLowerCase().includes(query.toLowerCase()) ||
+      customer.company.toLowerCase().includes(query.toLowerCase()) ||
+      customer.email.toLowerCase().includes(query.toLowerCase())
+    )
+  }
+  
+  return {
+    customers,
+    statuses,
+    industries,
+    activeCustomers,
+    leads,
+    customerById,
+    addCustomer,
+    updateCustomer,
+    deleteCustomer,
+    searchCustomers
+  }
+})
+</div>
+            
+            <h2>创建客户卡片组件</h2>
+            <p>创建显示单个客户信息的组件：</p>
+            
+            <div class="code-block">
+// src/components/CustomerCard.vue
+&lt;template&gt;
+  &lt;div class="customer-card" :class="{ [customer.status]: true }"&gt;
+    &lt;div class="customer-header"&gt;
+      &lt;div class="customer-avatar"&gt;
+        {{ customer.name.charAt(0).toUpperCase() }}
+      &lt;/div&gt;
+      &lt;div class="customer-basic"&gt;
+        &lt;h3&gt;{{ customer.name }}&lt;/h3&gt;
+        &lt;p class="customer-position"&gt;{{ customer.position }}&lt;/p&gt;
+        &lt;span class="customer-status" :class="customer.status"&gt;
+          {{ getStatusText(customer.status) }}
+        &lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="customer-details"&gt;
+      &lt;div class="detail-item"&gt;
+        &lt;span class="detail-label"&gt;公司&lt;/span&gt;
+        &lt;span class="detail-value"&gt;{{ customer.company }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class="detail-item"&gt;
+        &lt;span class="detail-label"&gt;邮箱&lt;/span&gt;
+        &lt;span class="detail-value"&gt;{{ customer.email }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class="detail-item"&gt;
+        &lt;span class="detail-label"&gt;电话&lt;/span&gt;
+        &lt;span class="detail-value"&gt;{{ customer.phone }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class="detail-item"&gt;
+        &lt;span class="detail-label"&gt;行业&lt;/span&gt;
+        &lt;span class="detail-value"&gt;{{ customer.industry }}&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;div class="detail-item"&gt;
+        &lt;span class="detail-label"&gt;最后联系&lt;/span&gt;
+        &lt;span class="detail-value"&gt;{{ customer.lastContact }}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="customer-actions"&gt;
+      &lt;button @click="viewDetails" class="btn btn-primary"&gt;查看详情&lt;/button&gt;
+      &lt;button @click="editCustomer" class="btn btn-secondary"&gt;编辑&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
+  customer: {
+    type: Object,
+    required: true
+  }
+})
+
+const router = useRouter()
+
+const getStatusText = (status) => {
+  const statusMap = {
+    lead: '潜在客户',
+    active: '活跃客户',
+    inactive: '非活跃客户'
+  }
+  return statusMap[status] || status
+}
+
+const viewDetails = () => {
+  router.push(`/customers/${props.customer.id}`)
+}
+
+const editCustomer = () => {
+  // 实现编辑功能
+  console.log('编辑客户:', props.customer.id)
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.customer-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.customer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.customer-card.lead {
+  border-left: 4px solid #ffc107;
+}
+
+.customer-card.active {
+  border-left: 4px solid #28a745;
+}
+
+.customer-card.inactive {
+  border-left: 4px solid #6c757d;
+}
+
+.customer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.customer-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #42b983;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-right: 15px;
+}
+
+.customer-basic h3 {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.customer-position {
+  margin: 0 0 8px 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.customer-status {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.customer-status.lead {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.customer-status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.customer-status.inactive {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.customer-details {
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.detail-label {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  color: #333;
+  font-weight: 500;
+}
+
+.customer-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.btn-primary {
+  background: #42b983;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #359c6d;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建客户列表页面</h2>
+            <p>创建显示客户列表的页面组件：</p>
+            
+            <div class="code-block">
+// src/views/Customers.vue
+&lt;template&gt;
+  &lt;div class="customers"&gt;
+    &lt;div class="header"&gt;
+      &lt;h2&gt;客户管理&lt;/h2&gt;
+      &lt;button @click="showAddForm = true" class="btn btn-primary"&gt;
+        + 添加客户
+      &lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="controls"&gt;
+      &lt;input 
+        v-model="searchQuery" 
+        type="text" 
+        placeholder="搜索客户..." 
+        class="search-input"
+      /&gt;
+      
+      &lt;select v-model="selectedStatus" class="status-filter"&gt;
+        &lt;option value=""&gt;所有状态&lt;/option&gt;
+        &lt;option value="lead"&gt;潜在客户&lt;/option&gt;
+        &lt;option value="active"&gt;活跃客户&lt;/option&gt;
+        &lt;option value="inactive"&gt;非活跃客户&lt;/option&gt;
+      &lt;/select&gt;
+    &lt;/div&gt;
+    
+    &lt;div v-if="filteredCustomers.length === 0" class="no-customers"&gt;
+      没有找到客户
+    &lt;/div&gt;
+    
+    &lt;div v-else class="customers-list"&gt;
+      &lt;CustomerCard 
+        v-for="customer in filteredCustomers" 
+        :key="customer.id" 
+        :customer="customer" 
+      /&gt;
+    &lt;/div&gt;
+    
+    &lt;div v-if="showAddForm" class="add-customer-form"&gt;
+      &lt;h3&gt;添加新客户&lt;/h3&gt;
+      &lt;form @submit.prevent="addNewCustomer"&gt;
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;姓名*&lt;/label&gt;
+          &lt;input 
+            v-model="newCustomer.name" 
+            type="text" 
+            required 
+            class="form-control"
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;公司*&lt;/label&gt;
+          &lt;input 
+            v-model="newCustomer.company" 
+            type="text" 
+            required 
+            class="form-control"
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;职位&lt;/label&gt;
+          &lt;input 
+            v-model="newCustomer.position" 
+            type="text" 
+            class="form-control"
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;邮箱*&lt;/label&gt;
+          &lt;input 
+            v-model="newCustomer.email" 
+            type="email" 
+            required 
+            class="form-control"
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;电话&lt;/label&gt;
+          &lt;input 
+            v-model="newCustomer.phone" 
+            type="tel" 
+            class="form-control"
+          /&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;行业&lt;/label&gt;
+          &lt;select v-model="newCustomer.industry" class="form-control"&gt;
+            &lt;option value=""&gt;选择行业&lt;/option&gt;
+            &lt;option value="互联网"&gt;互联网&lt;/option&gt;
+            &lt;option value="金融"&gt;金融&lt;/option&gt;
+            &lt;option value="教育"&gt;教育&lt;/option&gt;
+            &lt;option value="医疗"&gt;医疗&lt;/option&gt;
+            &lt;option value="制造"&gt;制造&lt;/option&gt;
+            &lt;option value="零售"&gt;零售&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;状态&lt;/label&gt;
+          &lt;select v-model="newCustomer.status" class="form-control"&gt;
+            &lt;option value="lead"&gt;潜在客户&lt;/option&gt;
+            &lt;option value="active"&gt;活跃客户&lt;/option&gt;
+            &lt;option value="inactive"&gt;非活跃客户&lt;/option&gt;
+          &lt;/select&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-group"&gt;
+          &lt;label&gt;备注&lt;/label&gt;
+          &lt;textarea 
+            v-model="newCustomer.notes" 
+            class="form-control" 
+            rows="3"
+          &gt;&lt;/textarea&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="form-actions"&gt;
+          &lt;button type="submit" class="btn btn-primary"&gt;保存&lt;/button&gt;
+          &lt;button type="button" @click="showAddForm = false" class="btn btn-secondary"&gt;取消&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/form&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, computed } from 'vue'
+import { useCustomersStore } from '@/stores/customers'
+import CustomerCard from '@/components/CustomerCard.vue'
+
+const customersStore = useCustomersStore()
+
+const searchQuery = ref('')
+const selectedStatus = ref('')
+const showAddForm = ref(false)
+
+const newCustomer = ref({
+  name: '',
+  company: '',
+  position: '',
+  email: '',
+  phone: '',
+  industry: '',
+  status: 'lead',
+  notes: ''
+})
+
+const filteredCustomers = computed(() => {
+  let result = customersStore.customers
+  
+  if (searchQuery.value) {
+    result = customersStore.searchCustomers(searchQuery.value)
+  }
+  
+  if (selectedStatus.value) {
+    result = result.filter(customer => customer.status === selectedStatus.value)
+  }
+  
+  return result
+})
+
+const addNewCustomer = () => {
+  customersStore.addCustomer({ ...newCustomer.value })
+  newCustomer.value = {
+    name: '',
+    company: '',
+    position: '',
+    email: '',
+    phone: '',
+    industry: '',
+    status: 'lead',
+    notes: ''
+  }
+  showAddForm.value = false
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.customers {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn-primary {
+  background: #42b983;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #359c6d;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-input, .status-filter {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.status-filter {
+  min-width: 150px;
+}
+
+.no-customers {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-size: 18px;
+}
+
+.customers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.add-customer-form {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.add-customer-form h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #42b983;
+  box-shadow: 0 0 0 2px rgba(66, 185, 131, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .controls {
+    flex-direction: column;
+  }
+  
+  .search-input, .status-filter {
+    min-width: auto;
+  }
+  
+  .customers-list {
+    grid-template-columns: 1fr;
+  }
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建销售管道组件</h2>
+            <p>创建销售机会管道管理组件：</p>
+            
+            <div class="code-block">
+// src/components/DealPipeline.vue
+&lt;template&gt;
+  &lt;div class="deal-pipeline"&gt;
+    &lt;div 
+      v-for="stage in pipelineStages" 
+      :key="stage.key"
+      class="pipeline-stage"
+    &gt;
+      &lt;h3 class="stage-title"&gt;
+        {{ stage.title }}
+        &lt;span class="stage-count"&gt;({{ getDealsByStage(stage.key).length }})&lt;/span&gt;
+      &lt;/h3&gt;
+      
+      &lt;div class="stage-deals"&gt;
+        &lt;div 
+          v-for="deal in getDealsByStage(stage.key)" 
+          :key="deal.id"
+          class="deal-card"
+          draggable
+          @dragstart="startDrag($event, deal, stage.key)"
+        &gt;
+          &lt;h4&gt;{{ deal.title }}&lt;/h4&gt;
+          &lt;p class="deal-amount"&gt;¥{{ formatCurrency(deal.amount) }}&lt;/p&gt;
+          &lt;p class="deal-customer"&gt;{{ deal.customerName }}&lt;/p&gt;
+          &lt;p class="deal-date"&gt;{{ formatDate(deal.createdDate) }}&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue'
+
+// 模拟销售机会数据
+const deals = ref([
+  { id: 1, title: '电商平台合作', amount: 500000, customerName: '阿里巴巴', stage: 'negotiation', createdDate: '2025-11-15' },
+  { id: 2, title: '云服务采购', amount: 300000, customerName: '腾讯', stage: 'proposal', createdDate: '2025-12-01' },
+  { id: 3, title: '广告投放合作', amount: 150000, customerName: '百度', stage: 'qualified', createdDate: '2025-10-20' },
+  { id: 4, title: '数据分析服务', amount: 80000, customerName: '京东', stage: 'prospecting', createdDate: '2025-12-10' },
+  { id: 5, title: 'AI解决方案', amount: 1200000, customerName: '字节跳动', stage: 'negotiation', createdDate: '2025-11-30' }
+])
+
+const pipelineStages = [
+  { key: 'prospecting', title: '初步接触' },
+  { key: 'qualified', title: '需求确认' },
+  { key: 'proposal', title: '方案提交' },
+  { key: 'negotiation', title: '商务谈判' },
+  { key: 'closed', title: '成交' }
+]
+
+const getDealsByStage = (stage) => {
+  return deals.value.filter(deal => deal.stage === stage)
+}
+
+const startDrag = (event, deal, stage) => {
+  event.dataTransfer.setData('dealId', deal.id)
+  event.dataTransfer.setData('fromStage', stage)
+}
+
+const formatCurrency = (amount) => {
+  return amount.toLocaleString()
+}
+
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString('zh-CN')
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.deal-pipeline {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.pipeline-stage {
+  min-width: 250px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  flex: 1;
+}
+
+.stage-title {
+  margin: 0 0 15px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+  display: flex;
+  justify-content: space-between;
+}
+
+.stage-count {
+  background: #42b983;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+}
+
+.stage-deals {
+  min-height: 200px;
+}
+
+.deal-card {
+  background: white;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: move;
+  border-left: 3px solid #42b983;
+}
+
+.deal-card h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.deal-amount {
+  font-weight: bold;
+  color: #42b983;
+  margin: 5px 0;
+}
+
+.deal-customer {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 5px 0;
+}
+
+.deal-date {
+  color: #adb5bd;
+  font-size: 0.8rem;
+  margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+  .deal-pipeline {
+    flex-direction: column;
+  }
+  
+  .pipeline-stage {
+    min-width: 100%;
+  }
+}
+&lt;/style&gt;
+</div>
+            
+            <div class="project-steps">
+                <h3>项目扩展建议</h3>
+                <ul>
+                    <li><strong>联系记录管理</strong>：详细记录与客户的沟通历史</li>
+                    <li><strong>邮件集成</strong>：直接在CRM中发送和接收邮件</li>
+                    <li><strong>日历集成</strong>：安排会议和提醒事项</li>
+                    <li><strong>报告系统</strong>：生成客户分析和销售报告</li>
+                    <li><strong>移动端适配</strong>：开发移动应用版本</li>
+                    <li><strong>数据导入导出</strong>：支持Excel等格式的数据导入导出</li>
+                    <li><strong>API接口</strong>：提供外部系统集成接口</li>
+                    <li><strong>权限管理</strong>：实现基于角色的访问控制</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./dashboard.html" class="nav-link">上一课：管理后台</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+        </div>
+        
+        <footer>
+            <p>CRM系统 - Vue.js实战项目</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

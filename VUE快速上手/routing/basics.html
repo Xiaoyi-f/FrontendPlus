@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router基础 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vue Router基础</h1>
+            <p class="subtitle">路由配置、导航、参数</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="../state/pinia.html" class="nav-link">上一课：Pinia状态管理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./advanced.html" class="nav-link">下一课：Vue Router进阶</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>Vue Router核心概念</h3>
+                <ul>
+                    <li><strong>Router实例</strong>：管理路由的实例</li>
+                    <li><strong>路由配置</strong>：定义路径与组件的映射关系</li>
+                    <li><strong>Router-link</strong>：导航链接组件</li>
+                    <li><strong>Router-view</strong>：渲染匹配组件的占位符</li>
+                    <li><strong>路由参数</strong>：动态路由参数和查询参数</li>
+                    <li><strong>编程式导航</strong>：通过代码进行路由跳转</li>
+                </ul>
+            </div>
+            
+            <h2>什么是Vue Router？</h2>
+            <p>Vue Router是Vue.js的官方路由管理器，它与Vue.js核心深度集成，让构建单页面应用变得易如反掌。使用Vue Router可以轻松地实现页面之间的导航，而无需重新加载整个页面。</p>
+            
+            <h2>安装Vue Router</h2>
+            <p>首先安装Vue Router：</p>
+            <div class="code-block">
+npm install vue-router@4
+            </div>
+            
+            <h2>基本配置</h2>
+            <p>创建路由的基本配置：</p>
+            
+            <div class="code-block">
+// router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '../views/Home.vue'
+import About from '../views/About.vue'
+import User from '../views/User.vue'
+
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About
+  },
+  {
+    path: '/user/:id',
+    name: 'User',
+    component: User,
+    props: true  // 将路由参数作为props传递给组件
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(),  // 使用HTML5 history模式
+  routes
+})
+
+export default router
+            </div>
+            
+            <h2>在主应用中使用路由</h2>
+            <p>在主应用中安装路由：</p>
+            
+            <div class="code-block">
+// main.js
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+app.use(router)
+app.mount('#app')
+            </div>
+            
+            <h2>在组件中使用路由</h2>
+            <p>在组件中使用[router-link](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-directives.html#L394-L394)和[router-view](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-directives.html#L395-L395)：</p>
+            
+            <div class="code-block">
+// App.vue
+&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;nav&gt;
+      &lt;!-- 使用 router-link 组件进行导航 --&gt;
+      &lt;router-link to="/"&gt;首页&lt;/router-link&gt;
+      &lt;router-link to="/about"&gt;关于&lt;/router-link&gt;
+      &lt;router-link to="/user/123"&gt;用户&lt;/router-link&gt;
+    &lt;/nav&gt;
+    
+    &lt;!-- 路由出口，匹配的组件将在这里渲染 --&gt;
+    &lt;router-view&gt;&lt;/router-view&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+            </div>
+            
+            <h2>动态路由匹配</h2>
+            <p>可以使用动态路径参数来匹配动态路由：</p>
+            
+            <div class="code-block">
+const routes = [
+  // 动态路径参数以冒号开头
+  { path: '/user/:id', component: User },
+  // 可以有多个参数
+  { path: '/user/:id/post/:postId', component: Post },
+  // 可以使用正则表达式
+  { path: '/user/:id(\\d+)', component: User },  // 只匹配数字
+  // 可选参数
+  { path: '/user/:id?', component: User }
+]
+            </div>
+            
+            <p>在组件中获取路由参数：</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;用户信息&lt;/h2&gt;
+    &lt;p&gt;用户ID: {{ $route.params.id }}&lt;/p&gt;
+    &lt;p&gt;查询参数: {{ $route.query }}&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+export default {
+  setup() {
+    const route = useRoute()
+    
+    // 监听路由变化
+    watch(
+      () => route.params.id,
+      (newId, oldId) => {
+        // 当路由参数改变时执行的操作
+        console.log(`ID从 ${oldId} 变为 ${newId}`)
+      }
+    )
+    
+    return {}
+  },
+  
+  // 或者使用选项API
+  /*
+  watch: {
+    '$route'(to, from) {
+      // 当路由改变时执行的操作
+      console.log(to, from)
+    }
+  },
+  */
+  
+  methods: {
+    getUserId() {
+      // 使用 this.$route 获取参数
+      return this.$route.params.id
+    }
+  }
+}
+&lt;/script&gt;
+            </div>
+            
+            <h2>编程式导航</h2>
+            <p>除了使用[router-link](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-directives.html#L394-L394)创建导航链接，还可以使用router实例的方法进行编程式导航：</p>
+            
+            <div class="code-block">
+&lt;script&gt;
+import { useRouter, useRoute } from 'vue-router'
+
+export default {
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    
+    function navigateToHome() {
+      // 字符串路径
+      router.push('/home')
+      
+      // 对象形式
+      router.push({ path: '/home' })
+      
+      // 命名路由
+      router.push({ name: 'Home' })
+      
+      // 带参数的命名路由
+      router.push({ name: 'User', params: { id: 123 } })
+      
+      // 带查询参数
+      router.push({ path: '/register', query: { plan: 'premium' } })
+    }
+    
+    function navigateBack() {
+      router.go(-1)  // 后退一页
+      // 或者
+      router.back()  // 后退
+    }
+    
+    function navigateForward() {
+      router.go(1)   // 前进一页
+      // 或者
+      router.forward()  // 前进
+    }
+    
+    return {
+      navigateToHome,
+      navigateBack,
+      navigateForward
+    }
+  }
+}
+&lt;/script&gt;
+            </div>
+            
+            <h2>嵌套路由</h2>
+            <p>在某些场景下，需要嵌套的路由结构：</p>
+            
+            <div class="code-block">
+const routes = [
+  {
+    path: '/user/:id',
+    component: User,
+    children: [
+      // 当 /user/:id 匹配成功时，会渲染到User组件的[router-view](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-directives.html#L395-L395)中
+      { path: '', component: UserProfile },  // 默认子路由
+      { path: 'profile', name: 'UserProfile', component: UserProfile },
+      { path: 'posts', name: 'UserPosts', component: UserPosts }
+    ]
+  }
+]
+            </div>
+            
+            <p>父组件中需要有[router-view](file:///e:\FrontendTeach\VUE快速上手\advanced\custom-directives.html#L395-L395)：</p>
+            
+            <div class="code-block">
+// User.vue
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;用户: {{ $route.params.id }}&lt;/h2&gt;
+    &lt;router-view /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+            </div>
+            
+            <h2>路由守卫</h2>
+            <p>Vue Router提供了导航守卫来保护路由，全局前置守卫示例：</p>
+            
+            <div class="code-block">
+// router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({ /* ... */ })
+
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  // 在路由切换前执行
+  if (to.path.startsWith('/admin') && !isAuthenticated()) {
+    // 如果访问管理员页面但未认证，重定向到登录页
+    next('/login')
+  } else {
+    // 继续路由
+    next()
+  }
+})
+
+// 全局后置钩子
+router.afterEach((to, from) => {
+  // 在路由切换后执行，例如更新页面标题
+  document.title = to.meta.title || '默认标题'
+})
+            </div>
+            
+            <h2>组件内守卫</h2>
+            <p>在组件内部定义的路由守卫：</p>
+            
+            <div class="code-block">
+export default {
+  async beforeRouteEnter(to, from, next) {
+    // 在路由进入前调用
+    // 不能访问组件实例 `this`
+    // 因为组件实例还没被创建
+    
+    const data = await fetchSomething(to.params.id)
+    next(vm => {
+      // 通过vm访问组件实例
+      vm.setData(data)
+    })
+  },
+  
+  beforeRouteUpdate(to, from, next) {
+    // 在当前路由改变，但组件被复用时调用
+    // 例如从 /user/1 到 /user/2
+    this.setData(to.params.id)
+    next()
+  },
+  
+  beforeRouteLeave(to, from, next) {
+    // 在路由离开当前组件时调用
+    const answer = window.confirm('确认离开？')
+    if (answer) {
+      next()
+    } else {
+      next(false)
+    }
+  }
+}
+            </div>
+            
+            <h2>路由元信息</h2>
+            <p>可以在路由配置中添加元信息，用于路由守卫中判断：</p>
+            
+            <div class="code-block">
+const routes = [
+  {
+    path: '/user',
+    component: User,
+    meta: { 
+      requiresAuth: true,  // 需要认证
+      title: '用户中心'     // 页面标题
+    }
+  },
+  {
+    path: '/admin',
+    component: Admin,
+    meta: { 
+      requiresAuth: true,
+      requiresAdmin: true,
+      title: '管理后台'
+    }
+  }
+]
+
+// 使用元信息的路由守卫
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    next('/login')
+  } else if (to.meta.requiresAdmin && !isAdmin()) {
+    next('/user')  // 重定向到普通用户页面
+  } else {
+    document.title = to.meta.title || 'Vue App'
+    next()
+  }
+})
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="../state/pinia.html" class="nav-link">上一课：Pinia状态管理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./advanced.html" class="nav-link">下一课：Vue Router进阶</a>
+        </div>
+        
+        <footer>
+            <p>Vue Router基础 - 掌握Vue.js路由系统</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件基础 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .component-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .component-table th, .component-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .component-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .component-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 组件系统篇 > 组件基础</div>
+            <h1>组件基础</h1>
+        </header>
+        
+        <div class="content">
+            <p>组件是Vue.js的核心概念之一，它让我们可以将复杂的UI拆分成独立的、可复用的部件。组件系统让我们能够用独立、解耦的方式构建大型应用，每个组件都可以看作一个小型的Vue实例。</p>
+            
+            <div class="key-features">
+                <h3>组件基础核心概念</h3>
+                <ul>
+                    <li><strong>组件定义</strong>：创建可复用的Vue组件</li>
+                    <li><strong>组件注册</strong>：全局注册和局部注册组件</li>
+                    <li><strong>组件复用</strong>：在应用中多次使用同一组件</li>
+                    <li><strong>组件嵌套</strong>：在组件中使用其他组件</li>
+                    <li><strong>组件模板</strong>：定义组件的结构和内容</li>
+                    <li><strong>组件数据</strong>：组件的独立数据状态</li>
+                </ul>
+            </div>
+            
+            <h2>组件的定义</h2>
+            <p>组件本质上是一个拥有预定义选项的Vue实例。我们可以通过Vue.component()方法来全局注册一个组件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">基本组件定义示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;button-counter&gt;&lt;/button-counter&gt;<br>
+                    &nbsp;&nbsp;&lt;button-counter&gt;&lt;/button-counter&gt;<br>
+                    &nbsp;&nbsp;&lt;button-counter&gt;&lt;/button-counter&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 定义一个名为button-counter的组件</span><br>
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'button-counter'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"counter"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"count++"</span>&gt;点击次数: {{ count }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>全局注册 vs 局部注册</h2>
+            <p>组件可以通过两种方式注册：全局注册和局部注册。全局注册的组件可以在整个应用中的任何组件内部使用，而局部注册的组件只能在其注册的组件内部使用。</p>
+            
+            <table class="component-table">
+                <thead>
+                    <tr>
+                        <th>注册方式</th>
+                        <th>优点</th>
+                        <th>缺点</th>
+                        <th>使用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>全局注册</td>
+                        <td>在任何组件中都可以使用</td>
+                        <td>增加打包体积，可能造成命名冲突</td>
+                        <td>通用组件，如按钮、输入框等</td>
+                    </tr>
+                    <tr>
+                        <td>局部注册</td>
+                        <td>按需引入，减少打包体积</td>
+                        <td>需要在每个使用的地方导入</td>
+                        <td>特定业务组件</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">全局注册示例</div>
+                <div class="code-block">
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 全局注册一个组件</span><br>
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'my-button'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button class=<span class="code-string">"btn"</span>&gt;{{ buttonText }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buttonText: <span class="code-string">'点击我'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">局部注册示例</div>
+                <div class="code-block">
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 定义组件</span><br>
+                    <span class="code-keyword">const</span> MyButton = {<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class=<span class="code-string">"btn"</span>&gt;{{ buttonText }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;`,<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buttonText: <span class="code-string">'点击我'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    };<br><br>
+                    
+                    <span class="code-comment">// 局部注册组件</span><br>
+                    createApp({<br>
+                    &nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;MyButton <span class="code-comment">// 等同于 'MyButton: MyButton'</span><br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>组件的复用</h2>
+            <p>组件最重要的特性之一就是可复用性。我们可以创建一个组件，然后在应用中多次使用它，每个实例都有自己的独立状态。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">组件复用示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"component-list"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;todo-item v-for=<span class="code-string">"item in todoList"</span> :key=<span class="code-string">"item.id"</span> :title=<span class="code-string">"item.title"</span>&gt;&lt;/todo-item&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> todoList = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, title: <span class="code-string">'学习Vue组件'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, title: <span class="code-string">'练习组件开发'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, title: <span class="code-string">'构建组件库'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todoList<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;TodoItem: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'title'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"todo-item"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;{{ title }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=<span class="code-string">"checkbox"</span> id=<span class="code-string">"complete"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label for=<span class="code-string">"complete"</span>&gt;完成&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>组件嵌套</h2>
+            <p>组件可以相互嵌套，形成组件树。这种嵌套关系有助于构建复杂的UI结构。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">组件嵌套示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;my-app&gt;&lt;/my-app&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    <span class="code-comment">// 定义子组件</span><br>
+                    <span class="code-keyword">const</span> ChildComponent = {<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"child"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;子组件&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;这是嵌套的子组件内容&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    };<br><br>
+                    
+                    <span class="code-comment">// 定义父组件</span><br>
+                    <span class="code-keyword">const</span> ParentComponent = {<br>
+                    &nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;ChildComponent<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"parent"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;父组件&lt;/h2&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;child-component&gt;&lt;/child-component&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;`<br>
+                    };<br><br>
+                    
+                    <span class="code-comment">// 定义根组件</span><br>
+                    createApp({<br>
+                    &nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;MyApp: ParentComponent<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>组件数据的独立性</h2>
+            <p>每个组件实例都应该有自己独立的数据状态。在组件的data选项中，必须是一个返回数据对象的函数，而不是直接返回对象，这样可以确保每个组件实例都拥有独立的数据副本。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">组件数据独立性示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;counter-component&gt;&lt;/counter-component&gt;<br>
+                    &nbsp;&nbsp;&lt;counter-component&gt;&lt;/counter-component&gt;<br>
+                    &nbsp;&nbsp;&lt;counter-component&gt;&lt;/counter-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'counter-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 注意：这里必须返回一个新的对象</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 这样每个组件实例都有独立的数据副本</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"counter-component"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"count++"</span>&gt;点击: {{ count }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .counter-component {<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ccc;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>使用单文件组件(SFC)</h2>
+            <p>在实际项目中，我们通常使用单文件组件(Single File Components，SFC)，它使用.vue文件扩展名，将模板、脚本和样式封装在一个文件中。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">单文件组件示例</div>
+                <div class="code-block">
+                    &lt;!-- ButtonCounter.vue --&gt;<br>
+                    &lt;template&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"counter"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"increment"</span>&gt;点击次数: {{ count }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"reset"</span>&gt;重置&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/template&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">import</span> { ref } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>;<br><br>
+                    
+                    <span class="code-keyword">export</span> <span class="code-keyword">default</span> {<br>
+                    &nbsp;&nbsp;name: <span class="code-string">'ButtonCounter'</span>,<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> count = ref(<span class="code-number">0</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> increment = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> reset = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value = <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reset<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    };<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style scoped&gt;<br>
+                    .counter {<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #42b983;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    }<br><br>
+                    
+                    button {<br>
+                    &nbsp;&nbsp;margin-right: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">5</span>px <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;background-color: #42b983;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;border: none;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">3</span>px;<br>
+                    &nbsp;&nbsp;cursor: pointer;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>组合式API中的组件</h2>
+            <p>在组合式API中，组件的定义方式略有不同，但核心概念保持一致。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">选项式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> MyComponent = {<br>
+                        &nbsp;&nbsp;name: <span class="code-string">'MyComponent'</span>,<br>
+                        &nbsp;&nbsp;data() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;methods: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;reset() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count = <span class="code-number">0</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">组合式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">import</span> { ref } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>;<br><br>
+                        
+                        <span class="code-keyword">const</span> MyComponent = {<br>
+                        &nbsp;&nbsp;name: <span class="code-string">'MyComponent'</span>,<br>
+                        &nbsp;&nbsp;setup() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> count = ref(<span class="code-number">0</span>);<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> increment = () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> reset = () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value = <span class="code-number">0</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reset<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;}<br>
+                        };
+                    </div>
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>组件在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>UI组件库</strong>：如按钮、输入框、对话框等基础组件</li>
+                    <li><strong>业务组件</strong>：如用户头像、商品卡片等特定业务组件</li>
+                    <li><strong>布局组件</strong>：如导航栏、侧边栏、页脚等布局组件</li>
+                    <li><strong>功能组件</strong>：如搜索框、购物车等具有特定功能的组件</li>
+                    <li><strong>容器组件</strong>：用于组织和管理其他组件</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">实际应用示例 - 用户卡片组件</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;user-card <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;v-for=<span class="code-string">"user in users"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:key=<span class="code-string">"user.id"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:user=<span class="code-string">"user"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@user-click=<span class="code-string">"handleUserClick"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/user-card&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> users = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'张三'</span>, email: <span class="code-string">'zhangsan@example.com'</span>, avatar: <span class="code-string">'https://via.placeholder.com/50'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'李四'</span>, email: <span class="code-string">'lisi@example.com'</span>, avatar: <span class="code-string">'https://via.placeholder.com/50'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'王五'</span>, email: <span class="code-string">'wangwu@example.com'</span>, avatar: <span class="code-string">'https://via.placeholder.com/50'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleUserClick = (userId) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">`点击了用户 ${userId}`</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;users,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleUserClick<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;UserCard: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'user'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"user-card"</span> @click=<span class="code-string">"$emit('user-click', user.id)"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;img :src=<span class="code-string">"user.avatar"</span> :alt=<span class="code-string">"user.name"</span> class=<span class="code-string">"avatar"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"user-info"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;{{ user.name }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ user.email }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .user-card {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;align-items: center;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;cursor: pointer;<br>
+                    &nbsp;&nbsp;transition: box-shadow <span class="code-number">0.3</span>s;<br>
+                    }<br><br>
+                    
+                    .user-card:hover {<br>
+                    &nbsp;&nbsp;box-shadow: <span class="code-number">0</span> <span class="code-number">2</span>px <span class="code-number">10</span>px rgba(<span class="code-number">0</span>, <span class="code-number">0</span>, <span class="code-number">0</span>, <span class="code-number">0.1</span>);<br>
+                    }<br><br>
+                    
+                    .avatar {<br>
+                    &nbsp;&nbsp;width: <span class="code-number">50</span>px;<br>
+                    &nbsp;&nbsp;height: <span class="code-number">50</span>px;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">50</span>%;<br>
+                    &nbsp;&nbsp;margin-right: <span class="code-number">15</span>px;<br>
+                    }<br><br>
+                    
+                    .user-info h3 {<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">0</span> <span class="code-number">0</span> <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;color: #333;<br>
+                    }<br><br>
+                    
+                    .user-info p {<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;color: #666;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h3>最佳实践建议</h3>
+            <p>在使用组件时，有一些最佳实践建议：</p>
+            
+            <ul>
+                <li>组件应该保持单一职责，只做一件事</li>
+                <li>组件应该具有良好的可复用性</li>
+                <li>组件名称应该具有描述性，使用PascalCase或kebab-case命名</li>
+                <li>组件数据必须是函数，确保每个实例有独立的数据副本</li>
+                <li>合理使用组件嵌套，避免过深的嵌套层级</li>
+                <li>使用props进行父子组件通信，使用自定义事件向上传递数据</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个按钮组件，支持不同样式和大小</li>
+                    <li>创建一个卡片组件，可以显示不同类型的内容</li>
+                    <li>创建一个列表组件，支持不同的列表项</li>
+                    <li>创建一个表单组件，包含多个输入字段</li>
+                    <li>创建一个模态框组件，支持自定义内容</li>
+                    <li>创建一个导航组件，支持嵌套菜单</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="index.html" class="nav-link">← 返回组件系统篇首页</a>
+            <a href="props.html" class="nav-link">下一课：Props详解 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

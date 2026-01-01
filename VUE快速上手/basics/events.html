@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件处理 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .event-table th, .event-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .event-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .event-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .click-counter {
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .click-button {
+            padding: 8px 15px;
+            margin: 5px;
+            background-color: #42b983;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .click-button:hover {
+            background-color: #359c6d;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 基础语法篇 > 事件处理</div>
+            <h1>事件处理</h1>
+        </header>
+        
+        <div class="content">
+            <p>事件处理是Vue.js中与用户交互的重要方式。Vue提供v-on指令来监听DOM事件，并在触发事件时执行JavaScript代码。通过事件处理，我们可以响应用户的点击、键盘输入、鼠标移动等操作。</p>
+            
+            <div class="key-features">
+                <h3>事件处理核心概念</h3>
+                <ul>
+                    <li><strong>v-on指令</strong>：用于监听DOM事件</li>
+                    <li><strong>事件修饰符</strong>：用于处理常见的事件行为</li>
+                    <li><strong>按键修饰符</strong>：用于监听特定按键事件</li>
+                    <li><strong>系统修饰键</strong>：用于监听系统按键组合</li>
+                    <li><strong>鼠标按键修饰符</strong>：用于监听特定鼠标按键</li>
+                    <li><strong>事件对象</strong>：访问原生DOM事件对象</li>
+                </ul>
+            </div>
+            
+            <h2>基本事件处理</h2>
+            <p>使用v-on指令来监听DOM事件，可以绑定方法或内联语句。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">基本事件处理示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"click-counter"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;点击计数器: {{ count }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class=<span class="code-string">"click-button"</span> v-on:click=<span class="code-string">"increment"</span>&gt;增加&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class=<span class="code-string">"click-button"</span> @click=<span class="code-string">"decrement"</span>&gt;减少&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button class=<span class="code-string">"click-button"</span> @click=<span class="code-string">"reset"</span>&gt;重置&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"count++"</span>&gt;内联表达式&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;当前计数: {{ count }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> count = ref(<span class="code-number">0</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> increment = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> decrement = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> reset = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value = <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrement,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reset<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>事件修饰符</h2>
+            <p>Vue提供了事件修饰符来处理常见的事件行为，如阻止冒泡、阻止默认行为等。</p>
+            
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>修饰符</th>
+                        <th>说明</th>
+                        <th>示例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>.stop</td>
+                        <td>阻止事件冒泡</td>
+                        <td>@click.stop="handler"</td>
+                    </tr>
+                    <tr>
+                        <td>.prevent</td>
+                        <td>阻止默认行为</td>
+                        <td>@submit.prevent="handler"</td>
+                    </tr>
+                    <tr>
+                        <td>.capture</td>
+                        <td>使用事件捕获模式</td>
+                        <td>@click.capture="handler"</td>
+                    </tr>
+                    <tr>
+                        <td>.self</td>
+                        <td>只在事件目标是元素本身时触发</td>
+                        <td>@click.self="handler"</td>
+                    </tr>
+                    <tr>
+                        <td>.once</td>
+                        <td>事件只触发一次</td>
+                        <td>@click.once="handler"</td>
+                    </tr>
+                    <tr>
+                        <td>.passive</td>
+                        <td>以被动模式添加事件监听器</td>
+                        <td>@scroll.passive="handler"</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">事件修饰符示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div @click=<span class="code-string">"outerClick"</span> class=<span class="code-string">"outer"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;外层<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div @click.stop=<span class="code-string">"innerClick"</span> class=<span class="code-string">"inner"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;内层 (点击不会冒泡到外层)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;form @submit.prevent=<span class="code-string">"handleSubmit"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=<span class="code-string">"text"</span> placeholder=<span class="code-string">"输入内容"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=<span class="code-string">"submit"</span>&gt;提交&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/form&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div @click.once=<span class="code-string">"onceClick"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;只触发一次的点击 ({{ onceCount }}次)<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.self=<span class="code-string">"selfClick"</span>&gt;只在元素本身触发&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;点击这里不会触发&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> onceCount = ref(<span class="code-number">0</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> outerClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'外层被点击'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> innerClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'内层被点击'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleSubmit = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'表单提交被阻止'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> onceClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onceCount.value++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> selfClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'只在元素本身触发'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onceCount,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outerClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;innerClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleSubmit,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onceClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selfClick<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>按键修饰符</h2>
+            <p>在监听键盘事件时，我们经常需要检查特定的按键。Vue允许为v-on添加按键修饰符。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">按键修饰符示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input @keyup.enter=<span class="code-string">"submitForm"</span> placeholder=<span class="code-string">"按回车提交"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"submitForm"</span>&gt;提交&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input @keyup.page-down=<span class="code-string">"nextPage"</span> placeholder=<span class="code-string">"按PageDown切换页面"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"nextPage"</span>&gt;下一页&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input @keydown.ctrl.67=<span class="code-string">"copy"</span> placeholder=<span class="code-string">"按Ctrl+C复制"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"copy"</span>&gt;复制&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;p&gt;按下的键: {{ keyLog }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;input @keydown=<span class="code-string">"logKey"</span> placeholder=<span class="code-string">"按下任意键查看日志"</span>&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> keyLog = ref(<span class="code-string">''</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> submitForm = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'表单已提交!'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> nextPage = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'切换到下一页!'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> copy = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'内容已复制!'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> logKey = (event) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyLog.value = <span class="code-string">`键: ${event.key}, 代码: ${event.keyCode}`</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keyLog,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submitForm,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nextPage,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;copy,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;logKey<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>系统修饰键</h2>
+            <p>可以用如下修饰符来实现仅在按下相应按键时才触发鼠标或键盘事件的监听器。</p>
+            
+            <div class="key-features">
+                <h3>系统修饰键</h3>
+                <ul>
+                    <li><strong>.ctrl</strong>：Ctrl键</li>
+                    <li><strong>.alt</strong>：Alt键</li>
+                    <li><strong>.shift</strong>：Shift键</li>
+                    <li><strong>.meta</strong>：在Mac上是Command键，在Windows上是Windows键</li>
+                    <li><strong>.exact</strong>：修饰符可以精确控制触发事件的按键</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">系统修饰键示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.ctrl=<span class="code-string">"ctrlClick"</span>&gt;按Ctrl+点击&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.shift=<span class="code-string">"shiftClick"</span>&gt;按Shift+点击&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.alt=<span class="code-string">"altClick"</span>&gt;按Alt+点击&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.meta=<span class="code-string">"metaClick"</span>&gt;按Meta+点击&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.ctrl.exact=<span class="code-string">"ctrlOnly"</span>&gt;仅按Ctrl+点击&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click.exact=<span class="code-string">"noModifiers"</span>&gt;无修饰键点击&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input @keyup.shift.enter=<span class="code-string">"specialSubmit"</span> placeholder=<span class="code-string">"按Shift+Enter提交"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;p&gt;事件日志: {{ eventLog }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> eventLog = ref(<span class="code-string">''</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> ctrlClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'Ctrl+点击'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> shiftClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'Shift+点击'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> altClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'Alt+点击'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> metaClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'Meta+点击'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> ctrlOnly = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'仅Ctrl+点击'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> noModifiers = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'无修饰键点击'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> specialSubmit = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog.value = <span class="code-string">'Shift+Enter提交'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventLog,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctrlClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;shiftClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;altClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metaClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ctrlOnly,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noModifiers,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;specialSubmit<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>鼠标按键修饰符</h2>
+            <p>可以使用鼠标按键修饰符来监听特定的鼠标按键事件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">鼠标按键修饰符示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"mouse-area"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div @mousedown.left=<span class="code-string">"leftClick"</span>&gt;左键点击&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div @mousedown.right=<span class="code-string">"rightClick"</span>&gt;右键点击&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div @mousedown.middle=<span class="code-string">"middleClick"</span>&gt;中键点击&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;p&gt;鼠标事件日志: {{ mouseLog }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> mouseLog = ref(<span class="code-string">''</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> leftClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouseLog.value = <span class="code-string">'左键被按下'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> rightClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouseLog.value = <span class="code-string">'右键被按下'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> middleClick = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouseLog.value = <span class="code-string">'中键被按下'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mouseLog,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;leftClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rightClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;middleClick<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>访问原生DOM事件</h2>
+            <p>在内联语句中，可以通过特殊变量$event访问原生DOM事件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">访问原生DOM事件示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"handleClick($event, '参数')"</span>&gt;传递事件对象&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;input @keyup=<span class="code-string">"handleKeyup"</span> placeholder=<span class="code-string">"按任意键查看事件信息"</span>&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"warn('表单仍为保存!', $event)"</span>&gt;警告&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;p&gt;事件信息: {{ eventInfo }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> eventInfo = ref(<span class="code-string">''</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleClick = (event, param) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventInfo.value = <span class="code-string">`事件类型: ${event.type}, 参数: ${param}, 时间戳: ${event.timeStamp}`</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleKeyup = (event) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventInfo.value = <span class="code-string">`按键: ${event.key}, 代码: ${event.code}, 键值: ${event.keyCode}`</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> warn = (message, event) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (event) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;event.preventDefault();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(message);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eventInfo,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleClick,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleKeyup,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;warn<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>组合式API中的事件处理</h2>
+            <p>在组合式API中，事件处理的语法是相同的，但方法定义方式不同。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">选项式API</div>
+                    <div class="code-block">
+                        createApp({<br>
+                        &nbsp;&nbsp;data() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;methods: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;decrement() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count--;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;handleClick(event) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'点击事件'</span>, event);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}<br>
+                        });
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">组合式API</div>
+                    <div class="code-block">
+                        createApp({<br>
+                        &nbsp;&nbsp;setup() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> { ref } = Vue;<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> count = ref(<span class="code-number">0</span>);<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> increment = () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> decrement = () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value--;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleClick = (event) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'点击事件'</span>, event);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrement,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleClick<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;}<br>
+                        });
+                    </div>
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>事件处理在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>表单提交</strong>：处理表单提交事件，验证数据</li>
+                    <li><strong>按钮点击</strong>：执行特定操作，如保存、删除、编辑</li>
+                    <li><strong>键盘交互</strong>：实现快捷键、热键功能</li>
+                    <li><strong>鼠标交互</strong>：实现拖拽、右键菜单等功能</li>
+                    <li><strong>滚动事件</strong>：实现无限滚动、懒加载等功能</li>
+                    <li><strong>触摸事件</strong>：在移动端实现滑动、缩放等交互</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">实际应用示例 - 交互式表单</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"form-container"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;用户注册表单&lt;/h2&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;form @submit.prevent=<span class="code-string">"submitForm"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"form-group"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;用户名&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"form.username"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@blur=<span class="code-string">"validateUsername"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"请输入用户名"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:class=<span class="code-string">"{ 'error': errors.username }"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span v-if=<span class="code-string">"errors.username"</span> class=<span class="code-string">"error-msg"</span>&gt;{{ errors.username }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"form-group"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;邮箱&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"form.email"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@blur=<span class="code-string">"validateEmail"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"请输入邮箱"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:class=<span class="code-string">"{ 'error': errors.email }"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span v-if=<span class="code-string">"errors.email"</span> class=<span class="code-string">"error-msg"</span>&gt;{{ errors.email }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"form-group"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;密码&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"form.password"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=<span class="code-string">"password"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@blur=<span class="code-string">"validatePassword"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"请输入密码"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:class=<span class="code-string">"{ 'error': errors.password }"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span v-if=<span class="code-string">"errors.password"</span> class=<span class="code-string">"error-msg"</span>&gt;{{ errors.password }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"form-actions"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=<span class="code-string">"submit"</span> :disabled=<span class="code-string">"!isFormValid"</span>&gt;注册&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=<span class="code-string">"button"</span> @click=<span class="code-string">"resetForm"</span>&gt;重置&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/form&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div v-if=<span class="code-string">"submitSuccess"</span> class=<span class="code-string">"success-message"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注册成功！<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> form = ref({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> errors = ref({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> submitSuccess = ref(<span class="code-boolean">false</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> validateUsername = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (form.value.username.length &lt; <span class="code-number">3</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value.username = <span class="code-string">'用户名至少需要3个字符'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value.username = <span class="code-string">''</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> validateEmail = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (!emailRegex.test(form.value.email)) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value.email = <span class="code-string">'请输入有效的邮箱地址'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value.email = <span class="code-string">''</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> validatePassword = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (form.value.password.length &lt; <span class="code-number">6</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value.password = <span class="code-string">'密码至少需要6个字符'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value.password = <span class="code-string">''</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> isFormValid = computed(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> !errors.value.username &amp;&amp; <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!errors.value.email &amp;&amp; <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;!errors.value.password &amp;&amp; <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form.value.username &amp;&amp; <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form.value.email &amp;&amp; <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form.value.password;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> submitForm = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (isFormValid.value) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'提交表单:'</span>, form.value);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submitSuccess.value = <span class="code-boolean">true</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submitSuccess.value = <span class="code-boolean">false</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, <span class="code-number">3000</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> resetForm = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form.value = {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors.value = {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;username: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-string">''</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;password: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submitSuccess.value = <span class="code-boolean">false</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;errors,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submitSuccess,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validateUsername,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validateEmail,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;validatePassword,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isFormValid,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submitForm,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resetForm<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h3>性能优化建议</h3>
+            <p>在使用事件处理时，有一些性能优化的建议：</p>
+            
+            <ul>
+                <li>避免在模板中使用复杂的内联表达式，应将逻辑封装到方法中</li>
+                <li>对于不需要传递参数的事件，使用方法引用而不是内联函数</li>
+                <li>使用事件修饰符来避免不必要的DOM操作</li>
+                <li>对于大量相似元素的事件，考虑使用事件委托</li>
+                <li>在组件销毁时，移除手动添加的事件监听器</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个交互式表单，包含各种验证和事件处理</li>
+                    <li>实现一个带有键盘快捷键的待办事项应用</li>
+                    <li>创建一个拖拽功能，使用鼠标事件处理</li>
+                    <li>实现一个带有热键的文本编辑器</li>
+                    <li>创建一个使用组合式API的复杂事件处理示例</li>
+                    <li>实现一个事件委托的性能优化示例</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="list-rendering.html" class="nav-link">← 上一课：列表渲染</a>
+            <a href="../index.html" class="nav-link">返回首页 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>
