@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据类型与类型检测 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .data-type-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .data-type-table th, .data-type-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .data-type-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .data-type-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .type-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .type-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .type-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .type-value {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 基础语法 > 数据类型与类型检测</div>
+            <h1>数据类型与类型检测</h1>
+        </header>
+        
+        <div class="content">
+            <p>JavaScript是一种动态类型语言，变量的类型在运行时确定。JavaScript有7种原始数据类型和1种引用数据类型。理解数据类型是学习JavaScript的基础。</p>
+            
+            <div class="key-features">
+                <h3>JavaScript数据类型概览</h3>
+                <ul>
+                    <li><strong>原始类型（Primitive Types）</strong>：number, string, boolean, null, undefined, symbol, bigint</li>
+                    <li><strong>引用类型（Reference Types）</strong>：object（包括数组、函数、日期等）</li>
+                    <li><strong>typeof操作符</strong>：用于检测数据类型</li>
+                    <li><strong>特殊值</strong>：NaN, Infinity, -Infinity</li>
+                </ul>
+            </div>
+            
+            <h2>原始数据类型</h2>
+            <p>原始数据类型存储在栈内存中，赋值时会创建值的副本。</p>
+            
+            <table class="data-type-table">
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>示例</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Number</td>
+                        <td>42, 3.14, Infinity, NaN</td>
+                        <td>包括整数和浮点数，以及特殊值</td>
+                    </tr>
+                    <tr>
+                        <td>String</td>
+                        <td>"Hello", 'World', `Template`</td>
+                        <td>文本数据，可用单引号、双引号或反引号</td>
+                    </tr>
+                    <tr>
+                        <td>Boolean</td>
+                        <td>true, false</td>
+                        <td>逻辑值，只有两个值</td>
+                    </tr>
+                    <tr>
+                        <td>Undefined</td>
+                        <td>undefined</td>
+                        <td>变量声明但未赋值时的默认值</td>
+                    </tr>
+                    <tr>
+                        <td>Null</td>
+                        <td>null</td>
+                        <td>表示"空值"或"无对象"</td>
+                    </tr>
+                    <tr>
+                        <td>Symbol</td>
+                        <td>Symbol('description')</td>
+                        <td>ES6引入，表示唯一、不可变的值</td>
+                    </tr>
+                    <tr>
+                        <td>BigInt</td>
+                        <td>123n, BigInt(123)</td>
+                        <td>ES2020引入，表示任意精度的整数</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Number 类型</h3>
+            <p>JavaScript中的数字类型包括整数和浮点数，以及一些特殊值：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 整数和浮点数</span><br>
+                <span class="code-keyword">let</span> integer = <span class="code-number">42</span>;<br>
+                <span class="code-keyword">let</span> float = <span class="code-number">3.14159</span>;<br><br>
+                
+                <span class="code-comment">// 特殊值</span><br>
+                <span class="code-keyword">let</span> positiveInfinity = Infinity;<br>
+                <span class="code-keyword">let</span> negativeInfinity = -Infinity;<br>
+                <span class="code-keyword">let</span> notANumber = NaN; <span class="code-comment">// "Not-a-Number"</span><br><br>
+                
+                <span class="code-comment">// 进制表示</span><br>
+                <span class="code-keyword">let</span> binary = <span class="code-number">0b1010</span>; <span class="code-comment">// 二进制</span><br>
+                <span class="code-keyword">let</span> octal = <span class="code-number">0o755</span>; <span class="code-comment">// 八进制</span><br>
+                <span class="code-keyword">let</span> hex = <span class="code-number">0xFF</span>; <span class="code-comment">// 十六进制</span><br><br>
+                
+                <span class="code-comment">// 精度问题示例</span><br>
+                console.log(<span class="code-number">0.1</span> + <span class="code-number">0.2</span>); <span class="code-comment">// 0.30000000000000004，不是0.3</span><br>
+                console.log(<span class="code-number">0.1</span> + <span class="code-number">0.2</span> === <span class="code-number">0.3</span>); <span class="code-comment">// false</span><br>
+            </div>
+            
+            <h3>String 类型</h3>
+            <p>字符串是文本数据，JavaScript提供了多种创建字符串的方式：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 不同的字符串表示方式</span><br>
+                <span class="code-keyword">let</span> singleQuote = <span class="code-string">'Single quotes'</span>;<br>
+                <span class="code-keyword">let</span> doubleQuote = <span class="code-string">"Double quotes"</span>;<br>
+                <span class="code-keyword">let</span> templateLiteral = `<span class="code-string">Template literal with ${singleQuote}</span>`;<br><br>
+                
+                <span class="code-comment">// 字符串操作</span><br>
+                <span class="code-keyword">let</span> greeting = <span class="code-string">"Hello, "</span>;<br>
+                <span class="code-keyword">let</span> name = <span class="code-string">"JavaScript"</span>;<br>
+                <span class="code-keyword">let</span> message = greeting + name; <span class="code-comment">// 字符串拼接</span><br>
+                console.log(message); <span class="code-comment">// "Hello, JavaScript"</span><br><br>
+                
+                <span class="code-keyword">let</span> str = <span class="code-string">"JavaScript"</span>;<br>
+                console.log(str.length); <span class="code-comment">// 10，字符串长度</span><br>
+                console.log(str[<span class="code-number">0</span>]); <span class="code-comment">// "J"，访问第一个字符</span><br>
+            </div>
+            
+            <h3>Boolean 类型</h3>
+            <p>布尔类型只有两个值：true 和 false，用于逻辑判断：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">let</span> isTrue = <span class="code-boolean">true</span>;<br>
+                <span class="code-keyword">let</span> isFalse = <span class="code-boolean">false</span>;<br><br>
+                
+                <span class="code-comment">// 布尔转换</span><br>
+                console.log(Boolean(<span class="code-number">0</span>)); <span class="code-comment">// false</span><br>
+                console.log(Boolean(<span class="code-number">1</span>)); <span class="code-comment">// true</span><br>
+                console.log(Boolean(<span class="code-string">""</span>)); <span class="code-comment">// false</span><br>
+                console.log(Boolean(<span class="code-string">"hello"</span>)); <span class="code-comment">// true</span><br>
+            </div>
+            
+            <h3>Undefined 和 Null</h3>
+            <p>Undefined表示变量已声明但未赋值，Null表示有意的"空值"：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">let</span> uninitializedVariable; <span class="code-comment">// 声明但未初始化</span><br>
+                console.log(uninitializedVariable); <span class="code-comment">// undefined</span><br><br>
+                
+                <span class="code-keyword">let</span> emptyValue = <span class="code-boolean">null</span>; <span class="code-comment">// 明确设置为null</span><br>
+                console.log(emptyValue); <span class="code-comment">// null</span><br><br>
+                
+                <span class="code-comment">// typeof 对 null 的处理是一个历史遗留问题</span><br>
+                console.log(typeof uninitializedVariable); <span class="code-comment">// "undefined"</span><br>
+                console.log(typeof emptyValue); <span class="code-comment">// "object" (这是一个历史bug)</span><br>
+            </div>
+            
+            <h3>Symbol 和 BigInt 类型</h3>
+            <p>ES6和ES2020引入的新原始类型：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// Symbol - 独一无二的值</span><br>
+                <span class="code-keyword">const</span> sym1 = Symbol(<span class="code-string">'description'</span>);<br>
+                <span class="code-keyword">const</span> sym2 = Symbol(<span class="code-string">'description'</span>);<br>
+                console.log(sym1 === sym2); <span class="code-comment">// false，即使描述相同也是不同的</span><br><br>
+                
+                <span class="code-comment">// 用作对象属性键</span><br>
+                <span class="code-keyword">const</span> obj = {};<br>
+                <span class="code-keyword">const</span> symKey = Symbol(<span class="code-string">'key'</span>);<br>
+                obj[symKey] = <span class="code-string">'private value'</span>;<br>
+                console.log(obj[symKey]); <span class="code-comment">// 'private value'</span><br><br>
+                
+                <span class="code-comment">// BigInt - 任意精度整数</span><br>
+                <span class="code-keyword">const</span> bigNumber = <span class="code-number">1234567890123456789012345678901234567890n</span>;<br>
+                <span class="code-keyword">const</span> anotherBig = BigInt(<span class="code-string">"9876543210987654321098765432109876543210"</span>);<br>
+                console.log(bigNumber + anotherBig); <span class="code-comment">// 正确处理大整数</span><br>
+            </div>
+            
+            <div class="type-examples">
+                <div class="type-example">
+                    <div class="type-name">Number</div>
+                    <div class="type-value">42</div>
+                </div>
+                <div class="type-example">
+                    <div class="type-name">String</div>
+                    <div class="type-value">"Hello"</div>
+                </div>
+                <div class="type-example">
+                    <div class="type-name">Boolean</div>
+                    <div class="type-value">true</div>
+                </div>
+                <div class="type-example">
+                    <div class="type-name">Undefined</div>
+                    <div class="type-value">undefined</div>
+                </div>
+                <div class="type-example">
+                    <div class="type-name">Null</div>
+                    <div class="type-value">null</div>
+                </div>
+                <div class="type-example">
+                    <div class="type-name">Symbol</div>
+                    <div class="type-value">Symbol()</div>
+                </div>
+                <div class="type-example">
+                    <div class="type-name">BigInt</div>
+                    <div class="type-value">123n</div>
+                </div>
+            </div>
+            
+            <h2>引用数据类型</h2>
+            <p>引用类型（如对象、数组、函数）存储在堆内存中，变量中存储的是指向该对象的引用。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 对象</span><br>
+                <span class="code-keyword">const</span> person = {<br>
+                &nbsp;&nbsp;name: <span class="code-string">"John"</span>,<br>
+                &nbsp;&nbsp;age: <span class="code-number">30</span>,<br>
+                &nbsp;&nbsp;city: <span class="code-string">"New York"</span><br>
+                };<br><br>
+                
+                <span class="code-comment">// 数组</span><br>
+                <span class="code-keyword">const</span> fruits = [<span class="code-string">"apple"</span>, <span class="code-string">"banana"</span>, <span class="code-string">"orange"</span>];<br><br>
+                
+                <span class="code-comment">// 函数</span><br>
+                <span class="code-keyword">function</span> greet(name) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Hello, "</span> + name;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 引用类型赋值</span><br>
+                <span class="code-keyword">const</span> originalObj = { value: <span class="code-number">10</span> };<br>
+                <span class="code-keyword">const</span> copiedRef = originalObj; <span class="code-comment">// 复制引用，不是值</span><br>
+                copiedRef.value = <span class="code-number">20</span>;<br>
+                console.log(originalObj.value); <span class="code-comment">// 20，原对象也被修改了</span><br>
+            </div>
+            
+            <h2>类型检测方法</h2>
+            <p>JavaScript提供了多种检测数据类型的方法：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// typeof 操作符 - 适用于原始类型</span><br>
+                console.log(typeof <span class="code-number">42</span>); <span class="code-comment">// "number"</span><br>
+                console.log(typeof <span class="code-string">'hello'</span>); <span class="code-comment">// "string"</span><br>
+                console.log(typeof <span class="code-boolean">true</span>); <span class="code-comment">// "boolean"</span><br>
+                console.log(typeof undefined); <span class="code-comment">// "undefined"</span><br>
+                console.log(typeof Symbol()); <span class="code-comment">// "symbol"</span><br>
+                console.log(typeof <span class="code-number">123n</span>); <span class="code-comment">// "bigint"</span><br><br>
+                
+                <span class="code-comment">// typeof 对对象的检测</span><br>
+                console.log(typeof {}); <span class="code-comment">// "object"</span><br>
+                console.log(typeof []); <span class="code-comment">// "object"</span><br>
+                console.log(typeof <span class="code-keyword">function</span>(){}); <span class="code-comment">// "function"</span><br>
+                console.log(typeof <span class="code-boolean">null</span>); <span class="code-comment">// "object" (历史bug)</span><br><br>
+                
+                <span class="code-comment">// instanceof 操作符 - 适用于对象类型</span><br>
+                console.log([] instanceof Array); <span class="code-comment">// true</span><br>
+                console.log({} instanceof Object); <span class="code-comment">// true</span><br>
+                console.log(<span class="code-keyword">function</span>(){} instanceof Function); <span class="code-comment">// true</span><br><br>
+                
+                <span class="code-comment">// Object.prototype.toString.call() - 最准确的方法</span><br>
+                console.log(Object.prototype.toString.call(<span class="code-number">42</span>)); <span class="code-comment">// "[object Number]"</span><br>
+                console.log(Object.prototype.toString.call(<span class="code-string">"hello"</span>)); <span class="code-comment">// "[object String]"</span><br>
+                console.log(Object.prototype.toString.call([])); <span class="code-comment">// "[object Array]"</span><br>
+                console.log(Object.prototype.toString.call(<span class="code-boolean">null</span>)); <span class="code-comment">// "[object Null]"</span><br>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">值类型 (原始类型)</div>
+                    <ul>
+                        <li>存储在栈内存中</li>
+                        <li>赋值时创建副本</li>
+                        <li>比较时比较值</li>
+                        <li>包括：number, string, boolean, null, undefined, symbol, bigint</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">引用类型</div>
+                    <ul>
+                        <li>存储在堆内存中</li>
+                        <li>变量存储指向对象的引用</li>
+                        <li>比较时比较引用地址</li>
+                        <li>包括：object, array, function 等</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建不同类型的变量并使用typeof检测其类型</li>
+                    <li>尝试比较两个相同值的原始类型和对象类型，观察差异</li>
+                    <li>使用Symbol作为对象属性键，验证其唯一性</li>
+                    <li>创建一个大整数使用BigInt，并进行计算</li>
+                    <li>实现一个通用的类型检测函数</li>
+                </ul>
+            </div>
+            
+            <h2>类型转换</h2>
+            <p>JavaScript中有显式和隐式类型转换：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 显式转换</span><br>
+                <span class="code-keyword">let</span> str = <span class="code-string">"123"</span>;<br>
+                <span class="code-keyword">let</span> num = Number(str); <span class="code-comment">// 转换为数字</span><br>
+                console.log(num); <span class="code-comment">// 123</span><br><br>
+                
+                <span class="code-keyword">let</span> bool = Boolean(<span class="code-string">"hello"</span>); <span class="code-comment">// 转换为布尔</span><br>
+                console.log(bool); <span class="code-comment">// true</span><br><br>
+                
+                <span class="code-comment">// 隐式转换</span><br>
+                console.log(<span class="code-string">"5"</span> - <span class="code-number">3</span>); <span class="code-comment">// 2 (字符串转数字)</span><br>
+                console.log(<span class="code-string">"5"</span> + <span class="code-number">3</span>); <span class="code-comment">// "53" (数字转字符串)</span><br>
+                console.log(<span class="code-string">"5"</span> == <span class="code-number">5</span>); <span class="code-comment">// true (类型转换)</span><br>
+                console.log(<span class="code-string">"5"</span> === <span class="code-number">5</span>); <span class="code-comment">// false (不转换类型)</span><br>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="variables.html" class="nav-link">← 上一课：变量与常量</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="operators.html" class="nav-link">下一课：运算符 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

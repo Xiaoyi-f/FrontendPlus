@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>进阶特性 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .advanced-topics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .advanced-topics-table th, .advanced-topics-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .advanced-topics-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .advanced-topics-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .topic-link {
+            display: block;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+        }
+        
+        .topic-link:hover {
+            background: #e3f2fd;
+            transform: translateX(5px);
+        }
+        
+        .topic-title {
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .topic-description {
+            margin-top: 8px;
+            color: #7f8c8d;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 进阶特性</div>
+            <h1>JavaScript进阶特性</h1>
+        </header>
+        
+        <div class="content">
+            <p>欢迎来到JavaScript进阶特性部分！在这里，我们将深入探讨JavaScript的高级概念和特性，这些知识将帮助你从JavaScript开发者转变为JavaScript专家。</p>
+            
+            <div class="key-features">
+                <h3>进阶特性概览</h3>
+                <ul>
+                    <li><strong>闭包</strong>：理解作用域和闭包的概念</li>
+                    <li><strong>原型与继承</strong>：JavaScript的面向对象机制</li>
+                    <li><strong>异步编程</strong>：Promise、async/await等</li>
+                    <li><strong>ES6+新特性</strong>：现代JavaScript的新功能</li>
+                    <li><strong>错误处理</strong>：异常处理和调试技巧</li>
+                    <li><strong>模块化</strong>：代码组织和模块系统</li>
+                </ul>
+            </div>
+            
+            <h2>进阶主题列表</h2>
+            <p>以下是我们将在进阶部分探讨的主要主题：</p>
+            
+            <table class="advanced-topics-table">
+                <thead>
+                    <tr>
+                        <th>主题</th>
+                        <th>难度</th>
+                        <th>重要性</th>
+                        <th>简介</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>闭包与作用域</td>
+                        <td>高级</td>
+                        <td>★★★★★</td>
+                        <td>深入理解JavaScript作用域链和闭包机制</td>
+                    </tr>
+                    <tr>
+                        <td>原型与继承</td>
+                        <td>高级</td>
+                        <td>★★★★★</td>
+                        <td>掌握JavaScript的面向对象编程模型</td>
+                    </tr>
+                    <tr>
+                        <td>异步编程</td>
+                        <td>中高级</td>
+                        <td>★★★★★</td>
+                        <td>Promise、async/await和事件循环</td>
+                    </tr>
+                    <tr>
+                        <td>ES6+新特性</td>
+                        <td>中级</td>
+                        <td>★★★★☆</td>
+                        <td>解构、展开运算符、类、模块等</td>
+                    </tr>
+                    <tr>
+                        <td>错误处理</td>
+                        <td>中级</td>
+                        <td>★★★☆☆</td>
+                        <td>try/catch、错误类型和调试技巧</td>
+                    </tr>
+                    <tr>
+                        <td>模块化</td>
+                        <td>中级</td>
+                        <td>★★★★☆</td>
+                        <td>ES6模块、CommonJS和其他模块系统</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>学习路径</h2>
+            <p>点击以下链接开始学习各个进阶主题：</p>
+            
+            <a href="closures.html" class="topic-link">
+                <div class="topic-title">1. 闭包与作用域</div>
+                <div class="topic-description">理解JavaScript的词法作用域、闭包概念及其实际应用</div>
+            </a>
+            
+            <a href="prototypes.html" class="topic-link">
+                <div class="topic-title">2. 原型与继承</div>
+                <div class="topic-description">深入理解JavaScript原型链、继承机制和面向对象编程</div>
+            </a>
+            
+            <a href="async.html" class="topic-link">
+                <div class="topic-title">3. 异步编程</div>
+                <div class="topic-description">掌握Promise、async/await和事件循环机制</div>
+            </a>
+            
+            <a href="es6-features.html" class="topic-link">
+                <div class="topic-title">4. ES6+新特性</div>
+                <div class="topic-description">探索现代JavaScript的新功能和编程范式</div>
+            </a>
+            
+            <a href="error-handling.html" class="topic-link">
+                <div class="topic-title">5. 错误处理</div>
+                <div class="topic-description">学习JavaScript错误处理机制和调试技巧</div>
+            </a>
+            
+            <a href="modules.html" class="topic-link">
+                <div class="topic-title">6. 模块化</div>
+                <div class="topic-description">理解JavaScript模块化概念和ES6模块系统</div>
+            </a>
+        </div>
+        
+        <nav>
+            <a href="../basics/strings.html" class="nav-link">← 上一课：字符串处理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

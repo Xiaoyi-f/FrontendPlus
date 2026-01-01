@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js进阶特性篇 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .topic-list {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+        
+        .topic-list li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .topic-link {
+            color: #42b983;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .topic-link:hover {
+            text-decoration: underline;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .difficulty.beginner {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .difficulty.intermediate {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .difficulty.advanced {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 进阶特性篇</div>
+            <h1>Vue.js进阶特性篇</h1>
+        </header>
+        
+        <div class="content">
+            <p>欢迎来到Vue.js进阶特性篇！在这一部分，我们将深入探讨Vue.js的高级功能和特性，包括组合式API、响应式原理、Teleport、Suspense等高级概念。通过学习这些内容，你将能够构建更复杂、更高效的Vue.js应用。</p>
+            
+            <div class="key-features">
+                <h3>进阶特性概览</h3>
+                <ul>
+                    <li><strong>组合式API</strong>：更灵活的逻辑组织方式</li>
+                    <li><strong>响应式原理</strong>：深入理解Vue的响应式系统</li>
+                    <li><strong>Teleport</strong>：将组件内容渲染到DOM树的任何位置</li>
+                    <li><strong>Suspense</strong>：处理异步组件的加载状态</li>
+                    <li><strong>自定义指令</strong>：创建可重用的DOM操作逻辑</li>
+                    <li><strong>渲染函数</strong>：使用JavaScript代替模板</li>
+                </ul>
+            </div>
+            
+            <h2>进阶特性课程列表</h2>
+            <ul class="topic-list">
+                <li>
+                    <a href="composition-api.html" class="topic-link">组合式API (Composition API)</a>
+                    <span class="difficulty intermediate">中级</span>
+                    <p>学习如何使用组合式API组织组件逻辑，更灵活地复用功能代码。</p>
+                </li>
+                <li>
+                    <a href="reactivity.html" class="topic-link">响应式原理深入</a>
+                    <span class="difficulty advanced">高级</span>
+                    <p>深入了解Vue 3的响应式系统原理，Proxy代理机制，以及如何创建自定义响应式API。</p>
+                </li>
+                <li>
+                    <a href="teleport.html" class="topic-link">Teleport组件</a>
+                    <span class="difficulty intermediate">中级</span>
+                    <p>学习如何使用Teleport组件将内容渲染到DOM树的任何位置，如模态框、弹窗等场景。</p>
+                </li>
+                <li>
+                    <a href="suspense.html" class="topic-link">Suspense组件</a>
+                    <span class="difficulty advanced">高级</span>
+                    <p>处理异步组件和数据加载状态，创建更好的用户体验。</p>
+                </li>
+                <li>
+                    <a href="custom-directives.html" class="topic-link">自定义指令</a>
+                    <span class="difficulty intermediate">中级</span>
+                    <p>创建自定义指令来处理底层DOM操作，扩展Vue的功能。</p>
+                </li>
+                <li>
+                    <a href="render-functions.html" class="topic-link">渲染函数与JSX</a>
+                    <span class="difficulty advanced">高级</span>
+                    <p>使用JavaScript代替模板，创建更灵活的组件渲染逻辑。</p>
+                </li>
+                <li>
+                    <a href="mixins.html" class="topic-link">Mixins与代码复用</a>
+                    <span class="difficulty intermediate">中级</span>
+                    <p>了解Mixins的使用方式，以及在组合式API中如何替代Mixins的逻辑复用模式。</p>
+                </li>
+                <li>
+                    <a href="plugins.html" class="topic-link">插件开发</a>
+                    <span class="difficulty advanced">高级</span>
+                    <p>学习如何开发和使用Vue插件，扩展Vue的功能。</p>
+                </li>
+            </ul>
+            
+            <h2>学习建议</h2>
+            <p>在学习进阶特性之前，请确保你已经掌握了Vue.js的基础知识和组件系统。进阶特性将帮助你：</p>
+            <ul>
+                <li>构建更复杂的应用程序</li>
+                <li>优化应用性能</li>
+                <li>更好地组织代码逻辑</li>
+                <li>解决特定的开发问题</li>
+                <li>提高代码的可维护性</li>
+            </ul>
+            
+            <p>建议按顺序学习这些特性，并在实际项目中实践应用。每个特性都有其适用的场景，理解何时使用何种特性是成为Vue专家的关键。</p>
+        </div>
+        
+        <nav>
+            <a href="../components/component-communication.html" class="nav-link">← 上一课：组件间通信</a>
+            <a href="composition-api.html" class="nav-link">下一课：组合式API →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

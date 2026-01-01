@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinia状态管理 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Pinia状态管理</h1>
+            <p class="subtitle">Vue官方推荐的状态管理</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./vuex.html" class="nav-link">上一课：Vuex状态管理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../routing/basics.html" class="nav-link">下一课：Vue Router基础</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>Pinia核心概念</h3>
+                <ul>
+                    <li><strong>Stores</strong>：状态容器，每个store都有自己的状态、getter和action</li>
+                    <li><strong>State</strong>：存储状态数据</li>
+                    <li><strong>Getters</strong>：计算属性，从state派生出的值</li>
+                    <li><strong>Actions</strong>：修改state的方法，可包含异步操作</li>
+                    <li><strong>Modularity</strong>：模块化，无需命名空间即可创建多个store</li>
+                </ul>
+            </div>
+            
+            <h2>什么是Pinia？</h2>
+            <p>Pinia是Vue.js官方推荐的状态管理库，它是Vue团队开发的新一代状态管理方案。相比于Vuex，Pinia提供了更简洁的API，更好的TypeScript支持，并且具有更小的体积和更好的开发体验。</p>
+            
+            <h2>为什么选择Pinia？</h2>
+            <p>Pinia相比Vuex的优势：</p>
+            <ul>
+                <li>更简洁直观的API</li>
+                <li>完整的TypeScript支持</li>
+                <li>支持DevTools浏览器扩展</li>
+                <li>支持服务端渲染</li>
+                <li>更小的打包体积</li>
+                <li>模块化设计，无需命名空间即可创建多个store</li>
+                <li>在store之间支持交叉引用</li>
+            </ul>
+            
+            <h2>安装和配置Pinia</h2>
+            <p>首先安装Pinia：</p>
+            <div class="code-block">
+npm install pinia
+            </div>
+            
+            <p>然后在Vue应用中安装Pinia：</p>
+            <div class="code-block">
+// main.js
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import App from './App.vue'
+
+const app = createApp(App)
+const pinia = createPinia()
+
+app.use(pinia)
+app.mount('#app')
+            </div>
+            
+            <h2>创建第一个Store</h2>
+            <p>在Pinia中，store是状态容器，每个store都有自己的状态、getter和action。创建一个store需要定义ID和可选的state、getter和action。</p>
+            
+            <div class="code-block">
+// stores/counter.js
+import { defineStore } from 'pinia'
+
+export const useCounterStore = defineStore('counter', {
+  // state: 定义状态
+  state: () => {
+    return {
+      count: 0,
+      name: 'Eduardo',
+      isAdmin: true
+    }
+  },
+  
+  // getters: 定义计算属性
+  getters: {
+    doubleCount: (state) => state.count * 2,
+    doubleCountPlusOne(): number {
+      return this.doubleCount + 1
+    }
+  },
+  
+  // actions: 定义方法
+  actions: {
+    increment() {
+      this.count++
+    },
+    decrement() {
+      this.count--
+    },
+    randomizeCounter() {
+      this.count = Math.floor(Math.random() * 100)
+    }
+  }
+})
+            </div>
+            
+            <h2>在组件中使用Store</h2>
+            <p>在组件中使用store非常简单，只需要导入并调用即可：</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;计数: {{ counter.count }}&lt;/p&gt;
+    &lt;p&gt;双倍计数: {{ counter.doubleCount }}&lt;/p&gt;
+    &lt;button @click="counter.increment"&gt;+&lt;/button&gt;
+    &lt;button @click="counter.decrement"&gt;-&lt;/button&gt;
+    &lt;button @click="counter.randomizeCounter"&gt;随机&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { useCounterStore } from '@/stores/counter'
+
+export default {
+  setup() {
+    const counter = useCounterStore()
+
+    return {
+      counter
+    }
+  }
+}
+&lt;/script&gt;
+            </div>
+            
+            <h2>使用Setup语法糖的Store</h2>
+            <p>在使用[setup](file:///e:\FrontendTeach\VUE快速上手\basics\template-syntax.html#L41-L41)语法的组件中，可以这样使用store：</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;计数: {{ counter.count }}&lt;/p&gt;
+    &lt;p&gt;双倍计数: {{ counter.doubleCount }}&lt;/p&gt;
+    &lt;button @click="increment"&gt;+&lt;/button&gt;
+    &lt;button @click="decrement"&gt;-&lt;/button&gt;
+    &lt;button @click="randomizeCounter"&gt;随机&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { storeToRefs } from 'pinia'
+import { useCounterStore } from '@/stores/counter'
+
+const counter = useCounterStore()
+
+// 使用storeToRefs保持响应性
+const { count, doubleCount } = storeToRefs(counter)
+const { increment, decrement, randomizeCounter } = counter
+&lt;/script&gt;
+            </div>
+            
+            <h2>异步Actions</h2>
+            <p>Actions可以包含异步操作，例如API调用：</p>
+            
+            <div class="code-block">
+// stores/users.js
+import { defineStore } from 'pinia'
+
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    userData: null,
+    loading: false,
+    error: null
+  }),
+  
+  actions: {
+    async fetchUser(id) {
+      this.loading = true
+      try {
+        const response = await fetch(`/api/users/${id}`)
+        this.userData = await response.json()
+      } catch (error) {
+        this.error = error.message
+      } finally {
+        this.loading = false
+      }
+    },
+    
+    async createUser(userData) {
+      this.loading = true
+      try {
+        const response = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData)
+        })
+        const newUser = await response.json()
+        // 更新本地状态
+        this.userData = newUser
+      } catch (error) {
+        this.error = error.message
+      } finally {
+        this.loading = false
+      }
+    }
+  }
+})
+            </div>
+            
+            <h2>Store间的相互引用</h2>
+            <p>在Pinia中，store之间可以相互引用：</p>
+            
+            <div class="code-block">
+// stores/session.js
+import { defineStore } from 'pinia'
+import { useUserStore } from '@/stores/user'
+
+export const useSessionStore = defineStore('session', {
+  state: () => ({
+    token: localStorage.getItem('token'),
+    isLoggedIn: false
+  }),
+  
+  actions: {
+    login(credentials) {
+      // 实现登录逻辑
+      // ...
+      this.isLoggedIn = true
+      
+      // 可以访问其他store
+      const userStore = useUserStore()
+      userStore.fetchUser(credentials.id)
+    },
+    
+    logout() {
+      this.token = null
+      this.isLoggedIn = false
+      localStorage.removeItem('token')
+      
+      // 重置用户信息
+      const userStore = useUserStore()
+      userStore.$reset()
+    }
+  }
+})
+            </div>
+            
+            <h2>Store的$patch方法</h2>
+            <p>除了直接修改state，还可以使用$patch方法批量更新state：</p>
+            
+            <div class="code-block">
+const counter = useCounterStore()
+
+// 用对象批量更新
+counter.$patch({
+  count: counter.count + 1,
+  name: 'Abraham'
+})
+
+// 用函数批量更新（更高效）
+counter.$patch((state) => {
+  state.count++
+  state.name = 'Abraham'
+})
+            </div>
+            
+            <h2>Store的$subscribe方法</h2>
+            <p>可以监听store的变化，类似于Vuex的subscribe：</p>
+            
+            <div class="code-block">
+const counter = useCounterStore()
+
+// 订阅状态变化
+counter.$subscribe((mutation, state) => {
+  // mutation: { type: 'direct', storeId: 'counter', payload: ... }
+  console.log('状态已更新:', mutation, state)
+  
+  // 持久化到localStorage
+  localStorage.setItem('counter', JSON.stringify(state))
+}, { detached: true })
+
+// 在组件卸载时清理订阅
+onUnmounted(() => {
+  // 清理订阅的逻辑
+})
+            </div>
+            
+            <h2>插件系统</h2>
+            <p>Pinia支持插件系统，可以扩展store的功能：</p>
+            
+            <div class="code-block">
+import { defineStore } from 'pinia'
+
+// 创建插件
+const myPlugin = ({ store }) => {
+  // 为每个store添加新属性
+  store.$subscribe((mutation, state) => {
+    // 每次mutation后执行
+    console.log('Mutation:', mutation)
+  })
+  
+  // 返回要添加到store的属性
+  return { 
+    secret: '秘密信息',
+    created: Date.now()
+  }
+}
+
+// 使用插件
+const pinia = createPinia()
+pinia.use(myPlugin)
+
+app.use(pinia)
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./vuex.html" class="nav-link">上一课：Vuex状态管理</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../routing/basics.html" class="nav-link">下一课：Vue Router基础</a>
+        </div>
+        
+        <footer>
+            <p>Pinia状态管理 - Vue.js官方推荐的状态管理方案</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

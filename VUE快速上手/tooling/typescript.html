@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript集成 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TypeScript集成</h1>
+            <p class="subtitle">Vue+TS开发</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./ssr.html" class="nav-link">上一课：服务端渲染</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../projects/todo.html" class="nav-link">下一课：待办事项应用</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>TypeScript集成核心概念</h3>
+                <ul>
+                    <li><strong>类型定义</strong>：为Vue组件和API提供类型支持</li>
+                    <li><strong>组合式API类型</strong>：对ref、reactive等API的类型支持</li>
+                    <li><strong>选项式API类型</strong>：对选项式API的类型支持</li>
+                    <li><strong>Props类型</strong>：定义组件props的类型</li>
+                    <li><strong>事件类型</strong>：定义组件事件的类型</li>
+                    <li><strong>插槽类型</strong>：定义组件插槽的类型</li>
+                </ul>
+            </div>
+            
+            <h2>为什么在Vue中使用TypeScript？</h2>
+            <p>TypeScript为JavaScript增加了静态类型系统，与Vue结合使用有以下优势：</p>
+            <ul>
+                <li><strong>类型安全</strong>：在编译时捕获错误，而不是运行时</li>
+                <li><strong>更好的IDE支持</strong>：智能补全、重构、跳转到定义</li>
+                <li><strong>文档化代码</strong>：类型定义本身就是一种文档</li>
+                <li><strong>提高代码质量</strong>：减少运行时错误</li>
+                <li><strong>团队协作</strong>：更清晰的API契约</li>
+            </ul>
+            
+            <h2>安装和配置</h2>
+            <p>在Vue项目中添加TypeScript支持：</p>
+            
+            <div class="code-block">
+# 使用Vue CLI创建TypeScript项目
+vue create my-ts-project
+# 在创建过程中选择TypeScript功能
+
+# 或者为现有项目添加TypeScript
+vue add typescript
+</div>
+            
+            <p>使用Vite创建TypeScript项目：</p>
+            
+            <div class="code-block">
+npm create vue@latest my-ts-project
+# 在交互式提示中选择TypeScript选项
+
+cd my-ts-project
+npm install
+</div>
+            
+            <h2>TypeScript配置文件</h2>
+            <p>创建[tsconfig.json](file:///e:\FrontendTeach\JS考点笔记\40. 实现一个深比较 isEqual 函数.md#L14-L14)配置文件：</p>
+            
+            <div class="code-block">
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    /* Vue相关配置 */
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*", "src/**/*.vue"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+</div>
+            
+            <h2>组合式API中的TypeScript</h2>
+            <p>在组合式API中使用TypeScript非常直观：</p>
+            
+            <div class="code-block">
+// src/components/UserProfile.vue
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h1&gt;{{ user.name }}&lt;/h1&gt;
+    &lt;p&gt;邮箱: {{ user.email }}&lt;/p&gt;
+    &lt;p&gt;年龄: {{ user.age }}&lt;/p&gt;
+    &lt;button @click="updateAge"&gt;增加年龄&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+import { ref, computed } from 'vue'
+
+// 定义用户类型
+interface User {
+  name: string
+  email: string
+  age: number
+  id?: number
+}
+
+// 使用类型注解定义响应式数据
+const user = ref<User>({
+  name: 'John Doe',
+  email: 'john@example.com',
+  age: 30
+})
+
+// 使用泛型定义响应式数据
+const loading = ref<boolean>(false)
+
+// 类型推断的计算属性
+const isAdult = computed(() => user.value.age >= 18)
+
+// 类型安全的函数
+const updateAge = (): void => {
+  user.value.age += 1
+}
+
+// 定义异步函数
+const fetchUser = async (id: number): Promise&lt;User&gt; => {
+  loading.value = true
+  try {
+    const response = await fetch(`/api/users/${id}`)
+    return await response.json()
+  } finally {
+    loading.value = false
+  }
+}
+&lt;/script&gt;
+</div>
+            
+            <h2>Props和Emit的类型定义</h2>
+            <p>在Vue 3中，可以为Props和Emit提供完整的类型支持：</p>
+            
+            <div class="code-block">
+// src/components/UserCard.vue
+&lt;template&gt;
+  &lt;div class="user-card"&gt;
+    &lt;h3&gt;{{ user.name }}&lt;/h3&gt;
+    &lt;p&gt;{{ user.email }}&lt;/p&gt;
+    &lt;button @click="handleEdit"&gt;编辑&lt;/button&gt;
+    &lt;button @click="handleDelete"&gt;删除&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+// 定义Props类型
+interface User {
+  id: number
+  name: string
+  email: string
+  avatar?: string
+}
+
+// 使用defineProps定义props类型
+type Props = {
+  user: User
+  size?: 'small' | 'medium' | 'large'
+  showAvatar?: boolean
+}
+
+const props = withDefaults(defineProps&lt;Props&gt;(), {
+  size: 'medium',
+  showAvatar: true
+})
+
+// 定义Emit类型
+interface Emits {
+  (e: 'edit', userId: number): void
+  (e: 'delete', userId: number): void
+  (e: 'update:status', status: string): void
+}
+
+const emit = defineEmits&lt;Emits&gt;()
+
+// 使用类型安全的事件处理
+const handleEdit = () => {
+  emit('edit', props.user.id)
+}
+
+const handleDelete = () => {
+  emit('delete', props.user.id)
+}
+&lt;/script&gt;
+</div>
+            
+            <h2>使用TypeScript定义组件</h2>
+            <p>在选项式API中使用TypeScript：</p>
+            
+            <div class="code-block">
+// src/components/Counter.vue
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;h2&gt;计数器: {{ count }}&lt;/h2&gt;
+    &lt;button @click="increment"&gt;+1&lt;/button&gt;
+    &lt;button @click="decrement"&gt;-1&lt;/button&gt;
+    &lt;button @click="reset"&gt;重置&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script lang="ts"&gt;
+import { defineComponent } from 'vue'
+
+interface CounterData {
+  count: number
+  initialCount: number
+}
+
+export default defineComponent({
+  name: 'Counter',
+  props: {
+    initial: {
+      type: Number,
+      default: 0
+    }
+  },
+  data(): CounterData {
+    return {
+      count: this.initial,
+      initialCount: this.initial
+    }
+  },
+  computed: {
+    isPositive(): boolean {
+      return this.count > 0
+    }
+  },
+  methods: {
+    increment(): void {
+      this.count++
+    },
+    decrement(): void {
+      this.count--
+    },
+    reset(): void {
+      this.count = this.initialCount
+    }
+  }
+})
+&lt;/script&gt;
+</div>
+            
+            <h2>类型声明文件</h2>
+            <p>为第三方库和全局变量创建类型声明：</p>
+            
+            <div class="code-block">
+// src/types/index.ts
+export interface ApiResponse&lt;T&gt; {
+  data: T
+  message: string
+  success: boolean
+  code: number
+}
+
+export interface Pagination {
+  page: number
+  size: number
+  total: number
+}
+
+// src/shims-vue.d.ts
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent&lt;{}, {}, any&gt;
+  export default component
+}
+</div>
+            
+            <h2>可组合函数(Composables)的类型</h2>
+            <p>定义类型安全的可组合函数：</p>
+            
+            <div class="code-block">
+// src/composables/useApi.ts
+import { ref, Ref } from 'vue'
+
+export interface ApiResult&lt;T&gt; {
+  data: Ref&lt;T | null&gt;
+  loading: Ref&lt;boolean&gt;
+  error: Ref&lt;string | null&gt;
+  execute: () => Promise&lt;void&gt;
+}
+
+export function useApi&lt;T&gt;(url: string): ApiResult&lt;T&gt; {
+  const data = ref&lt;T | null&gt;(null)
+  const loading = ref&lt;boolean&gt;(true)
+  const error = ref&lt;string | null&gt;(null)
+
+  const execute = async (): Promise&lt;void&gt; => {
+    try {
+      loading.value = true
+      error.value = null
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      data.value = await response.json()
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'An error occurred'
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {
+    data,
+    loading,
+    error,
+    execute
+  }
+}
+
+// src/composables/useLocalStorage.ts
+export function useLocalStorage&lt;T&gt;(key: string, initialValue: T) {
+  const storedValue = localStorage.getItem(key)
+  const value = ref&lt;T&gt;(
+    storedValue ? JSON.parse(storedValue) : initialValue
+  )
+
+  const setValue = (newValue: T) => {
+    value.value = newValue
+    localStorage.setItem(key, JSON.stringify(newValue))
+  }
+
+  return { value, setValue }
+}
+</div>
+            
+            <h2>在组件中使用可组合函数</h2>
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;div v-if="loading"&gt;加载中...&lt;/div&gt;
+    &lt;div v-else-if="error"&gt;错误: {{ error }}&lt;/div&gt;
+    &lt;div v-else&gt;
+      &lt;h2&gt;用户信息&lt;/h2&gt;
+      &lt;p&gt;姓名: {{ data?.name }}&lt;/p&gt;
+      &lt;p&gt;邮箱: {{ data?.email }}&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;button @click="execute"&gt;重新加载&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+import { useApi } from '@/composables/useApi'
+import { User } from '@/types'
+
+const { data, loading, error, execute } = useApi&lt;User&gt;('/api/user/1')
+
+// 组件挂载时执行API调用
+execute()
+&lt;/script&gt;
+</div>
+            
+            <h2>TypeScript最佳实践</h2>
+            <p>在Vue项目中使用TypeScript的最佳实践：</p>
+            
+            <ul>
+                <li><strong>使用接口而不是类型别名</strong>：接口可以被扩展和实现</li>
+                <li><strong>使用精确的类型</strong>：避免使用any和Object</li>
+                <li><strong>利用类型推断</strong>：减少不必要的类型注解</li>
+                <li><strong>创建共享类型</li>
+                <li><strong>使用泛型提高复用性</li>
+            </ul>
+            
+            <div class="code-block">
+// 好的做法：定义明确的接口
+interface User {
+  id: number
+  name: string
+  email: string
+  createdAt: string
+}
+
+// 避免：使用any类型
+// const user: any = fetchUser()  // 不推荐
+
+// 推荐：使用具体类型
+const user = ref&lt;User | null&gt;(null)
+</div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./ssr.html" class="nav-link">上一课：服务端渲染</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../projects/todo.html" class="nav-link">下一课：待办事项应用</a>
+        </div>
+        
+        <footer>
+            <p>TypeScript集成 - Vue.js类型安全开发</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

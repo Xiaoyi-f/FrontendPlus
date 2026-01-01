@@ -1,3 +1,4 @@
+在CSS中，每一个语句其实都可以叫做声明--------------------------》明确....
 1.选择器类型
   element {} 元素选择器
   .class {} 类选择器
@@ -451,14 +452,16 @@ backface-visibility: visible | hidden; /* 背面可见性 */
 ## 八、列表与表格
 /* 列表 */
 list-style: none | disc | circle | square | decimal;
+<!-- list-style得详细写法 -->
 list-style-type: lower-roman | upper-alpha | none;
+
 list-style-position: inside | outside;
 list-style-image: url("icon.png");
 
 /* 表格 */
 border-collapse: collapse | separate; /* 边框合并 */
-border-spacing: 5px; /* 单元格间距 */
-table-layout: auto | fixed; /* 布局方式 */
+border-spacing: 5px; /* 单元格间距->separate模式才有用 */
+table-layout: auto | fixed; /* 布局方式，单元格的大小动态变化/固定 */
 caption-side: top | bottom; /* 标题位置 */
 empty-cells: show | hide; /* 空单元格显示 */
 
@@ -467,10 +470,10 @@ cursor: default | pointer | move | text | not-allowed | wait | help;
 cursor: url("custom-cursor.png"), pointer; /* 自定义光标 */
 pointer-events: auto | none; /* 事件穿透：none不响应鼠标事件 */
 user-select: none | auto | text | all; /* 禁止/允许文本选择 */
-resize: none | both | horizontal | vertical; /* 调整尺寸（textarea） */
-scroll-behavior: auto | smooth; /* 平滑滚动 */
-touch-action: auto | none | pan-x | pan-y; /* 触摸行为 */
-will-change: transform | opacity; /* 提前告知浏览器优化 */
+resize: none | both | horizontal | vertical; /* 控制元素是否可以被用户调整尺寸（textarea） */
+scroll-behavior: auto | smooth; /* 平滑滚动 一般用于锚点得结合使用 */
+touch-action: auto | none | pan-x | pan-y; /* 触摸行为，自动/禁止/横向滚动/纵向滚动 */
+will-change: transform | opacity | contents; /* 提前告知浏览器优化 */
 
 ## 十、滤镜与混合模式（高级视觉）
 /* 滤镜 */
@@ -551,10 +554,25 @@ font-size: 5vmin; /* 视口最小边的1% */
 font-size: 5vmax; /* 视口最大边的1% */
 
 ## 十三、无障碍与布局进阶
+
+WebKit 是一种「浏览器渲染内核」 —— 你可以把它理解成浏览器的 “核心发动机”：
+浏览器只是一个 “外壳”（比如 Chrome 的界面、收藏夹、设置按钮）；
+WebKit 是外壳里的 “发动机”，负责解析 HTML/CSS/JS、渲染网页内容、处理交互（比如点击按钮、滚动页面）
+
+👉 简单记：Chrome/Safari/ 新版 Edge 都属于 WebKit 家族，我们之前写的 ::-webkit-scrollbar 只对这些浏览器生效
+有些浏览器使用的内核不是webkit，火狐就不是使用的webkit内核，所以这些样式无效
+
 /* 滚动条样式（非标准，兼容webkit） */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+scrollbar-color: 滚动条颜色 滚动轨道颜色;  --> 必须传递两个颜色参数才有效果
+scrollbar-width
+注意优先级问题，标准的优先级可能会更高
+
+
+利用层叠性，优先写标准代码，然后在后面再写webkit代码
 
 /* 粘性定位 */
 position: sticky;

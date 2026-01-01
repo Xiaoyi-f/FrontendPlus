@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .test-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .test-step {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .api-table th, .api-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .api-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .api-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 测试</div>
+            <h1>测试</h1>
+        </header>
+        
+        <div class="content">
+            <p>测试是Vue.js应用开发中不可或缺的一部分，它确保了代码的质量和功能的稳定性。本章将介绍Vue.js应用中的测试策略、工具和最佳实践。</p>
+            
+            <div class="key-features">
+                <h3>测试核心概念</h3>
+                <ul>
+                    <li><strong>单元测试</strong>：测试单个组件或函数</li>
+                    <li><strong>集成测试</strong>：测试组件之间的交互</li>
+                    <li><strong>E2E测试</strong>：端到端测试整个应用流程</li>
+                    <li><strong>测试驱动开发</strong>：先写测试再实现功能</li>
+                    <li><strong>测试工具</strong>：使用专业测试工具</li>
+                    <li><strong>测试覆盖率</strong>：衡量测试完整性</li>
+                </ul>
+            </div>
+            
+            <h2>测试类型和流程</h2>
+            <div class="test-diagram">
+                <div class="test-step">单元测试</div>
+                →
+                <div class="test-step">集成测试</div>
+                →
+                <div class="test-step">E2E测试</div>
+                →
+                <div class="test-step">持续集成</div>
+            </div>
+            
+            <p>测试是确保代码质量的重要环节。在Vue.js应用中，我们需要进行不同层次的测试：单元测试用于测试单个组件或函数，集成测试用于测试组件之间的交互，E2E测试用于测试整个应用流程。</p>
+            
+            <h2>Vue测试工具</h2>
+            <p>Vue.js提供了专门的测试工具和库，帮助开发者更轻松地编写测试。</p>
+            
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>工具</th>
+                        <th>用途</th>
+                        <th>特点</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Vue Test Utils</td>
+                        <td>Vue组件测试</td>
+                        <td>官方推荐，深度集成</td>
+                        <td>单元测试、集成测试</td>
+                    </tr>
+                    <tr>
+                        <td>Jest</td>
+                        <td>JavaScript测试框架</td>
+                        <td>快照测试，代码覆盖率</td>
+                        <td>单元测试、函数测试</td>
+                    </tr>
+                    <tr>
+                        <td>Cypress</td>
+                        <td>E2E测试</td>
+                        <td>真实浏览器环境</td>
+                        <td>端到端测试</td>
+                    </tr>
+                    <tr>
+                        <td>Vitest</td>
+                        <td>现代测试框架</td>
+                        <td>快速，Vite集成</td>
+                        <td>单元测试、集成测试</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>单元测试基础</h2>
+            <p>单元测试是测试最小的可测试软件组件（通常是函数或组件）的测试类型。对于Vue组件，单元测试可以验证组件的渲染、事件处理和数据更新。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">简单的Vue组件单元测试示例</div>
+                <div class="code-block">
+                    <span class="code-comment">// Counter.vue - 被测试的组件</span><br>
+                    &lt;template&gt;<br>
+                    &nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"counter"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;p <span class="code-keyword">class</span>=<span class="code-string">"count"</span>&gt;计数: {{ count }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"increment"</span> <span class="code-keyword">class</span>=<span class="code-string">"increment-btn"</span>&gt;增加&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"decrement"</span> <span class="code-keyword">class</span>=<span class="code-string">"decrement-btn"</span>&gt;减少&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/template&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    export default {<br>
+                    &nbsp;&nbsp;name: <span class="code-string">'Counter'</span>,<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;decrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br>
+                    &lt;/script&gt;
+                </div>
+                
+                <div class="code-block">
+                    <span class="code-comment">// Counter.test.js - 组件的单元测试</span><br>
+                    <span class="code-keyword">import</span> { mount } from <span class="code-string">'@vue/test-utils'</span>;<br>
+                    <span class="code-keyword">import</span> { describe, it, expect } from <span class="code-string">'vitest'</span>;<br>
+                    <span class="code-keyword">import</span> Counter from <span class="code-string">'./Counter.vue'</span>;<br><br>
+                    
+                    describe(<span class="code-string">'Counter'</span>, () =&gt; {<br>
+                    &nbsp;&nbsp;it(<span class="code-string">'初始计数应该为0'</span>, () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(Counter);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'.count'</span>).text()).toContain(<span class="code-string">'计数: 0'</span>);<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;it(<span class="code-string">'点击增加按钮应增加计数'</span>, <span class="code-keyword">async</span> () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(Counter);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> incrementBtn = wrapper.find(<span class="code-string">'.increment-btn'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> incrementBtn.trigger(<span class="code-string">'click'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'.count'</span>).text()).toContain(<span class="code-string">'计数: 1'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> incrementBtn.trigger(<span class="code-string">'click'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'.count'</span>).text()).toContain(<span class="code-string">'计数: 2'</span>);<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;it(<span class="code-string">'点击减少按钮应减少计数'</span>, <span class="code-keyword">async</span> () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(Counter);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> decrementBtn = wrapper.find(<span class="code-string">'.decrement-btn'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> decrementBtn.trigger(<span class="code-string">'click'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'.count'</span>).text()).toContain(<span class="code-string">'计数: -1'</span>);<br>
+                    &nbsp;&nbsp;});<br>
+                    });
+                </div>
+            </div>
+            
+            <h2>Vue Test Utils API</h2>
+            <p>Vue Test Utils提供了丰富的API来帮助我们测试Vue组件。以下是一些常用的API方法：</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">mount与shallowMount</div>
+                    <div class="code-block">
+                        <span class="code-keyword">import</span> { mount, shallowMount } from <span class="code-string">'@vue/test-utils'</span>;<br><br>
+                        
+                        <span class="code-comment">// mount - 完全渲染组件及其子组件</span><br>
+                        <span class="code-keyword">const</span> wrapper = mount(MyComponent, {<br>
+                        &nbsp;&nbsp;props: { title: <span class="code-string">'测试标题'</span> },<br>
+                        &nbsp;&nbsp;slots: { default: <span class="code-string">'默认插槽内容'</span> }<br>
+                        });<br><br>
+                        
+                        <span class="code-comment">// shallowMount - 只渲染当前组件，子组件被存根</span><br>
+                        <span class="code-keyword">const</span> shallowWrapper = shallowMount(MyComponent, {<br>
+                        &nbsp;&nbsp;props: { title: <span class="code-string">'浅渲染测试'</span> }<br>
+                        });
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">常用API方法</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> wrapper = mount(MyComponent);<br><br>
+                        
+                        <span class="code-comment">// 查询元素</span><br>
+                        wrapper.find(<span class="code-string">'.class-name'</span>);<br>
+                        wrapper.findAll(<span class="code-string">'button'</span>);<br>
+                        wrapper.get(<span class="code-string">'#id'</span>);<br><br>
+                        
+                        <span class="code-comment">// 触发事件</span><br>
+                        wrapper.trigger(<span class="code-string">'click'</span>);<br>
+                        wrapper.vm.$emit(<span class="code-string">'custom-event'</span>);<br><br>
+                        
+                        <span class="code-comment">// 断言</span><br>
+                        expect(wrapper.text()).toContain(<span class="code-string">'expected text'</span>);<br>
+                        expect(wrapper.classes()).toContain(<span class="code-string">'active'</span>);<br>
+                        expect(wrapper.props()).toHaveProperty(<span class="code-string">'title'</span>);
+                    </div>
+                </div>
+            </div>
+            
+            <h2>测试组件的Props和Events</h2>
+            <p>在测试Vue组件时，我们经常需要测试组件如何处理props和发出的events。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">测试Props和Events</div>
+                <div class="code-block">
+                    <span class="code-comment">// Notification.vue</span><br>
+                    &lt;template&gt;<br>
+                    &nbsp;&nbsp;&lt;div <span class="code-keyword">class</span>=<span class="code-string">"notification"</span> v-if=<span class="code-string">"show"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;{{ title }}&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ message }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"close"</span>&gt;关闭&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/template&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    export default {<br>
+                    &nbsp;&nbsp;name: <span class="code-string">'Notification'</span>,<br>
+                    &nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;title: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: String,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;required: <span class="code-boolean">true</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;message: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: String,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;show: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: Boolean,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default: <span class="code-boolean">true</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;close() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'close'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br>
+                    &lt;/script&gt;
+                </div>
+                
+                <div class="code-block">
+                    <span class="code-comment">// Notification.test.js</span><br>
+                    <span class="code-keyword">import</span> { mount } from <span class="code-string">'@vue/test-utils'</span>;<br>
+                    <span class="code-keyword">import</span> { describe, it, expect } from <span class="code-string">'vitest'</span>;<br>
+                    <span class="code-keyword">import</span> Notification from <span class="code-string">'./Notification.vue'</span>;<br><br>
+                    
+                    describe(<span class="code-string">'Notification'</span>, () =&gt; {<br>
+                    &nbsp;&nbsp;it(<span class="code-string">'正确接收props'</span>, () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(Notification, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: <span class="code-string">'测试标题'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message: <span class="code-string">'测试消息'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.props().title).toBe(<span class="code-string">'测试标题'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.props().message).toBe(<span class="code-string">'测试消息'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'h4'</span>).text()).toBe(<span class="code-string">'测试标题'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'p'</span>).text()).toBe(<span class="code-string">'测试消息'</span>);<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;it(<span class="code-string">'当show为false时不应显示'</span>, () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(Notification, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: <span class="code-string">'测试标题'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show: <span class="code-boolean">false</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.find(<span class="code-string">'.notification'</span>).exists()).toBe(<span class="code-boolean">false</span>);<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;it(<span class="code-string">'点击关闭按钮应发出close事件'</span>, <span class="code-keyword">async</span> () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(Notification, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: <span class="code-string">'测试标题'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> wrapper.find(<span class="code-string">'button'</span>).trigger(<span class="code-string">'click'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.emitted()).toHaveProperty(<span class="code-string">'close'</span>);<br>
+                    &nbsp;&nbsp;});<br>
+                    });
+                </div>
+            </div>
+            
+            <h2>测试异步行为</h2>
+            <p>Vue组件经常包含异步操作，如API调用或定时器。测试这些行为需要特殊的处理方式。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">测试异步行为</div>
+                <div class="code-block">
+                    <span class="code-comment">// AsyncDataComponent.vue</span><br>
+                    &lt;template&gt;<br>
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div v-if=<span class="code-string">"loading"</span>&gt;加载中...&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div v-else&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;{{ data.title }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ data.content }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"loadData"</span> :disabled=<span class="code-string">"loading"</span>&gt;重新加载&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/template&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    export default {<br>
+                    &nbsp;&nbsp;name: <span class="code-string">'AsyncDataComponent'</span>,<br>
+                    &nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data: {},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;loading: <span class="code-boolean">false</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;async mounted() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> <span class="code-keyword">this</span>.loadData();<br>
+                    &nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;async loadData() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.loading = <span class="code-boolean">true</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">try</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 模拟API调用</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> response = <span class="code-keyword">await</span> fetch(<span class="code-string">'/api/data'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.data = <span class="code-keyword">await</span> response.json();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">catch</span> (error) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="code-string">'加载数据失败:'</span>, error);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">finally</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.loading = <span class="code-boolean">false</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br>
+                    &lt;/script&gt;
+                </div>
+                
+                <div class="code-block">
+                    <span class="code-comment">// AsyncDataComponent.test.js</span><br>
+                    <span class="code-keyword">import</span> { mount } from <span class="code-string">'@vue/test-utils'</span>;<br>
+                    <span class="code-keyword">import</span> { describe, it, expect, beforeEach, afterEach, vi } from <span class="code-string">'vitest'</span>;<br>
+                    <span class="code-keyword">import</span> AsyncDataComponent from <span class="code-string">'./AsyncDataComponent.vue'</span>;<br><br>
+                    
+                    describe(<span class="code-string">'AsyncDataComponent'</span>, () =&gt; {<br>
+                    &nbsp;&nbsp;beforeEach(() =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 模拟fetch API</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;global.fetch = vi.fn().mockResolvedValue({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;json: vi.fn().mockResolvedValue({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: <span class="code-string">'模拟标题'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content: <span class="code-string">'模拟内容'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;afterEach(() =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;vi.resetAllMocks();<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;it(<span class="code-string">'加载数据时显示加载状态'</span>, <span class="code-keyword">async</span> () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(AsyncDataComponent);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.text()).toContain(<span class="code-string">'加载中...'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 等待异步操作完成</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> wrapper.vm.$nextTick();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.text()).not.toContain(<span class="code-string">'加载中...'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.text()).toContain(<span class="code-string">'模拟标题'</span>);<br>
+                    &nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;it(<span class="code-string">'点击按钮重新加载数据'</span>, <span class="code-keyword">async</span> () =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> wrapper = mount(AsyncDataComponent);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 等待初始加载完成</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> vi.waitFor(() =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.text()).not.toContain(<span class="code-string">'加载中...'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 点击重新加载按钮</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> wrapper.find(<span class="code-string">'button'</span>).trigger(<span class="code-string">'click'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.text()).toContain(<span class="code-string">'加载中...'</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 等待加载完成</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">await</span> vi.waitFor(() =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;expect(wrapper.text()).not.toContain(<span class="code-string">'加载中...'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;});<br>
+                    });
+                </div>
+            </div>
+            
+            <h2>测试最佳实践</h2>
+            <p>在进行Vue应用测试时，遵循一些最佳实践可以提高测试质量和效率。</p>
+            
+            <div class="key-features">
+                <h3>Vue测试最佳实践</h3>
+                <ul>
+                    <li><strong>测试命名</strong>：使用清晰的测试描述</li>
+                    <li><strong>测试独立性</strong>：确保测试之间相互独立</li>
+                    <li><strong>测试隔离</strong>：隔离组件依赖</li>
+                    <li><strong>测试覆盖率</strong>：追求有意义的覆盖率</li>
+                    <li><strong>快照测试</strong>：对UI组件进行快照测试</li>
+                    <li><strong>持续集成</strong>：将测试集成到CI流程</li>
+                </ul>
+            </div>
+            
+            <h3>测试策略建议</h3>
+            <p>在开发Vue.js应用时，应该遵循"测试金字塔"策略：</p>
+            
+            <ul>
+                <li><strong>单元测试</strong>：占测试总数的70%，测试独立的函数和组件</li>
+                <li><strong>集成测试</strong>：占测试总数的20%，测试组件间的交互</li>
+                <li><strong>E2E测试</strong>：占测试总数的10%，测试关键用户流程</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>为项目中的组件编写单元测试</li>
+                    <li>创建一个模拟API服务进行测试</li>
+                    <li>使用快照测试验证UI组件</li>
+                    <li>实现一个完整的E2E测试流程</li>
+                    <li>配置测试覆盖率报告</li>
+                    <li>在CI环境中运行测试</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="performance.html" class="nav-link">← 上一课：性能优化</a>
+            <a href="deployment.html" class="nav-link">下一课：部署 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>自定义指令</h1>
+            <p class="subtitle">创建和使用自定义指令</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./composition-api.html" class="nav-link">上一课：组合式API</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./mixins.html" class="nav-link">下一课：混入Mixins</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>自定义指令核心概念</h3>
+                <ul>
+                    <li><strong>全局指令</strong>：全局注册的自定义指令</li>
+                    <li><strong>局部指令</strong>：组件内注册的自定义指令</li>
+                    <li><strong>指令钩子</strong>：指令生命周期钩子函数</li>
+                    <li><strong>钩子函数参数</strong>：指令钩子函数接收的参数</li>
+                    <li><strong>函数简写</strong>：简化指令定义方式</li>
+                    <li><strong>动态指令参数</strong>：支持动态参数的指令</li>
+                </ul>
+            </div>
+            
+            <h2>什么是自定义指令？</h2>
+            <p>除了 Vue 内置的指令（如 v-if、v-for、v-model 等），Vue 还允许我们注册自定义指令来实现特定的 DOM 操作。虽然组件是实现 UI 重用的首选方式，但有时我们仍需要对 DOM 元素进行底层操作，这时自定义指令就非常有用。</p>
+            
+            <h2>注册自定义指令</h2>
+            <p>自定义指令可以通过全局或局部方式注册。</p>
+            
+            <h3>全局指令</h3>
+            <p>全局指令通过[Vue.directive()](file:///e:\FrontendTeach\VUE快速上手\api\global-api.html#L12-L12)方法注册，可以在应用的任何组件中使用：</p>
+            
+            <div class="code-block">
+// 全局注册自定义指令
+Vue.directive('focus', {
+  mounted(el) {
+    el.focus()
+  }
+})
+
+// 现在可以在任何组件中使用 v-focus 指令
+const app = new Vue({
+  el: '#app'
+})
+            </div>
+            
+            <h3>局部指令</h3>
+            <p>局部指令在组件的 directives 选项中注册，只能在当前组件中使用：</p>
+            
+            <div class="code-block">
+const MyComponent = {
+  directives: {
+    // 局部注册自定义指令
+    focus: {
+      mounted(el) {
+        el.focus()
+      }
+    },
+    // 带参数的指令
+    color: {
+      mounted(el, binding) {
+        el.style.color = binding.value
+      }
+    }
+  },
+  template: `
+    &lt;div&gt;
+      &lt;input v-focus type="text" placeholder="自动获得焦点" /&gt;
+      &lt;div v-color="'red'"&gt;这行文字是红色的&lt;/div&gt;
+    &lt;/div&gt;
+  `
+}
+            </div>
+            
+            <h2>指令钩子函数</h2>
+            <p>自定义指令可以提供几个钩子函数，这些函数会在不同的时机被调用：</p>
+            
+            <ul>
+                <li><strong>created</strong>：在绑定元素的 attribute 或事件监听器被应用之前调用</li>
+                <li><strong>beforeMount</strong>：在元素被插入到 DOM 之前调用</li>
+                <li><strong>mounted</strong>：在绑定元素的父组件被挂载后调用</li>
+                <li><strong>beforeUpdate</strong>：在包含组件的 VNode 更新之前调用</li>
+                <li><strong>updated</strong>：在包含组件的 VNode 及其子组件的 VNode 更新后调用</li>
+                <li><strong>beforeUnmount</strong>：在绑定元素的父组件卸载之前调用</li>
+                <li><strong>unmounted</strong>：在绑定元素的父组件卸载后调用</li>
+            </ul>
+            
+            <div class="code-block">
+Vue.directive('demo', {
+  created(el, binding, vnode, prevVnode) {
+    console.log('created: 指令被创建')
+  },
+  beforeMount(el, binding, vnode, prevVnode) {
+    console.log('beforeMount: 元素即将被插入DOM')
+  },
+  mounted(el, binding, vnode, prevVnode) {
+    console.log('mounted: 元素已被插入DOM')
+    // 通常在这里执行DOM操作
+  },
+  beforeUpdate(el, binding, vnode, prevVnode) {
+    console.log('beforeUpdate: 组件更新前')
+  },
+  updated(el, binding, vnode, prevVnode) {
+    console.log('updated: 组件更新后')
+    // 在这里可以访问更新后的DOM
+  },
+  beforeUnmount(el, binding, vnode, prevVnode) {
+    console.log('beforeUnmount: 组件卸载前')
+    // 清理工作
+  },
+  unmounted(el, binding, vnode, prevVnode) {
+    console.log('unmounted: 组件已卸载')
+    // 清理工作
+  }
+})
+            </div>
+            
+            <h2>钩子函数参数</h2>
+            <p>每个钩子函数都接收几个参数：</p>
+            
+            <ul>
+                <li><strong>el</strong>：指令绑定的元素，可以直接操作DOM</li>
+                <li><strong>binding</strong>：包含指令相关信息的对象，属性包括：
+                    <ul>
+                        <li><code>value</code>：指令绑定的值</li>
+                        <li><code>oldValue</code>：之前的值（仅在beforeUpdate和updated中可用）</li>
+                        <li><code>arg</code>：传递给指令的参数</li>
+                        <li><code>modifiers</code>：包含修饰符的对象</li>
+                        <li><code>instance</code>：使用该指令的组件实例</li>
+                        <li><code>dir</code>：指令定义的对象</li>
+                    </ul>
+                </li>
+                <li><strong>vnode</strong>：Vue 编译生成的虚拟节点</li>
+                <li><strong>prevVnode</strong>：上一个虚拟节点（仅在beforeUpdate和updated中可用）</li>
+            </ul>
+            
+            <div class="code-block">
+Vue.directive('my-directive', {
+  mounted(el, binding, vnode) {
+    console.log('元素:', el)
+    console.log('绑定对象:', binding)
+    console.log('绑定的值:', binding.value)
+    console.log('参数:', binding.arg)
+    console.log('修饰符:', binding.modifiers)
+    console.log('虚拟节点:', vnode)
+  }
+})
+
+// 使用示例
+// &lt;div v-my-directive:argument.modifier="value"&gt;&lt;/div&gt;
+            </div>
+            
+            <h2>函数简写</h2>
+            <p>如果一个指令需要同时在 mounted 和 updated 上执行相同的行为，并且不需要其他钩子函数，可以写成函数形式：</p>
+            
+            <div class="code-block">
+// 函数简写形式
+Vue.directive('color', (el, binding) => {
+  el.style.color = binding.value
+})
+
+// 等价于
+Vue.directive('color', {
+  mounted(el, binding) {
+    el.style.color = binding.value
+  },
+  updated(el, binding) {
+    el.style.color = binding.value
+  }
+})
+            </div>
+            
+            <h2>实际应用示例</h2>
+            <p>以下是一些常用的自定义指令示例：</p>
+            
+            <h3>1. 自动聚焦指令</h3>
+            <div class="code-block">
+// 自动聚焦指令
+const focusDirective = {
+  mounted(el, binding) {
+    // 检查是否需要聚焦
+    if (binding.value !== false) {
+      el.focus()
+    }
+  },
+  updated(el, binding) {
+    // 更新时也检查是否需要聚焦
+    if (binding.value !== false) {
+      el.focus()
+    }
+  }
+}
+
+// 注册
+Vue.directive('focus', focusDirective)
+            </div>
+            
+            <h3>2. 点击外部关闭指令</h3>
+            <div class="code-block">
+// 点击外部关闭指令
+const clickOutside = {
+  beforeMount(el, binding) {
+    el.clickOutsideEvent = (event) => {
+      // 检查点击的元素是否在绑定的元素内部
+      if (!(el === event.target || el.contains(event.target))) {
+        // 调用绑定的方法
+        binding.value(event)
+      }
+    }
+    document.addEventListener('click', el.clickOutsideEvent)
+  },
+  unmounted(el) {
+    // 移除事件监听器
+    document.removeEventListener('click', el.clickOutsideEvent)
+  }
+}
+
+Vue.directive('click-outside', clickOutside)
+
+// 使用
+// &lt;div v-click-outside="handleClickOutside" class="dropdown"&gt;
+//   &lt;!-- 内容 --&gt;
+// &lt;/div&gt;
+            </div>
+            
+            <h3>3. 滚动加载指令</h3>
+            <div class="code-block">
+// 滚动到底部加载更多
+const infiniteScroll = {
+  mounted(el, binding) {
+    el.scrollListener = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        // 距离底部5px时触发
+        if (typeof binding.value === 'function') {
+          binding.value()
+        }
+      }
+    }
+    
+    el.addEventListener('scroll', el.scrollListener)
+  },
+  unmounted(el) {
+    el.removeEventListener('scroll', el.scrollListener)
+  }
+}
+
+Vue.directive('infinite-scroll', infiniteScroll)
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例：工具提示指令</h3>
+                <p>以下是一个创建工具提示（tooltip）自定义指令的完整示例：</p>
+                
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;自定义指令示例&lt;/title&gt;
+  &lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+  &lt;style&gt;
+    .tooltip {
+      position: absolute;
+      background: #333;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      z-index: 1000;
+      white-space: nowrap;
+    }
+    
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border: 5px solid transparent;
+      border-top-color: #333;
+    }
+    
+    .container {
+      padding: 50px;
+    }
+    
+    .btn {
+      padding: 10px 15px;
+      margin: 10px;
+      border: none;
+      border-radius: 4px;
+      background: #42b983;
+      color: white;
+      cursor: pointer;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="app"&gt;
+    &lt;div class="container"&gt;
+      &lt;h2&gt;自定义工具提示指令示例&lt;/h2&gt;
+      &lt;button v-tooltip.top="'这是顶部工具提示'" class="btn"&gt;顶部提示&lt;/button&gt;
+      &lt;button v-tooltip.right="'这是右侧工具提示'" class="btn"&gt;右侧提示&lt;/button&gt;
+      &lt;button v-tooltip.bottom="'这是底部工具提示'" class="btn"&gt;底部提示&lt;/button&gt;
+      &lt;button v-tooltip.left="'这是左侧工具提示'" class="btn"&gt;左侧提示&lt;/button&gt;
+      &lt;div style="margin-top: 50px;"&gt;
+        &lt;input 
+          v-model="dynamicText" 
+          v-tooltip.bottom="dynamicText + ' (动态内容)'" 
+          placeholder="输入文本查看动态工具提示" 
+          style="padding: 8px; width: 300px;"
+        /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    const { createApp } = Vue
+    
+    // 工具提示指令定义
+    const tooltipDirective = {
+      mounted(el, binding) {
+        createTooltip(el, binding)
+      },
+      updated(el, binding) {
+        // 更新工具提示内容
+        if (el.tooltipElement) {
+          el.tooltipElement.textContent = binding.value || ''
+        }
+      },
+      unmounted(el) {
+        // 清理工具提示元素
+        if (el.tooltipElement) {
+          el.tooltipElement.remove()
+          el.tooltipElement = null
+        }
+      }
+    }
+    
+    function createTooltip(el, binding) {
+      const tooltipText = binding.value
+      const position = binding.arg || 'top' // 默认位置是top
+      const modifiers = binding.modifiers
+      
+      if (!tooltipText) return
+      
+      // 创建工具提示元素
+      const tooltip = document.createElement('div')
+      tooltip.className = 'tooltip'
+      tooltip.textContent = tooltipText
+      tooltip.style.display = 'none' // 初始隐藏
+      
+      // 添加到文档
+      document.body.appendChild(tooltip)
+      
+      // 保存引用
+      el.tooltipElement = tooltip
+      
+      // 鼠标进入事件
+      el.addEventListener('mouseenter', () => {
+        tooltip.style.display = 'block'
+        positionTooltip(el, tooltip, position)
+      })
+      
+      // 鼠标移动事件（用于跟随鼠标）
+      if (modifiers.follow) {
+        el.addEventListener('mousemove', (e) => {
+          if (tooltip.style.display !== 'none') {
+            tooltip.style.left = e.pageX + 10 + 'px'
+            tooltip.style.top = e.pageY - 10 + 'px'
+          }
+        })
+      }
+      
+      // 鼠标离开事件
+      el.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none'
+      })
+    }
+    
+    function positionTooltip(el, tooltip, position) {
+      const elRect = el.getBoundingClientRect()
+      const tooltipRect = tooltip.getBoundingClientRect()
+      
+      let top, left
+      
+      switch(position) {
+        case 'top':
+          top = elRect.top - tooltipRect.height - 8
+          left = elRect.left + (elRect.width - tooltipRect.width) / 2
+          break
+        case 'right':
+          top = elRect.top + (elRect.height - tooltipRect.height) / 2
+          left = elRect.right + 8
+          break
+        case 'bottom':
+          top = elRect.bottom + 8
+          left = elRect.left + (elRect.width - tooltipRect.width) / 2
+          break
+        case 'left':
+          top = elRect.top + (elRect.height - tooltipRect.height) / 2
+          left = elRect.left - tooltipRect.width - 8
+          break
+        default:
+          top = elRect.top - tooltipRect.height - 8
+          left = elRect.left + (elRect.width - tooltipRect.width) / 2
+      }
+      
+      // 确保工具提示在视窗内
+      left = Math.max(10, Math.min(left, window.innerWidth - tooltipRect.width - 10))
+      top = Math.max(10, top)
+      
+      tooltip.style.top = top + window.scrollY + 'px'
+      tooltip.style.left = left + window.scrollX + 'px'
+    }
+    
+    const app = createApp({
+      data() {
+        return {
+          dynamicText: '输入一些文本'
+        }
+      }
+    })
+    
+    // 注册自定义指令
+    app.directive('tooltip', tooltipDirective)
+    
+    app.mount('#app')
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </div>
+            </div>
+            
+            <h2>Vue 3中的自定义指令</h2>
+            <p>在Vue 3中，自定义指令的API有一些变化，钩子函数名称与组件的生命周期钩子更加一致：</p>
+            
+            <div class="code-block">
+// Vue 3 中的自定义指令
+const MyDirective = {
+  // 在绑定元素的 attribute 前
+  // 和事件监听器应用前调用
+  created(el, binding, vnode, prevVnode) {
+    // 与模板引用上的事件侦听器相同
+    // 再次保留之前的行为
+  },
+  // 在元素被插入到 DOM 前调用
+  beforeMount(el, binding, vnode, prevVnode) {},
+  // 在绑定元素的父组件
+  // 及他自己的所有子节点都挂载完成后调用
+  mounted(el, binding, vnode, prevVnode) {},
+  // 在元素本身更新前调用
+  beforeUpdate(el, binding, vnode, prevVnode) {},
+  // 在元素本身更新完成后调用
+  updated(el, binding, vnode, prevVnode) {},
+  // 在绑定元素的父组件卸载前调用
+  beforeUnmount(el, binding, vnode, prevVnode) {},
+  // 在绑定元素的父组件卸载后调用
+  unmounted(el, binding, vnode, prevVnode) {}
+}
+
+// 在组合式API中使用
+&lt;script setup&gt;
+const vFocus = {
+  mounted(el) {
+    el.focus()
+  }
+}
+
+// 在模板中使用 v-focus
+&lt;/script&gt;
+            </div>
+            
+            <h2>最佳实践</h2>
+            <p>使用自定义指令时的最佳实践：</p>
+            
+            <ul>
+                <li>尽量使用组件而不是自定义指令，除非确实需要直接操作DOM</li>
+                <li>在适当的钩子函数中执行操作，避免在错误的时机操作DOM</li>
+                <li>记得在组件卸载时清理事件监听器和定时器</li>
+                <li>合理使用参数和修饰符，提高指令的灵活性</li>
+                <li>为指令提供清晰的文档说明</li>
+            </ul>
+        </div>
+        
+        <div class="navigation">
+            <a href="./composition-api.html" class="nav-link">上一课：组合式API</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./mixins.html" class="nav-link">下一课：混入Mixins</a>
+        </div>
+        
+        <footer>
+            <p>自定义指令 - Vue.js底层DOM操作的强大工具</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

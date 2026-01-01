@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>input-css-plus</title>
+  <style>
+    html {
+      background: black;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .form {
+      position: relative;
+      width: 100%;
+      max-width: 20rem;
+      margin: 0 auto;
+      color: white;
+    }
+
+    .form__input {
+      width: 100%;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0.8em;
+      background: none;
+      color: white;
+      border: 2px solid gray;
+      border-radius: 0.5rem;
+    }
+
+    .form__input:hover {
+      border-color: lightblue;
+    }
+
+    .form__input:focus {
+      border-color: lightblue;
+    }
+
+    .form__label {
+      color: white;
+      position: absolute;
+      top: 0.8em;
+      left: 1em;
+      cursor: text;
+      user-select: none;
+      background-color: black;
+      padding: 0 0.5em;
+      transition: top 200ms ease-in, font-size 200ms ease-in;
+    }
+
+    .form__input:focus~.form__label {
+      top: -0.5em;
+      font-size: 0.8em;
+    }
+
+    .form__input:focus~.form__label,
+    .form__input:not(:placeholder-shown)~.form__label {
+      /* top: -0.5em;
+      font-size: 0.8em; */
+      transform: translateY(-40%) scale(1.2);
+    }
+  </style>
+</head>
+
+<body>
+  <form class="form">
+    <input type="email" class="form__input" id="email" placeholder="">
+    <label for="email" class="form__label">
+      Email
+    </label>
+  </form>
+</body>
+
+</html>

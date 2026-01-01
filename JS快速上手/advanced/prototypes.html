@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型与继承 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .prototype-diagram {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .inheritance-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .inheritance-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 进阶特性 > 原型与继承</div>
+            <h1>原型与继承</h1>
+        </header>
+        
+        <div class="content">
+            <p>原型和继承是JavaScript面向对象编程的核心概念。JavaScript使用原型链实现继承，这与传统基于类的语言有所不同。理解原型和原型链对于掌握JavaScript至关重要。</p>
+            
+            <div class="key-features">
+                <h3>原型与继承概览</h3>
+                <ul>
+                    <li><strong>原型对象</strong>：每个函数都有一个prototype属性</li>
+                    <li><strong>原型链</strong>：对象属性的查找机制</li>
+                    <li><strong>构造函数</strong>：创建对象的模板</li>
+                    <li><strong>继承实现</strong>：原型链继承、构造函数继承、组合继承</li>
+                    <li><strong>ES6类</strong>：基于原型的语法糖</li>
+                </ul>
+            </div>
+            
+            <h2>原型基础概念</h2>
+            <p>在JavaScript中，每个函数都有一个特殊的属性叫做<a href="#L21">prototype</a>，当这个函数作为构造函数被调用时（使用new关键字），新创建的对象会继承这个prototype属性。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 创建构造函数</span><br>
+                <span class="code-keyword">function</span> Person(name, age) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.name = name;<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.age = age;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 在原型上添加方法</span><br>
+                Person.prototype.greet = <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`Hello, I'm ${<span class="code-keyword">this</span>.name} and I'm ${<span class="code-keyword">this</span>.age} years old.`</span>;<br>
+                };<br><br>
+                
+                Person.prototype.species = <span class="code-string">"Homo sapiens"</span>;<br><br>
+                
+                <span class="code-comment">// 创建实例</span><br>
+                <span class="code-keyword">const</span> person1 = <span class="code-keyword">new</span> Person(<span class="code-string">"Alice"</span>, <span class="code-number">25</span>);<br>
+                <span class="code-keyword">const</span> person2 = <span class="code-keyword">new</span> Person(<span class="code-string">"Bob"</span>, <span class="code-number">30</span>);<br><br>
+                
+                console.log(person1.greet()); <span class="code-comment">// "Hello, I'm Alice and I'm 25 years old."</span><br>
+                console.log(person2.greet()); <span class="code-comment">// "Hello, I'm Bob and I'm 30 years old."</span><br><br>
+                
+                <span class="code-comment">// 验证原型关系</span><br>
+                console.log(person1.greet === person2.greet); <span class="code-comment">// true - 同一个方法引用</span><br>
+                console.log(person1.hasOwnProperty(<span class="code-string">'name'</span>)); <span class="code-comment">// true</span><br>
+                console.log(person1.hasOwnProperty(<span class="code-string">'greet'</span>)); <span class="code-comment">// false</span><br>
+                console.log(person1.hasOwnProperty(<span class="code-string">'species'</span>)); <span class="code-comment">// false</span>
+            </div>
+            
+            <div class="prototype-diagram">
+                <h3>原型关系示意图</h3>
+                <p>Person构造函数 → Person.prototype（原型对象） → 实例对象<br>
+                实例的__proto__指向其构造函数的prototype</p>
+                <pre>
+    Person.prototype
+          ↑
+    person1.__proto__  ←  person1（实例）
+          ↑
+    person2.__proto__  ←  person2（实例）
+                </pre>
+            </div>
+            
+            <h2>原型链</h2>
+            <p>原型链是JavaScript实现继承的主要方式。当访问对象的属性时，JavaScript引擎会首先在对象本身查找，如果找不到，则沿着原型链向上查找。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 原型链示例</span><br>
+                <span class="code-keyword">function</span> Animal(name) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.name = name;<br>
+                }<br><br>
+                
+                Animal.prototype.speak = <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`${<span class="code-keyword">this</span>.name} makes a sound.`</span>);<br>
+                };<br><br>
+                
+                <span class="code-keyword">function</span> Dog(name, breed) {<br>
+                &nbsp;&nbsp;Animal.call(<span class="code-keyword">this</span>, name);<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.breed = breed;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 设置原型链</span><br>
+                Dog.prototype = Object.create(Animal.prototype);<br>
+                Dog.prototype.constructor = Dog;<br><br>
+                
+                <span class="code-comment">// 添加Dog特有的方法</span><br>
+                Dog.prototype.bark = <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`${<span class="code-keyword">this</span>.name} barks!`</span>);<br>
+                };<br><br>
+                
+                <span class="code-comment">// 重写继承的方法</span><br>
+                Dog.prototype.speak = <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`${<span class="code-keyword">this</span>.name} barks loudly!`</span>);<br>
+                };<br><br>
+                
+                <span class="code-keyword">const</span> myDog = <span class="code-keyword">new</span> Dog(<span class="code-string">"Rex"</span>, <span class="code-string">"Golden Retriever"</span>);<br><br>
+                
+                myDog.speak(); <span class="code-comment">// "Rex barks loudly!"</span><br>
+                myDog.bark(); <span class="code-comment">// "Rex barks!"</span><br><br>
+                
+                <span class="code-comment">// 检查原型链关系</span><br>
+                console.log(myDog <span class="code-keyword">instanceof</span> Dog); <span class="code-comment">// true</span><br>
+                console.log(myDog <span class="code-keyword">instanceof</span> Animal); <span class="code-comment">// true</span><br>
+                console.log(Dog.prototype <span class="code-keyword">instanceof</span> Animal.prototype); <span class="code-comment">// false (正确方式: Object.getPrototypeOf(Dog.prototype) === Animal.prototype)</span><br><br>
+                
+                <span class="code-comment">// 获取原型</span><br>
+                console.log(Object.getPrototypeOf(myDog) === Dog.prototype); <span class="code-comment">// true</span><br>
+                console.log(Object.getPrototypeOf(Dog.prototype) === Animal.prototype); <span class="code-comment">// true</span>
+            </div>
+            
+            <h2>ES6类与原型</h2>
+            <p>ES6引入了class语法，但这只是原型继承的语法糖，底层仍基于原型链。</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// ES6类语法</span><br>
+                <span class="code-keyword">class</span> Vehicle {<br>
+                &nbsp;&nbsp;constructor(brand, model) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.brand = brand;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.model = model;<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;start() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`${<span class="code-keyword">this</span>.brand} ${<span class="code-keyword">this</span>.model} is starting...`</span>);<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;getInfo() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`${<span class="code-keyword">this</span>.brand} ${<span class="code-keyword">this</span>.model}`</span>;<br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-keyword">class</span> Car <span class="code-keyword">extends</span> Vehicle {<br>
+                &nbsp;&nbsp;constructor(brand, model, doors) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">super</span>(brand, model); <span class="code-comment">// 调用父类构造函数</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.doors = doors;<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;honor() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`Honk! ${<span class="code-keyword">this</span>.brand} ${<span class="code-keyword">this</span>.model}`</span>);<br>
+                &nbsp;&nbsp;}<br><br>
+                
+                &nbsp;&nbsp;getInfo() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 调用父类方法</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> baseInfo = <span class="code-keyword">super</span>.getInfo();<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`${baseInfo} with ${<span class="code-keyword">this</span>.doors} doors`</span>;<br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-keyword">const</span> myCar = <span class="code-keyword">new</span> Car(<span class="code-string">"Toyota"</span>, <span class="code-string">"Camry"</span>, <span class="code-number">4</span>);<br>
+                myCar.start(); <span class="code-comment">// "Toyota Camry is starting..."</span><br>
+                myCar.honor(); <span class="code-comment">// "Honk! Toyota Camry"</span><br>
+                console.log(myCar.getInfo()); <span class="code-comment">// "Toyota Camry with 4 doors"</span><br><br>
+                
+                <span class="code-comment">// ES6类本质上仍是基于原型的</span><br>
+                console.log(myCar <span class="code-keyword">instanceof</span> Car); <span class="code-comment">// true</span><br>
+                console.log(myCar <span class="code-keyword">instanceof</span> Vehicle); <span class="code-comment">// true</span><br>
+                console.log(myCar.__proto__ === Car.prototype); <span class="code-comment">// true</span><br>
+                console.log(Car.prototype.__proto__ === Vehicle.prototype); <span class="code-comment">// true</span>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">构造函数 vs ES6类</div>
+                    <ul>
+                        <li><strong>构造函数</strong>：使用function定义，通过prototype添加方法</li>
+                        <li><strong>ES6类</strong>：更清晰的语法，使用class关键字和方法定义</li>
+                        <li><strong>继承</strong>：构造函数需手动设置prototype，类使用extends和super</li>
+                        <li><strong>底层</strong>：ES6类只是语法糖，底层仍是原型链</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">原型方法</div>
+                    <ul>
+                        <li><strong>Object.create()</strong>：创建新对象，使用现有对象作为原型</li>
+                        <li><strong>Object.getPrototypeOf()</strong>：获取对象的原型</li>
+                        <li><strong>Object.setPrototypeOf()</strong>：设置对象的原型</li>
+                        <li><strong>isPrototypeOf()</strong>：检查对象是否在原型链中</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>原型操作</h2>
+            <p>JavaScript提供了多种方式来操作和检查原型关系：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 使用Object.create创建对象</span><br>
+                <span class="code-keyword">const</span> personPrototype = {<br>
+                &nbsp;&nbsp;greet() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">`Hello, I'm ${<span class="code-keyword">this</span>.name}`</span>;<br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;species: <span class="code-string">"Homo sapiens"</span><br>
+                };<br><br>
+                
+                <span class="code-keyword">const</span> alice = Object.create(personPrototype);<br>
+                alice.name = <span class="code-string">"Alice"</span>;<br>
+                alice.age = <span class="code-number">25</span>;<br><br>
+                
+                console.log(alice.greet()); <span class="code-comment">// "Hello, I'm Alice"</span><br>
+                console.log(alice.hasOwnProperty(<span class="code-string">'name'</span>)); <span class="code-comment">// true</span><br>
+                console.log(alice.hasOwnProperty(<span class="code-string">'greet'</span>)); <span class="code-comment">// false</span><br>
+                console.log(personPrototype.isPrototypeOf(alice)); <span class="code-comment">// true</span><br><br>
+                
+                <span class="code-comment">// 原型属性检查</span><br>
+                <span class="code-keyword">function</span> hasPrototypeProperty(obj, prop) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> prop <span class="code-keyword">in</span> obj && !obj.hasOwnProperty(prop);<br>
+                }<br><br>
+                
+                console.log(hasPrototypeProperty(alice, <span class="code-string">'greet'</span>)); <span class="code-comment">// true</span><br>
+                console.log(hasPrototypeProperty(alice, <span class="code-string">'name'</span>)); <span class="code-comment">// false</span><br><br>
+                
+                <span class="code-comment">// 遍历对象的自有属性和继承属性</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> key <span class="code-keyword">in</span> alice) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">if</span> (alice.hasOwnProperty(key)) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`自有属性: ${key}`</span>); <span class="code-comment">// name, age</span><br>
+                &nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`继承属性: ${key}`</span>); <span class="code-comment">// greet, species</span><br>
+                &nbsp;&nbsp;}<br>
+                }
+            </div>
+            
+            <div class="inheritance-example">
+                <div class="inheritance-example-title">复杂继承示例：形状类层次结构</div>
+                <div class="code-block">
+                    <span class="code-keyword">class</span> Shape {<br>
+                    &nbsp;&nbsp;constructor(color) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.color = color;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;move(x, y) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.x = x;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.y = y;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;getColor() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.color;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">class</span> Rectangle <span class="code-keyword">extends</span> Shape {<br>
+                    &nbsp;&nbsp;constructor(color, width, height) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">super</span>(color);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.width = width;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.height = height;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;getArea() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.width * <span class="code-keyword">this</span>.height;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;getPerimeter() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-number">2</span> * (<span class="code-keyword">this</span>.width + <span class="code-keyword">this</span>.height);<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">class</span> Square <span class="code-keyword">extends</span> Rectangle {<br>
+                    &nbsp;&nbsp;constructor(color, side) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">super</span>(color, side, side); <span class="code-comment">// 正方形是特殊的矩形</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.side = side;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;getArea() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.side * <span class="code-keyword">this</span>.side;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;setSide(newSide) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.side = newSide;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.width = newSide;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.height = newSide;<br>
+                    &nbsp;&nbsp;}<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">const</span> mySquare = <span class="code-keyword">new</span> Square(<span class="code-string">"red"</span>, <span class="code-number">5</span>);<br>
+                    console.log(mySquare.getArea()); <span class="code-comment">// 25</span><br>
+                    console.log(mySquare.getPerimeter()); <span class="code-comment">// 20</span><br>
+                    console.log(mySquare.getColor()); <span class="code-comment">// "red"</span><br><br>
+                    
+                    <span class="code-comment">// 检查原型链</span><br>
+                    console.log(mySquare <span class="code-keyword">instanceof</span> Square); <span class="code-comment">// true</span><br>
+                    console.log(mySquare <span class="code-keyword">instanceof</span> Rectangle); <span class="code-comment">// true</span><br>
+                    console.log(mySquare <span class="code-keyword">instanceof</span> Shape); <span class="code-comment">// true</span><br><br>
+                    
+                    <span class="code-comment">// 获取类名</span><br>
+                    console.log(mySquare.constructor.name); <span class="code-comment">// "Square"</span>
+                </div>
+            </div>
+            
+            <h2>原型的高级特性</h2>
+            <p>JavaScript原型系统还有一些高级特性和最佳实践：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 使用Object.defineProperty在原型上定义属性</span><br>
+                <span class="code-keyword">function</span> Product(name, price) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.name = name;<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.price = price;<br>
+                }<br><br>
+                
+                <span class="code-comment">// 定义计算属性</span><br>
+                Object.defineProperty(Product.prototype, <span class="code-string">'priceWithTax'</span>, {<br>
+                &nbsp;&nbsp;get: <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.price * <span class="code-number">1.1</span>; <span class="code-comment">// 10% 税</span><br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;set: <span class="code-keyword">function</span>(value) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.price = value / <span class="code-number">1.1</span>;<br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;enumerable: <span class="code-boolean">true</span>,<br>
+                &nbsp;&nbsp;configurable: <span class="code-boolean">true</span><br>
+                });<br><br>
+                
+                <span class="code-keyword">const</span> laptop = <span class="code-keyword">new</span> Product(<span class="code-string">"Laptop"</span>, <span class="code-number">1000</span>);<br>
+                console.log(laptop.priceWithTax); <span class="code-comment">// 1100</span><br>
+                laptop.priceWithTax = <span class="code-number">1210</span>;<br>
+                console.log(laptop.price); <span class="code-comment">// 1100</span><br><br>
+                
+                <span class="code-comment">// 使用Symbol作为对象属性键</span><br>
+                <span class="code-keyword">const</span> id = Symbol(<span class="code-string">'id'</span>);<br>
+                <span class="code-keyword">function</span> User(name) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>.name = name;<br>
+                &nbsp;&nbsp;<span class="code-keyword">this</span>[id] = Math.random().toString(<span class="code-number">36</span>).substr(<span class="code-number">2</span>, <span class="code-number">9</span>); <span class="code-comment">// 唯一ID</span><br>
+                }<br><br>
+                
+                User.prototype.getId = <span class="code-keyword">function</span>() {<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>[id]; <span class="code-comment">// 只有通过此方法才能访问ID</span><br>
+                };<br><br>
+                
+                <span class="code-keyword">const</span> user = <span class="code-keyword">new</span> User(<span class="code-string">"John"</span>);<br>
+                console.log(user.getId()); <span class="code-comment">// 随机ID</span><br>
+                console.log(Object.keys(user)); <span class="code-comment">// ["name"] - Symbol属性不会被枚举</span><br>
+                console.log(<span class="code-keyword">for</span>(<span class="code-keyword">let</span> prop <span class="code-keyword">in</span> user) { console.log(prop); }); <span class="code-comment">// "name" - Symbol属性不会被for...in遍历</span>
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个动物类层次结构（哺乳动物、鸟类、鱼类等）</li>
+                    <li>实现一个事件发射器类，支持监听和触发事件</li>
+                    <li>创建一个可扩展的表单验证器类系统</li>
+                    <li>使用原型链实现一个简单的组件系统</li>
+                    <li>创建一个继承自Array的自定义列表类，添加额外方法</li>
+                </ul>
+            </div>
+            
+            <h2>原型最佳实践</h2>
+            <p>在使用原型和继承时，有一些最佳实践需要注意：</p>
+            <ul>
+                <li>优先使用ES6类语法，更清晰易懂</li>
+                <li>谨慎修改内置对象的原型，可能造成冲突</li>
+                <li>理解原型链的工作原理，避免性能问题</li>
+                <li>使用Object.create(null)创建无原型对象，避免原型污染</li>
+            </ul>
+        </div>
+        
+        <nav>
+            <a href="closures.html" class="nav-link">← 上一课：闭包与作用域</a>
+            <a href="async.html" class="nav-link">下一课：异步编程 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

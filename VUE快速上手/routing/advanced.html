@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Router进阶 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Vue Router进阶</h1>
+            <p class="subtitle">路由守卫、懒加载、嵌套路由</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./basics.html" class="nav-link">上一课：Vue Router基础</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../tooling/cli.html" class="nav-link">下一课：Vue CLI</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>Vue Router进阶特性</h3>
+                <ul>
+                    <li><strong>路由守卫</strong>：全局守卫、路由独享守卫、组件内守卫</li>
+                    <li><strong>懒加载</strong>：按需加载组件，优化应用性能</li>
+                    <li><strong>嵌套路由</strong>：多层级路由结构</li>
+                    <li><strong>路由模式</strong>：hash模式与history模式</li>
+                    <li><strong>导航故障</strong>：处理路由导航错误</li>
+                    <li><strong>滚动行为</li>
+                </ul>
+            </div>
+            
+            <h2>路由守卫详解</h2>
+            <p>路由守卫用于在路由切换过程中进行权限验证、数据获取等操作。Vue Router提供了多种守卫：</p>
+            
+            <h3>全局前置守卫</h3>
+            <p>在路由切换开始时触发，可以用于全局权限验证：</p>
+            
+            <div class="code-block">
+import { createRouter, createWebHistory } from 'vue-router'
+
+const router = createRouter({ /* ... */ })
+
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  // to: RouteLocationNormalized - 将要进入的目标路由
+  // from: RouteLocationNormalized - 离开的路由
+  // next: Function - 必须调用的函数，用于resolve钩子
+  
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    // 如果需要认证但未认证，重定向到登录页
+    return next({
+      path: '/login',
+      // 保存目标页面，登录后重定向回来
+      query: { redirect: to.fullPath }
+    })
+  }
+  
+  // 检查角色权限
+  if (to.meta.role && !hasRole(to.meta.role)) {
+    return next({ name: 'Forbidden' })
+  }
+  
+  // 允许访问
+  next()
+})
+            </div>
+            
+            <h3>全局解析守卫</h3>
+            <p>在所有组件内守卫和异步路由组件被解析之后触发：</p>
+            
+            <div class="code-block">
+router.beforeResolve((to, from, next) => {
+  // 在所有组件内守卫和异步路由组件被解析之后触发
+  // 与 beforeEach 类似，但会在所有组件内守卫和异步路由组件被解析之后触发
+  
+  // 例如：在这里进行数据预加载
+  if (to.meta.requiresUserData) {
+    loadUserData().then(() => next())
+  } else {
+    next()
+  }
+})
+            </div>
+            
+            <h3>路由独享守卫</h3>
+            <p>在路由配置中直接定义的守卫：</p>
+            
+            <div class="code-block">
+const routes = [
+  {
+    path: '/admin',
+    component: Admin,
+    beforeEnter: (to, from, next) => {
+      // 只在进入该路由时触发
+      if (isUserAdmin()) {
+        next()
+      } else {
+        next('/login')
+      }
+    }
+  }
+]
+            </div>
+            
+            <h3>组件内守卫</h3>
+            <p>在组件内部定义的路由守卫：</p>
+            
+            <div class="code-block">
+export default {
+  async beforeRouteEnter(to, from, next) {
+    // 在路由进入前调用
+    // 不能访问组件实例 `this`
+    // 因为组件实例还没被创建
+    
+    // 可以通过传入一个回调来访问组件实例
+    const data = await fetchData(to.params.id)
+    next(vm => {
+      vm.setData(data)
+    })
+  },
+  
+  async beforeRouteUpdate(to, from, next) {
+    // 在当前路由改变，但是该组件被复用时调用
+    // 例如对于 /user/:id 路由，当从 /user/1 导航到 /user/2 时
+    try {
+      this.data = await fetchData(to.params.id)
+      next()
+    } catch (error) {
+      next(new Error('Failed to fetch data'))
+    }
+  },
+  
+  beforeRouteLeave(to, from, next) {
+    // 在路由离开当前组件时调用
+    const answer = window.confirm('确认离开？您有未保存的更改！')
+    if (answer) {
+      next()
+    } else {
+      next(false) // 中断导航
+    }
+  }
+}
+            </div>
+            
+            <h2>懒加载和代码分割</h2>
+            <p>懒加载可以将应用按路由拆分成多个小块，只在需要时才加载组件代码，提高首屏加载速度：</p>
+            
+            <div class="code-block">
+// router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: () => import('../views/Home.vue')  // 懒加载
+  },
+  {
+    path: '/about',
+    name: 'About',
+    // 使用webpack的魔法注释来命名打包块
+    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: () => import('../views/User.vue')
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+export default router
+            </div>
+            
+            <h3>基于函数的懒加载</h3>
+            <p>可以创建一个通用的懒加载函数来处理错误和加载状态：</p>
+            
+            <div class="code-block">
+// utils/lazyLoad.js
+export const lazyLoad = (view) => {
+  return () => import(`../views/${view}.vue`)
+}
+
+// router/index.js
+import { lazyLoad } from '@/utils/lazyLoad'
+
+const routes = [
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: lazyLoad('Dashboard')
+  }
+]
+            </div>
+            
+            <h2>嵌套路由进阶</h2>
+            <p>嵌套路由可以构建复杂的多层级页面结构：</p>
+            
+            <div class="code-block">
+const routes = [
+  {
+    path: '/user',
+    component: UserLayout,
+    children: [
+      {
+        path: '',  // /user
+        name: 'UserProfile',
+        component: UserProfile,
+        children: [
+          {
+            path: 'edit',  // /user/edit
+            name: 'EditProfile',
+            component: EditProfile
+          }
+        ]
+      },
+      {
+        path: 'settings',  // /user/settings
+        name: 'UserSettings',
+        component: UserSettings,
+        children: [
+          {
+            path: 'account',  // /user/settings/account
+            name: 'AccountSettings',
+            component: AccountSettings
+          },
+          {
+            path: 'privacy',  // /user/settings/privacy
+            name: 'PrivacySettings',
+            component: PrivacySettings
+          }
+        ]
+      }
+    ]
+  }
+]
+            </div>
+            
+            <p>对应的组件结构：</p>
+            
+            <div class="code-block">
+// UserLayout.vue
+&lt;template&gt;
+  &lt;div class="user-layout"&gt;
+    &lt;h1&gt;用户中心&lt;/h1&gt;
+    &lt;nav class="user-nav"&gt;
+      &lt;router-link to="/user"&gt;个人资料&lt;/router-link&gt;
+      &lt;router-link to="/user/settings"&gt;设置&lt;/router-link&gt;
+    &lt;/nav&gt;
+    &lt;!-- 子路由内容将在这里渲染 --&gt;
+    &lt;router-view /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+// UserProfile.vue
+&lt;template&gt;
+  &lt;div class="user-profile"&gt;
+    &lt;h2&gt;个人资料&lt;/h2&gt;
+    &lt;!-- 内层嵌套路由 --&gt;
+    &lt;router-view /&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+            </div>
+            
+            <h2>路由模式详解</h2>
+            <p>Vue Router提供三种路由模式：</p>
+            
+            <h3>History模式</h3>
+            <p>使用HTML5 History API，URL看起来更美观：</p>
+            
+            <div class="code-block">
+const router = createRouter({
+  history: createWebHistory(),  // 使用浏览器的History API
+  routes
+})
+            </div>
+            
+            <h3>Hash模式</h3>
+            <p>使用URL的hash部分，兼容性更好：</p>
+            
+            <div class="code-block">
+const router = createRouter({
+  history: createWebHashHistory(),  // URL中包含#号
+  routes
+})
+            </div>
+            
+            <h3>Memory模式</h3>
+            <p>将路由信息保存在内存中，不改变URL：</p>
+            
+            <div class="code-block">
+const router = createRouter({
+  history: createMemoryHistory(),  // 不改变URL
+  routes
+})
+            </div>
+            
+            <h2>滚动行为控制</h2>
+            <p>可以自定义路由切换时的滚动行为：</p>
+            
+            <div class="code-block">
+const router = createRouter({ /* ... */ })
+
+router.afterEach((to, from) => {
+  // 页面切换后滚动到顶部
+  window.scrollTo(0, 0)
+})
+
+// 或者使用滚动行为函数
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [ /* ... */ ],
+  scrollBehavior(to, from, savedPosition) {
+    // savedPosition 在浏览器前进/后退按钮时可用
+    if (savedPosition) {
+      return savedPosition
+    } else if (to.hash) {
+      // 滚动到锚点
+      return {
+        el: to.hash,
+        behavior: 'smooth'
+      }
+    } else {
+      // 滚动到顶部
+      return { top: 0 }
+    }
+  }
+})
+            </div>
+            
+            <h2>导航故障处理</h2>
+            <p>Vue Router 4引入了导航故障类型，用于区分不同的导航结果：</p>
+            
+            <div class="code-block">
+import { NavigationFailureType, RouterLink, RouterView } from 'vue-router'
+
+// 在组件中处理导航失败
+export default {
+  methods: {
+    async navigateTo(path) {
+      try {
+        const result = await this.$router.push(path)
+        if (result) {
+          console.log('导航被阻止', result)
+        }
+      } catch (error) {
+        if (error.name === 'NavigationDuplicated') {
+          // 处理重复导航错误
+          console.log('重复导航')
+        } else {
+          console.error('导航失败', error)
+        }
+      }
+    }
+  }
+}
+            </div>
+            
+            <h2>路由参数变化监听</h2>
+            <p>当路由参数变化但组件被复用时，需要监听参数变化：</p>
+            
+            <div class="code-block">
+// 使用组合式API
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+export default {
+  setup() {
+    const route = useRoute()
+    
+    // 监听路由参数变化
+    watch(
+      () => route.params.id,
+      (newId, oldId) => {
+        fetchData(newId)
+      }
+    )
+    
+    // 监听整个路由变化
+    watch(
+      () => route.fullPath,
+      (to, from) => {
+        console.log('路由变化', to, from)
+      }
+    )
+    
+    return {}
+  }
+}
+
+// 使用选项式API
+export default {
+  watch: {
+    '$route'(to, from) {
+      // 路由变化时重新获取数据
+      this.fetchData(to.params.id)
+    },
+    // 监听特定参数
+    '$route.params.id'(newId, oldId) {
+      this.fetchData(newId)
+    }
+  }
+}
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./basics.html" class="nav-link">上一课：Vue Router基础</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../tooling/cli.html" class="nav-link">下一课：Vue CLI</a>
+        </div>
+        
+        <footer>
+            <p>Vue Router进阶 - 深入掌握Vue.js路由系统</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

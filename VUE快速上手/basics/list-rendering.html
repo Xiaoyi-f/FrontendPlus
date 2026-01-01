@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表渲染 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .rendering-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .rendering-table th, .rendering-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .rendering-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .rendering-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .list-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        
+        .list-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .list-item.completed {
+            text-decoration: line-through;
+            color: #888;
+            background-color: #f5f5f5;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 基础语法篇 > 列表渲染</div>
+            <h1>列表渲染</h1>
+        </header>
+        
+        <div class="content">
+            <p>列表渲染是Vue.js的重要功能之一，它允许我们基于数组或对象来渲染列表。Vue提供了v-for指令来实现列表渲染，可以遍历数组、对象、数字等可迭代的数据结构。</p>
+            
+            <div class="key-features">
+                <h3>列表渲染核心概念</h3>
+                <ul>
+                    <li><strong>v-for指令</strong>：用于基于源数据多次渲染元素或模板块</li>
+                    <li><strong>数组遍历</strong>：遍历数组元素并渲染列表项</li>
+                    <li><strong>对象遍历</strong>：遍历对象的属性并渲染列表项</li>
+                    <li><strong>数字遍历</strong>：遍历数字范围并渲染列表项</li>
+                    <li><strong>key属性</strong>：为列表项提供唯一标识，提高渲染性能</li>
+                    <li><strong>数组方法</strong>：使用数组变异方法来更新列表</li>
+                </ul>
+            </div>
+            
+            <h2>v-for指令基础用法</h2>
+            <p>v-for指令基于一个数组来渲染一个列表。v-for指令需要使用item in items形式的特殊语法，其中items是源数据数组，item是数组元素的别名。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">v-for遍历数组示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li v-for=<span class="code-string">"(item, index) in items"</span> :key=<span class="code-string">"item.id"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ index + 1 }}. {{ item.name }} - {{ item.description }}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&lt;/ul&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"addItem"</span>&gt;添加项目&lt;/button&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> items = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'Vue.js'</span>, description: <span class="code-string">'渐进式JavaScript框架'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'React'</span>, description: <span class="code-string">'用于构建用户界面的JavaScript库'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'Angular'</span>, description: <span class="code-string">'前端开发平台'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> addItem = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> newId = items.value.length + <span class="code-number">1</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: newId,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">'框架 '</span> + newId,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description: <span class="code-string">'描述 '</span> + newId<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addItem<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>遍历对象</h2>
+            <p>我们也可以使用v-for来遍历对象的属性。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">v-for遍历对象示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li v-for=<span class="code-string">"(value, key, index) in user"</span> :key=<span class="code-string">"key"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ index + 1 }}. {{ key }}: {{ value }}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&lt;/ul&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> user = ref({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="code-string">'张三'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;age: <span class="code-number">25</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: <span class="code-string">'zhangsan@example.com'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;job: <span class="code-string">'前端工程师'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>遍历数字</h2>
+            <p>当v-for的表达式是数字时，会循环指定次数。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">v-for遍历数字示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;span v-for=<span class="code-string">"n in count"</span> :key=<span class="code-string">"n"</span>&gt;{{ n }} &lt;/span&gt;<br>
+                    &nbsp;&nbsp;&lt;div&gt;当前计数: {{ count }}&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"increment"</span>&gt;增加&lt;/button&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> count = ref(<span class="code-number">5</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> increment = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count.value++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>key属性的重要性</h2>
+            <p>Vue默认使用"就地更新"策略，当列表数据改变时，Vue会尽可能高效地更新DOM元素。但有时我们需要更精确地控制列表项的更新方式，这时就需要使用key属性。</p>
+            
+            <table class="rendering-table">
+                <thead>
+                    <tr>
+                        <th>情况</th>
+                        <th>说明</th>
+                        <th>建议</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>列表顺序可能改变</td>
+                        <td>没有key时，Vue会就地复用元素</td>
+                        <td>使用唯一key值</td>
+                    </tr>
+                    <tr>
+                        <td>列表顺序固定</td>
+                        <td>可以使用index作为key（不推荐）</td>
+                        <td>仍建议使用唯一key值</td>
+                    </tr>
+                    <tr>
+                        <td>列表项有唯一标识</td>
+                        <td>使用唯一标识作为key</td>
+                        <td>最佳实践</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">key属性的重要性示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;h3&gt;没有key的情况&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-for=<span class="code-string">"item in itemsWithoutKey"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=<span class="code-string">"checkbox"</span> :id=<span class="code-string">"'nokey_' + item.id"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;label :for=<span class="code-string">"'nokey_' + item.id"</span>&gt;{{ item.name }}&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"reverseWithoutKey"</span>&gt;反转顺序(无key)&lt;/button&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;h3&gt;有key的情况&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&lt;div v-for=<span class="code-string">"item in itemsWithKey"</span> :key=<span class="code-string">"item.id"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=<span class="code-string">"checkbox"</span> :id=<span class="code-string">"'withkey_' + item.id"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;label :for=<span class="code-string">"'withkey_' + item.id"</span>&gt;{{ item.name }}&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"reverseWithKey"</span>&gt;反转顺序(有key)&lt;/button&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> itemsWithoutKey = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'项目A'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'项目B'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'项目C'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> itemsWithKey = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'项目A'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'项目B'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'项目C'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> reverseWithoutKey = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemsWithoutKey.value.reverse();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> reverseWithKey = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemsWithKey.value.reverse();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemsWithoutKey,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;itemsWithKey,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reverseWithoutKey,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reverseWithKey<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>数组变异方法</h2>
+            <p>Vue能够检测到数组变化并更新DOM，这包括以下变异方法：</p>
+            
+            <div class="key-features">
+                <h3>数组变异方法</h3>
+                <ul>
+                    <li><strong>push()</strong>：在数组末尾添加一个或多个元素</li>
+                    <li><strong>pop()</strong>：移除数组最后一个元素</li>
+                    <li><strong>shift()</strong>：移除数组第一个元素</li>
+                    <li><strong>unshift()</strong>：在数组开头添加一个或多个元素</li>
+                    <li><strong>splice()</strong>：在任意位置添加/移除元素</li>
+                    <li><strong>sort()</strong>：对数组元素进行排序</li>
+                    <li><strong>reverse()</strong>：反转数组元素顺序</li>
+                </ul>
+            </div>
+            
+            <h2>替换数组方法</h2>
+            <p>以下方法不会改变原数组，而是返回一个新数组：</p>
+            
+            <ul>
+                <li><strong>filter()</strong>：过滤数组元素</li>
+                <li><strong>concat()</strong>：连接数组</li>
+                <li><strong>slice()</strong>：截取数组</li>
+            </ul>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">数组变异方法示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;input v-model=<span class="code-string">"newItem"</span> placeholder=<span class="code-string">"输入新项目"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"addItem"</span>&gt;添加&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;ul&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;li v-for=<span class="code-string">"(item, index) in items"</span> :key=<span class="code-string">"item.id"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ item.name }} <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"removeItem(index)"</span>&gt;删除&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&lt;/ul&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"sortItems"</span>&gt;排序&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"reverseItems"</span>&gt;反转&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"filterItems"</span>&gt;过滤&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"clearItems"</span>&gt;清空&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&lt;div&gt;总数: {{ items.length }}&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> items = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'Vue.js'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'React'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'Angular'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> newItem = ref(<span class="code-string">''</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">let</span> nextId = <span class="code-number">4</span>;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> addItem = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (newItem.value.trim() !== <span class="code-string">''</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: nextId++,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: newItem.value<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newItem.value = <span class="code-string">''</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> removeItem = (index) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.splice(index, <span class="code-number">1</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> sortItems = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.sort((a, b) => a.name.localeCompare(b.name));<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> reverseItems = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value.reverse();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> filterItems = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value = items.value.filter(item => item.name.length > <span class="code-number">4</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> clearItems = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items.value = [];<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newItem,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addItem,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeItem,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sortItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reverseItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;filterItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearItems<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>列表渲染在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>待办事项列表</strong>：显示和管理任务项</li>
+                    <li><strong>产品列表</strong>：电商网站的商品展示</li>
+                    <li><strong>用户列表</strong>：管理系统中的用户展示</li>
+                    <li><strong>评论列表</strong>：社交媒体中的评论展示</li>
+                    <li><strong>导航菜单</strong>：动态生成导航项</li>
+                    <li><strong>数据表格</strong>：展示结构化数据</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">实际应用示例 - 待办事项列表</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"todo-app"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;待办事项&lt;/h2&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"todo-form"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input v-model=<span class="code-string">"newTodo"</span> @keyup.enter=<span class="code-string">"addTodo"</span> placeholder=<span class="code-string">"添加新任务"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"addTodo"</span>&gt;添加&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"todo-stats"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总数: {{ todos.length }} | <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已完成: {{ completedCount }} | <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;未完成: {{ remainingCount }}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;ul class=<span class="code-string">"todo-list"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-for=<span class="code-string">"todo in todos"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:key=<span class="code-string">"todo.id"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;class=<span class="code-string">"list-item"</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:class=<span class="code-string">"{ completed: todo.completed }"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=<span class="code-string">"checkbox"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model=<span class="code-string">"todo.completed"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;{{ todo.text }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"removeTodo(todo.id)"</span>&gt;删除&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/li&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"todo-actions"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"removeCompleted"</span>&gt;删除已完成&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"toggleAll"</span>&gt;{{ allDone ? '取消全选' : '全选' }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> newTodo = ref(<span class="code-string">''</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> todos = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, text: <span class="code-string">'学习Vue.js'</span>, completed: <span class="code-boolean">false</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, text: <span class="code-string">'创建项目'</span>, completed: <span class="code-boolean">true</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, text: <span class="code-string">'部署应用'</span>, completed: <span class="code-boolean">false</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">let</span> nextId = <span class="code-number">4</span>;<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> addTodo = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (newTodo.value.trim() !== <span class="code-string">''</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todos.value.push({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: nextId++,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text: newTodo.value,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;completed: <span class="code-boolean">false</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newTodo.value = <span class="code-string">''</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> removeTodo = (id) => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todos.value = todos.value.filter(todo => todo.id !== id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> removeCompleted = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todos.value = todos.value.filter(todo => !todo.completed);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> toggleAll = () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> allDone = completedCount.value === todos.value.length;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todos.value.forEach(todo => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todo.completed = !allDone;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> completedCount = computed(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> todos.value.filter(todo => todo.completed).length;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> remainingCount = computed(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> todos.value.length - completedCount.value;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> allDone = computed(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> completedCount.value === todos.value.length && todos.value.length > <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newTodo,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;todos,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addTodo,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeTodo,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeCompleted,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;toggleAll,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;completedCount,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remainingCount,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allDone<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h3>性能优化建议</h3>
+            <p>在使用列表渲染时，有一些性能优化的建议：</p>
+            
+            <ul>
+                <li>始终为列表项提供key属性，使用唯一标识而不是index</li>
+                <li>对于大型列表，考虑使用虚拟滚动技术</li>
+                <li>避免在v-for中使用复杂的计算表达式，应使用计算属性代替</li>
+                <li>使用v-show而不是v-if来切换列表项的可见性（如果切换频繁）</li>
+                <li>限制列表渲染的数量，使用分页或无限滚动</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个产品列表组件，支持添加、删除、编辑产品</li>
+                    <li>实现一个评论系统，支持嵌套评论的渲染</li>
+                    <li>创建一个数据表格组件，支持排序和筛选功能</li>
+                    <li>实现一个使用虚拟滚动的大型列表组件</li>
+                    <li>创建一个使用组合式API的复杂列表渲染示例</li>
+                    <li>实现一个可拖拽排序的列表组件</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="conditional-rendering.html" class="nav-link">← 上一课：条件渲染</a>
+            <a href="events.html" class="nav-link">下一课：事件处理 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

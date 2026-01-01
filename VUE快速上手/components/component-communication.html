@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件间通信 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .communication-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .communication-table th, .communication-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .communication-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .communication-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .communication-diagram {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .communication-type {
+            margin: 10px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 5px;
+            border: 1px solid #bbdefb;
+            min-width: 120px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 组件系统篇 > 组件间通信</div>
+            <h1>组件间通信</h1>
+        </header>
+        
+        <div class="content">
+            <p>组件间通信是Vue.js应用开发中的核心概念。在Vue应用中，组件是构建UI的基本单元，而组件间通信则允许这些组件共享数据和状态。掌握组件间通信的方式对于构建复杂的Vue应用至关重要。</p>
+            
+            <div class="key-features">
+                <h3>组件间通信核心概念</h3>
+                <ul>
+                    <li><strong>Props</strong>：父组件向子组件传递数据</li>
+                    <li><strong>Events</strong>：子组件向父组件传递数据</li>
+                    <li><strong>v-model</strong>：双向数据绑定</li>
+                    <li><strong>Provide/Inject</strong>：跨层级组件通信</li>
+                    <li><strong>事件总线</strong>：任意组件间通信</li>
+                    <li><strong>状态管理</strong>：全局状态管理</li>
+                </ul>
+            </div>
+            
+            <h2>通信方式图解</h2>
+            <div class="communication-diagram">
+                <div class="communication-type">父→子<br>Props</div>
+                <div class="communication-type">子→父<br>Events</div>
+                <div class="communication-type">跨层级<br>Provide/Inject</div>
+                <div class="communication-type">任意组件<br>Event Bus</div>
+            </div>
+            
+            <h2>Props - 父组件向子组件传递数据</h2>
+            <p>Props是父组件向子组件传递数据的主要方式。通过props，父组件可以将数据传递给子组件，子组件通过声明props来接收这些数据。</p>
+            
+            <table class="communication-table">
+                <thead>
+                    <tr>
+                        <th>通信方式</th>
+                        <th>方向</th>
+                        <th>实现方式</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Props</td>
+                        <td>父→子</td>
+                        <td>通过属性传递数据</td>
+                        <td>父组件向子组件传递数据</td>
+                    </tr>
+                    <tr>
+                        <td>Events</td>
+                        <td>子→父</td>
+                        <td>使用$emit触发事件</td>
+                        <td>子组件向父组件传递数据</td>
+                    </tr>
+                    <tr>
+                        <td>v-model</td>
+                        <td>双向</td>
+                        <td>结合props和events</td>
+                        <td>双向数据绑定</td>
+                    </tr>
+                    <tr>
+                        <td>Provide/Inject</td>
+                        <td>祖先→后代</td>
+                        <td>祖先提供，后代注入</td>
+                        <td>跨层级组件通信</td>
+                    </tr>
+                    <tr>
+                        <td>事件总线</td>
+                        <td>任意</td>
+                        <td>全局事件系统</td>
+                        <td>任意组件间通信</td>
+                    </tr>
+                    <tr>
+                        <td>全局状态</td>
+                        <td>任意</td>
+                        <td>集中管理状态</td>
+                        <td>全局状态管理</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">Props示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;user-profile <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:name=<span class="code-string">"userName"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:age=<span class="code-string">"userAge"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:email=<span class="code-string">"userEmail"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/user-profile&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;userName: <span class="code-string">'张三'</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;userAge: <span class="code-number">28</span>,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;userEmail: <span class="code-string">'zhangsan@example.com'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'user-profile'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;props: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: String,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;age: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: Number,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;required: <span class="code-boolean">true</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: String,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default: <span class="code-string">''</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"user-profile"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;{{ name }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;年龄: {{ age }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;邮箱: {{ email }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>Events - 子组件向父组件传递数据</h2>
+            <p>Events是子组件向父组件传递数据的主要方式。子组件通过$emit触发自定义事件，父组件通过v-on监听这些事件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">Events示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;counter <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:initial-count=<span class="code-string">"count"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@increment=<span class="code-string">"handleIncrement"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@decrement=<span class="code-string">"handleDecrement"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/counter&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;当前计数: {{ count }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleIncrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleDecrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'counter'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'initialCount'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'increment'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'decrement'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"counter"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"decrement"</span>&gt;-&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;{{ initialCount }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"increment"</span>&gt;+&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>v-model - 双向数据绑定</h2>
+            <p>v-model是Vue提供的语法糖，结合了props和events，实现双向数据绑定。在Vue 3中，v-model的实现机制有所变化。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">v-model示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;custom-input v-model=<span class="code-string">"message"</span>&gt;&lt;/custom-input&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;输入的内容: {{ message }}&lt;/p&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> message = ref(<span class="code-string">'Hello Vue!'</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'custom-input'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'modelValue'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;emits: [<span class="code-string">'update:modelValue'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateValue(event) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'update:modelValue'</span>, event.target.value);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:value=<span class="code-string">"modelValue"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@input=<span class="code-string">"updateValue"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;placeholder=<span class="code-string">"请输入内容..."</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>Provide/Inject - 跨层级组件通信</h2>
+            <p>Provide/Inject允许祖先组件向其所有子孙组件注入一个依赖，无论组件层次有多深。这在构建高级组件库时非常有用。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">Provide/Inject示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;parent-component&gt;&lt;/parent-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, provide, inject, ref } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'parent-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> theme = ref(<span class="code-string">'dark'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> updateTheme = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;theme.value = theme.value === <span class="code-string">'dark'</span> ? <span class="code-string">'light'</span> : <span class="code-string">'dark'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 提供数据</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;provide(<span class="code-string">'theme'</span>, theme);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;provide(<span class="code-string">'updateTheme'</span>, updateTheme);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;theme<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div :class=<span class="code-string">"['parent', theme]"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;父组件 - 当前主题: {{ theme }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"updateTheme"</span>&gt;切换主题&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;middle-component&gt;&lt;/middle-component&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'middle-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"middle"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;中间组件&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;child-component&gt;&lt;/child-component&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'child-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 注入数据</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> theme = inject(<span class="code-string">'theme'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> updateTheme = inject(<span class="code-string">'updateTheme'</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;theme,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateTheme<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div :class=<span class="code-string">"['child', theme]"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h5&gt;子组件 - 当前主题: {{ theme }}&lt;/h5&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"updateTheme"</span>&gt;从子组件切换主题&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .dark {<br>
+                    &nbsp;&nbsp;background-color: #333;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    }<br><br>
+                    
+                    .light {<br>
+                    &nbsp;&nbsp;background-color: #fff;<br>
+                    &nbsp;&nbsp;color: black;<br>
+                    }<br><br>
+                    
+                    .parent, .middle, .child {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ccc;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>Ref - 直接访问子组件</h2>
+            <p>通过ref属性，父组件可以直接访问子组件的属性和方法。这是一种特殊的父子通信方式。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">Ref示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;child-component ref=<span class="code-string">"childRef"</span>&gt;&lt;/child-component&gt;<br>
+                    &nbsp;&nbsp;&lt;button @click=<span class="code-string">"callChildMethod"</span>&gt;调用子组件方法&lt;/button&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> childRef = ref(<span class="code-boolean">null</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> callChildMethod = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;childRef.value.showMessage();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'子组件数据:'</span>, childRef.value.childData);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;childRef,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callChildMethod<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'child-component'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;childData: <span class="code-string">'来自子组件的数据'</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showMessage() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="code-string">'来自子组件的消息！'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"child"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;子组件内容&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>组合式API中的通信方式</h2>
+            <p>在组合式API中，组件通信方式基本保持不变，但可以通过setup函数更灵活地处理数据和事件。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">选项式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> ChildComponent = {<br>
+                        &nbsp;&nbsp;props: [<span class="code-string">'message'</span>],<br>
+                        &nbsp;&nbsp;emits: [<span class="code-string">'update'</span>],<br>
+                        &nbsp;&nbsp;methods: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;notifyParent() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'update'</span>, <span class="code-string">'new data'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;template: `<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;{{ message }}&lt;/div&gt;<br>
+                        &nbsp;&nbsp;`<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">组合式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">import</span> { defineComponent } <span class="code-keyword">from</span> <span class="code-string">'vue'</span>;<br><br>
+                        
+                        <span class="code-keyword">const</span> ChildComponent = defineComponent({<br>
+                        &nbsp;&nbsp;props: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;message: String<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;emits: [<span class="code-string">'update'</span>],<br>
+                        &nbsp;&nbsp;setup(props, { emit }) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> notifyParent = <span class="code-function">()</span> =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(<span class="code-string">'update'</span>, <span class="code-string">'new data'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;notifyParent<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;template: `<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;{{ message }}&lt;/div&gt;<br>
+                        &nbsp;&nbsp;`<br>
+                        });
+                    </div>
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>组件间通信在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>表单组件</strong>：使用v-model实现双向绑定</li>
+                    <li><strong>列表组件</strong>：父组件传递数据，子组件触发事件</li>
+                    <li><strong>模态框组件</strong>：通过事件传递关闭状态</li>
+                    <li><strong>主题系统</strong>：使用Provide/Inject传递主题</li>
+                    <li><strong>导航菜单</strong>：跨层级传递激活状态</li>
+                    <li><strong>数据表格</strong>：父子组件协同处理数据</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">实际应用示例 - 购物车组件</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;shopping-cart&gt;&lt;/shopping-cart&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, provide, reactive } = Vue;<br><br>
+                    
+                    createApp({})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'shopping-cart'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> cartItems = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'商品A'</span>, price: <span class="code-number">100</span>, quantity: <span class="code-number">1</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'商品B'</span>, price: <span class="code-number">200</span>, quantity: <span class="code-number">2</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> addItem = <span class="code-function">item</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> existingItem = cartItems.value.find(<span class="code-function">i</span> =&gt; i.id === item.id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (existingItem) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;existingItem.quantity++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cartItems.value.push({...item, quantity: <span class="code-number">1</span>});<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> removeItem = <span class="code-function">id</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cartItems.value = cartItems.value.filter(<span class="code-function">item</span> =&gt; item.id !== id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> updateQuantity = <span class="code-function">(id, quantity)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> item = cartItems.value.find(<span class="code-function">i</span> =&gt; i.id === id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (item) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.quantity = quantity;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (item.quantity &lt;= <span class="code-number">0</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeItem(id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-comment">// 提供购物车功能</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;provide(<span class="code-string">'cart'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items: cartItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addItem,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeItem,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateQuantity<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cartItems<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"shopping-cart"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;购物车&lt;/h2&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;product-list&gt;&lt;/product-list&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;cart-summary&gt;&lt;/cart-summary&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'product-list'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> products = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'商品A'</span>, price: <span class="code-number">100</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'商品B'</span>, price: <span class="code-number">200</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'商品C'</span>, price: <span class="code-number">150</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> { addItem } = inject(<span class="code-string">'cart'</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;products,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addItem<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"product-list"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div v-for=<span class="code-string">"product in products"</span> :key=<span class="code-string">"product.id"</span> class=<span class="code-string">"product"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;{{ product.name }}&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;价格: {{ product.price }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"addItem(product)"</span>&gt;添加到购物车&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.component(<span class="code-string">'cart-summary'</span>, {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> { items, removeItem, updateQuantity } = inject(<span class="code-string">'cart'</span>);<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> total = computed(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> items.value.reduce(<span class="code-function">(sum, item)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> sum + (item.price * item.quantity);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, <span class="code-number">0</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;items,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeItem,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateQuantity,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"cart-summary"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;购物车摘要&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div v-for=<span class="code-string">"item in items"</span> :key=<span class="code-string">"item.id"</span> class=<span class="code-string">"cart-item"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;{{ item.name }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=<span class="code-string">"number"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v-model.number=<span class="code-string">"item.quantity"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min=<span class="code-string">"0"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;× {{ item.price }} = {{ item.price * item.quantity }}&lt;/span&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"removeItem(item.id)"</span>&gt;删除&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"total"</span>&gt;总计: {{ total }}&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;})<br>
+                    &nbsp;&nbsp;.mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .shopping-cart {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">20</span>px;<br>
+                    }<br><br>
+                    
+                    .product-list {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;gap: <span class="code-number">20</span>px;<br>
+                    &nbsp;&nbsp;margin-bottom: <span class="code-number">20</span>px;<br>
+                    }<br><br>
+                    
+                    .product {<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;text-align: center;<br>
+                    }<br><br>
+                    
+                    .cart-summary {<br>
+                    &nbsp;&nbsp;border-top: <span class="code-number">2</span>px solid #eee;<br>
+                    &nbsp;&nbsp;padding-top: <span class="code-number">20</span>px;<br>
+                    }<br><br>
+                    
+                    .cart-item {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;justify-content: space-between;<br>
+                    &nbsp;&nbsp;align-items: center;<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">10</span>px <span class="code-number">0</span>;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;background-color: #f8f9fa;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">4</span>px;<br>
+                    }<br><br>
+                    
+                    .total {<br>
+                    &nbsp;&nbsp;font-weight: bold;<br>
+                    &nbsp;&nbsp;font-size: <span class="code-number">1.2</span>em;<br>
+                    &nbsp;&nbsp;text-align: right;<br>
+                    &nbsp;&nbsp;margin-top: <span class="code-number">20</span>px;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h3>最佳实践建议</h3>
+            <p>在使用组件间通信时，有一些最佳实践建议：</p>
+            
+            <ul>
+                <li>优先使用props向下传递数据，events向上传递数据</li>
+                <li>对于深层嵌套的组件，考虑使用Provide/Inject</li>
+                <li>避免直接修改props，应该通过事件通知父组件修改</li>
+                <li>合理使用v-model实现双向绑定</li>
+                <li>对于复杂的状态管理，考虑使用Vuex或Pinia</li>
+                <li>注意组件通信的性能影响，避免不必要的重渲染</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个评论组件，父组件传递评论数据，子组件触发删除事件</li>
+                    <li>实现一个表单组件，使用v-model实现双向绑定</li>
+                    <li>创建一个主题切换器，使用Provide/Inject传递主题信息</li>
+                    <li>实现一个选项卡组件，父组件控制当前激活的选项卡</li>
+                    <li>创建一个级联选择器，父组件接收子组件的选择结果</li>
+                    <li>实现一个模态框组件，通过事件控制显示和隐藏</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="dynamic-static-components.html" class="nav-link">← 上一课：动态与静态组件</a>
+            <a href="../advanced/index.html" class="nav-link">下一课：Vue.js进阶特性 →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>

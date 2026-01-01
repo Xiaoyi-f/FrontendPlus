@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS媒体查询 核心实战（小白必懂）</title>
+  <style>
+    /* ========== 第一步：定义全局变量（为媒体查询做铺垫） ========== */
+    :root {
+      /* 基础样式变量 */
+      --primary-color: #008cff;
+      --font-size-base: 14px;
+      --spacing: 16px;
+      --border-radius: 8px;
+      --card-bg: skyblue;
+
+      /* 媒体查询断点（行业通用值，小白直接复用） */
+      --bp-xs: 375px;
+      /* 小屏手机 */
+      --bp-sm: 768px;
+      /* 平板/大屏手机 */
+      --bp-md: 992px;
+      /* 小屏电脑 */
+      --bp-lg: 1200px;
+      /* 大屏电脑 */
+      --bp-xl: 1440px;
+      /* 超宽屏 */
+    }
+
+    /* ========== 媒体查询核心实战（逐类讲解） ========== */
+    /* 1. 基础用法：按宽度断点修改变量（最常用场景） */
+    /* 小屏手机（≤375px）：缩小基础变量 */
+    @media screen and (max-width: 375px) {
+      :root {
+        --font-size-base: 12px;
+        --spacing: 10px;
+      }
+    }
+
+    /* 大屏电脑（≥1200px）：放大基础变量 */
+    @media screen and (min-width: 1200px) {
+      :root {
+        --font-size-base: 16px;
+        --spacing: 20px;
+      }
+    }
+
+    /* 超宽屏（≥1440px）：强化视觉效果 */
+    @media screen and (min-width: 1440px) {
+      :root {
+        --card-bg: #87ceeb;
+        /* 加深卡片背景 */
+        --border-radius: 12px;
+        /* 加大圆角 */
+      }
+    }
+
+    /* 2. 多条件组合：宽度+方向（手机横屏适配） */
+    /* 手机（≤767px）且横屏：优化布局 */
+    @media screen and (max-width: 767px) and (orientation: landscape) {
+      .card-group {
+        grid-template-columns: repeat(2, 1fr) !important;
+        /* 强制2列 */
+      }
+
+      .box {
+        height: max(120px, 25vh);
+        /* 降低盒子高度 */
+        font-size: calc(var(--font-size-base) + 2px);
+        /* 放大文字 */
+      }
+    }
+
+    /* 3. 范围条件：平板专属（768px~991px） */
+    @media screen and (min-width: 768px) and (max-width: 991px) {
+      .card-group {
+        grid-template-columns: repeat(2, 1fr);
+        /* 固定2列 */
+      }
+
+      .container {
+        max-width: 720px;
+        /* 限定容器宽度 */
+      }
+    }
+
+    /* 4. 其他媒体特性：打印样式（拓展知识点） */
+    @media print {
+
+      /* 打印时隐藏无关元素 */
+      .theme-switch,
+      .btn,
+      .modal-mask {
+        display: none !important;
+      }
+
+      /* 打印时卡片无边框阴影，节省墨水 */
+      .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+      }
+
+      /* 打印时文字变黑，背景变白 */
+      body {
+        background: white !important;
+        color: black !important;
+      }
+    }
+
+    /* 5. 反向条件：非屏幕设备（比如阅读器） */
+    @media not screen {
+      .box {
+        background: #fff !important;
+        color: #333 !important;
+        border: 1px solid #000 !important;
+      }
+    }
+
+    /* ========== 通用样式（配合媒体查询生效） ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: var(--font-size-base);
+      user-select: none;
+    }
+
+    .code-block {
+      user-select: text;
+      /* 代码块允许选中复制 */
+    }
+
+    body {
+      padding: var(--spacing);
+      background-color: hsl(210, 10%, 98%);
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+
+    .container {
+      max-width: clamp(300px, 80vw, 1200px);
+      margin: 0 auto;
+    }
+
+    /* 标题：用clamp配合媒体查询，实现响应式字号 */
+    h1 {
+      font-size: clamp(18px, 5vw, calc(var(--font-size-base) + 10px));
+      color: var(--primary-color);
+      margin-bottom: calc(var(--spacing) * 2);
+      text-align: center;
+    }
+
+    /* 媒体查询调试区：直观展示当前屏幕状态 */
+    .mq-debug {
+      background: #f8f9fa;
+      padding: var(--spacing);
+      border-radius: var(--border-radius);
+      margin: 0 auto calc(var(--spacing) * 2);
+      max-width: 100%;
+      text-align: center;
+      border: 1px solid #eee;
+    }
+
+    .mq-debug span {
+      color: #d63384;
+      font-weight: bold;
+      font-size: calc(var(--font-size-base) + 1px);
+    }
+
+    /* ========== 卡片组件（媒体查询核心适配对象） ========== */
+    .card-group {
+      display: grid;
+      /* 基础响应式：自动适配列数（媒体查询会覆盖此值） */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing);
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      padding: calc(var(--spacing) * 1.5);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: calc(var(--font-size-base) + 4px);
+      color: var(--primary-color);
+      margin-bottom: calc(var(--spacing) / 2);
+    }
+
+    .card-desc {
+      color: hsl(210, 5%, 50%);
+      line-height: 1.6;
+      margin-bottom: var(--spacing);
+    }
+
+    /* ========== 按钮样式（媒体查询适配点击区域） ========== */
+    .btn {
+      padding: calc(var(--spacing) / 2) var(--spacing);
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    /* 手机端（≤767px）按钮全屏宽（媒体查询里定义） */
+    @media screen and (max-width: 767px) {
+      .btn {
+        width: 100%;
+        padding: calc(var(--spacing)) var(--spacing);
+        /* 加大内边距，方便点击 */
+      }
+    }
+
+    .btn:hover {
+      background-color: color-mix(in srgb, var(--primary-color) 80%, white 20%);
+    }
+
+    /* ========== 特殊盒子（媒体查询+动态函数） ========== */
+    .box {
+      width: min(500px, 100%);
+      /* min函数：替代媒体查询改宽度 */
+      height: max(200px, 30vh);
+      /* max函数：替代媒体查询改高度 */
+      margin: var(--spacing) auto;
+      background-color: rgba(0, 140, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      border-radius: var(--border-radius);
+    }
+
+    /* ========== 主题切换按钮（媒体查询适配位置） ========== */
+    .theme-switch {
+      position: fixed;
+      top: var(--spacing);
+      right: var(--spacing);
+      padding: calc(var(--spacing) / 2) var(--spacing);
+      background-color: var(--card-bg);
+      border: 1px solid #eee;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    /* 手机端（≤767px）：主题按钮移到底部 */
+    @media screen and (max-width: 767px) {
+      .theme-switch {
+        top: auto;
+        bottom: var(--spacing);
+      }
+    }
+
+    /* ========== 弹窗样式（媒体查询适配尺寸） ========== */
+    .modal-mask {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal-container {
+      width: min(800px, 90vw);
+      /* 基础适配 */
+      max-height: 80vh;
+      background-color: white;
+      border-radius: var(--border-radius);
+      padding: calc(var(--spacing) * 2);
+      overflow-y: auto;
+    }
+
+    /* 手机端弹窗更紧凑 */
+    @media screen and (max-width: 767px) {
+      .modal-container {
+        width: 95vw;
+        padding: var(--spacing);
+      }
+    }
+
+    .modal-title {
+      font-size: calc(var(--font-size-base) + 6px);
+      color: var(--primary-color);
+      margin-bottom: var(--spacing);
+      border-bottom: 1px solid #eee;
+      padding-bottom: calc(var(--spacing) / 2);
+    }
+
+    .modal-content h3 {
+      font-size: calc(var(--font-size-base) + 2px);
+      color: var(--primary-color);
+      margin: var(--spacing) 0 calc(var(--spacing) / 2);
+    }
+
+    .code-block {
+      background-color: #f5f5f5;
+      padding: var(--spacing);
+      border-radius: var(--border-radius);
+      margin: calc(var(--spacing) / 2) 0;
+      font-family: "Consolas", monospace;
+      font-size: calc(var(--font-size-base) - 1px);
+      color: #d63384;
+      overflow-x: auto;
+    }
+
+    .modal-close {
+      margin-top: calc(var(--spacing) * 1.5);
+      padding: calc(var(--spacing) / 2) var(--spacing);
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>CSS媒体查询 核心实战</h1>
+
+    <!-- 媒体查询调试区：直观看到当前屏幕是否触发媒体查询 -->
+    <div class="mq-debug">
+      当前屏幕宽度：<span id="screen-width">0</span>px |
+      屏幕方向：<span id="screen-orient">未知</span> |
+      触发的媒体查询：<span id="mq-trigger">无</span>
+    </div>
+
+    <!-- 主题切换按钮（位置由媒体查询控制） -->
+    <div class="theme-switch" onclick="changeTheme()">切换主题色</div>
+
+    <!-- 卡片组（列数由媒体查询控制） -->
+    <div class="card-group">
+      <div class="card">
+        <h2 class="card-title">媒体查询基础语法</h2>
+        <p class="card-desc">@media 媒体类型 and (媒体特性) { 样式 }，核心是“条件判断+样式覆盖”</p>
+        <button class="btn" onclick="openModal('basic')">查看详情</button>
+      </div>
+      <div class="card">
+        <h2 class="card-title">多条件组合查询</h2>
+        <p class="card-desc">宽度+方向/分辨率，比如手机横屏时强制2列布局</p>
+        <button class="btn" onclick="openModal('combo')">查看详情</button>
+      </div>
+      <div class="card">
+        <h2 class="card-title">断点设计技巧</h2>
+        <p class="card-desc">行业通用断点（375/768/1200px），配合CSS变量统一维护</p>
+        <button class="btn" onclick="openModal('breakpoint')">查看详情</button>
+      </div>
+      <div class="card">
+        <h2 class="card-title">动态函数替代查询</h2>
+        <p class="card-desc">min/max/clamp减少媒体查询，比如盒子宽度用min(500px,100%)</p>
+        <button class="btn" onclick="openModal('function')">查看详情</button>
+      </div>
+    </div>
+
+    <!-- 特殊盒子（媒体查询+动态函数适配） -->
+    <div class="box">
+      媒体查询+动态函数<br>
+      宽度≤500px，高度≥200px<br>
+      手机横屏高度自动降低
+    </div>
+  </div>
+
+  <!-- 弹窗：专门讲解媒体查询知识点 -->
+  <div class="modal-mask" id="modalMask">
+    <div class="modal-container" id="modalContainer">
+      <h2 class="modal-title" id="modalTitle">媒体查询知识点</h2>
+      <div class="modal-content" id="modalContent"></div>
+      <button class="modal-close" onclick="closeModal()">关闭</button>
+    </div>
+  </div>
+
+  <script>
+    // ========== 实时显示屏幕信息（调试媒体查询） ==========
+    function updateScreenInfo() {
+      const width = window.innerWidth;
+      const orient = window.innerHeight > window.innerWidth ? '竖屏' : '横屏';
+      let trigger = '';
+
+      // 判断触发了哪些媒体查询
+      if (width <= 375) trigger = '小屏手机（≤375px）';
+      else if (width <= 767) trigger = '手机（≤767px）';
+      else if (width <= 991) trigger = '平板（768~991px）';
+      else if (width <= 1199) trigger = '小屏电脑（992~1199px）';
+      else if (width <= 1439) trigger = '大屏电脑（1200~1439px）';
+      else trigger = '超宽屏（≥1440px）';
+
+      // 横屏手机额外标注
+      if (width <= 767 && orient === '横屏') trigger += '+横屏';
+
+      // 更新DOM
+      document.getElementById('screen-width').textContent = width;
+      document.getElementById('screen-orient').textContent = orient;
+      document.getElementById('mq-trigger').textContent = trigger;
+    }
+    // 初始化+窗口变化时更新
+    updateScreenInfo();
+    window.addEventListener('resize', updateScreenInfo);
+
+    // ========== 弹窗：专门讲解媒体查询核心知识点 ==========
+    function openModal(type) {
+      const mask = document.getElementById('modalMask');
+      const title = document.getElementById('modalTitle');
+      const content = document.getElementById('modalContent');
+
+      // 1. 基础语法
+      if (type === 'basic') {
+        title.innerText = '媒体查询基础语法（小白必背）';
+        content.innerHTML = `
+          <h3>1. 核心结构</h3>
+          <div class="code-block">@media [媒体类型] [媒体特性] {
+  /* 满足条件时生效的样式 */
+}</div>
+          <h3>2. 媒体类型（常用2个）</h3>
+          <ul>
+            <li>screen：所有屏幕设备（手机/平板/电脑，99%场景用这个）</li>
+            <li>all：所有设备（默认值，可省略）</li>
+            <li>print：打印机/打印预览（拓展）</li>
+          </ul>
+          <h3>3. 核心媒体特性（必记）</h3>
+          <div class="code-block">/* 宽度≤767px（手机） */
+@media screen and (max-width: 767px) { ... }
+
+/* 宽度≥1200px（大屏电脑） */
+@media screen and (min-width: 1200px) { ... }
+
+/* 屏幕方向：横屏/竖屏 */
+@media screen and (orientation: landscape) { ... }</div>
+          <h3>4. 最简写法（省略媒体类型）</h3>
+          <div class="code-block">/* 等价于 screen and (max-width: 767px) */
+@media (max-width: 767px) { ... }</div>
+        `;
+      }
+      // 2. 多条件组合
+      else if (type === 'combo') {
+        title.innerText = '多条件组合查询（实战高频）';
+        content.innerHTML = `
+          <h3>1. and：同时满足多个条件</h3>
+          <div class="code-block">/* 手机（≤767px）且横屏 */
+@media screen and (max-width: 767px) and (orientation: landscape) {
+  .card-group { grid-template-columns: repeat(2, 1fr); }
+}</div>
+          <h3>2. ,（等价or）：满足任一条件</h3>
+          <div class="code-block">/* 手机 或 横屏 */
+@media (max-width: 767px), (orientation: landscape) { ... }</div>
+          <h3>3. not：取反（少用）</h3>
+          <div class="code-block">/* 非打印设备 */
+@media not print { ... }</div>
+          <h3>4. 范围条件（平板专属）</h3>
+          <div class="code-block">/* 768px ≤ 宽度 ≤ 991px */
+@media (min-width: 768px) and (max-width: 991px) {
+  .card-group { grid-template-columns: repeat(2, 1fr); }
+}</div>
+        `;
+      }
+      // 3. 断点设计
+      else if (type === 'breakpoint') {
+        title.innerText = '响应式断点设计（行业通用）';
+        content.innerHTML = `
+          <h3>1. 通用断点值（小白直接复用）</h3>
+          <div class="code-block">:root {
+  --bp-xs: 375px;  /* 小屏手机 */
+  --bp-sm: 768px;  /* 平板 */
+  --bp-md: 992px;  /* 小屏电脑 */
+  --bp-lg: 1200px; /* 大屏电脑 */
+  --bp-xl: 1440px; /* 超宽屏 */
+}</div>
+          <h3>2. 断点使用原则</h3>
+          <ul>
+            <li>从小到大：先写手机样式，再写平板/电脑（推荐）</li>
+            <li>从大到小：先写电脑样式，再写平板/手机（需加max-width）</li>
+            <li>变量只记录：媒体查询条件里不能直接用变量（浏览器不支持）</li>
+          </ul>
+          <h3>3. 断点配合变量（核心技巧）</h3>
+          <div class="code-block">/* 大屏时修改变量，全局样式自动适配 */
+@media (min-width: 1200px) {
+  :root {
+    --font-size-base: 16px; /* 字体变大 */
+    --spacing: 20px;        /* 间距变大 */
+  }
+}</div>
+        `;
+      }
+      // 4. 动态函数替代媒体查询
+      else if (type === 'function') {
+        title.innerText = '动态函数减少媒体查询（优化技巧）';
+        content.innerHTML = `
+          <h3>1. min()：替代“宽度≤Xpx”的媒体查询</h3>
+          <div class="code-block">/* 宽度最多500px，不用写@media (max-width: 500px) */
+.box { width: min(500px, 100%); }</div>
+          <h3>2. max()：替代“高度≥Xpx”的媒体查询</h3>
+          <div class="code-block">/* 高度最少200px，不用写@media (min-height: 200px) */
+.box { height: max(200px, 30vh); }</div>
+          <h3>3. clamp()：响应式字号（替代多个媒体查询）</h3>
+          <div class="code-block">/* 字号18px~26px，随屏幕宽度自适应 */
+h1 { font-size: clamp(18px, 5vw, 26px); }</div>
+          <h3>4. 核心原则</h3>
+          <p>能用计算函数解决的，就不用媒体查询！减少代码量，更灵活。</p>
+        `;
+      }
+
+      mask.style.display = 'flex';
+    }
+
+    // 关闭弹窗
+    function closeModal() {
+      document.getElementById('modalMask').style.display = 'none';
+    }
+
+    // ========== 主题切换（验证媒体查询下变量仍生效） ==========
+    function changeTheme() {
+      const root = document.documentElement;
+      const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+      root.style.setProperty('--primary-color', randomColor);
+      root.style.setProperty('--card-bg', colorMix(randomColor, 'white', 0.8));
+    }
+
+    // 简易color-mix兼容函数
+    function colorMix(color1, color2, ratio) {
+      return color1; // 简化版，核心验证变量修改生效
+    }
+
+    // 点击遮罩层关闭弹窗
+    document.getElementById('modalMask').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+
+</html>

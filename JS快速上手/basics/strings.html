@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串处理 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .string-methods-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .string-methods-table th, .string-methods-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .string-methods-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .string-methods-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .string-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .string-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 基础语法 > 字符串处理</div>
+            <h1>字符串处理</h1>
+        </header>
+        
+        <div class="content">
+            <p>字符串是JavaScript中最重要的数据类型之一，用于表示文本数据。JavaScript提供了丰富的字符串方法和操作方式，让我们能够轻松地创建、操作和处理字符串。掌握字符串处理是JavaScript编程的基础技能。</p>
+            
+            <div class="key-features">
+                <h3>字符串概览</h3>
+                <ul>
+                    <li><strong>字符串创建</strong>：单引号、双引号、反引号</li>
+                    <li><strong>字符串访问</strong>：索引、charAt()、at()</li>
+                    <li><strong>字符串操作</strong>：拼接、截取、替换、分割等</li>
+                    <li><strong>字符串搜索</strong>：indexOf()、includes()、startsWith()等</li>
+                    <li><strong>字符串格式化</strong>：模板字符串、padStart()等</li>
+                    <li><strong>ES2022/2023新方法</strong>：at()、replaceAll()等</li>
+                </ul>
+            </div>
+            
+            <h2>创建字符串</h2>
+            <p>JavaScript提供多种方式创建字符串：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// 1. 单引号</span><br>
+                <span class="code-keyword">const</span> str1 = <span class="code-string">'Hello, World!'</span>;<br><br>
+                
+                <span class="code-comment">// 2. 双引号</span><br>
+                <span class="code-keyword">const</span> str2 = <span class="code-string">"JavaScript is awesome!"</span>;<br><br>
+                
+                <span class="code-comment">// 3. 反引号（模板字符串，ES6）</span><br>
+                <span class="code-keyword">const</span> name = <span class="code-string">"张三"</span>;<br>
+                <span class="code-keyword">const</span> str3 = <span class="code-string">`Hello, ${name}! Today is ${<span class="code-keyword">new</span> Date().toLocaleDateString()}`</span>;<br><br>
+                
+                <span class="code-comment">// 4. String构造函数</span><br>
+                <span class="code-keyword">const</span> str4 = <span class="code-keyword">new</span> String(<span class="code-string">"构造函数创建的字符串"</span>); <span class="code-comment">// 返回String对象</span><br>
+                <span class="code-keyword">const</span> str5 = String(<span class="code-number">123</span>); <span class="code-comment">// 将其他类型转换为字符串</span><br><br>
+                
+                <span class="code-comment">// 字符串是不可变的</span><br>
+                <span class="code-keyword">let</span> text = <span class="code-string">"Hello"</span>;<br>
+                text[<span class="code-number">0</span>] = <span class="code-string">"h"</span>; <span class="code-comment">// 尝试修改字符串中的字符</span><br>
+                console.log(text); <span class="code-comment">// "Hello" - 原字符串没有改变</span><br><br>
+                
+                <span class="code-comment">// 需要创建新字符串来实现修改</span><br>
+                text = <span class="code-string">"h"</span> + text.slice(<span class="code-number">1</span>); <span class="code-comment">// "hello"</span><br>
+                console.log(text); <span class="code-comment">// "hello"</span>
+            </div>
+            
+            <h2>字符串访问和属性</h2>
+            <p>可以使用多种方式访问字符串中的字符和获取字符串信息：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> text = <span class="code-string">"Hello, JavaScript!"</span>;<br><br>
+                
+                <span class="code-comment">// 获取字符串长度</span><br>
+                console.log(text.length); <span class="code-comment">// 18</span><br><br>
+                
+                <span class="code-comment">// 访问字符 - 方括号表示法（ES5.1）</span><br>
+                console.log(text[<span class="code-number">0</span>]); <span class="code-comment">// "H"</span><br>
+                console.log(text[<span class="code-number">7</span>]); <span class="code-comment">// "J"</span><br><br>
+                
+                <span class="code-comment">// 使用charAt()方法</span><br>
+                console.log(text.charAt(<span class="code-number">0</span>)); <span class="code-comment">// "H"</span><br>
+                console.log(text.charAt(<span class="code-number">100</span>)); <span class="code-comment">// "" (空字符串)</span><br><br>
+                
+                <span class="code-comment">// ES2022的at()方法 - 支持负索引</span><br>
+                console.log(text.at(-<span class="code-number">1</span>)); <span class="code-comment">// "!" (最后一个字符)</span><br>
+                console.log(text.at(-<span class="code-number">2</span>)); <span class="code-comment">// "t" (倒数第二个字符)</span><br><br>
+                
+                <span class="code-comment">// 遍历字符串</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">const</span> char <span class="code-keyword">of</span> text) {<br>
+                &nbsp;&nbsp;console.log(char);<br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用Array.from()将字符串转换为字符数组</span><br>
+                <span class="code-keyword">const</span> charArray = Array.from(text);<br>
+                console.log(charArray); <span class="code-comment">// ['H', 'e', 'l', 'l', 'o', ',', ' ', 'J', ...]</span><br><br>
+                
+                <span class="code-comment">// 使用扩展运算符将字符串转换为字符数组</span><br>
+                <span class="code-keyword">const</span> charArray2 = [...text];<br>
+                console.log(charArray2); <span class="code-comment">// ['H', 'e', 'l', 'l', 'o', ',', ' ', 'J', ...]</span>
+            </div>
+            
+            <h2>字符串基本操作</h2>
+            <p>字符串的拼接、截取、转换等基本操作：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> str = <span class="code-string">"Hello, JavaScript World!"</span>;<br><br>
+                
+                <span class="code-comment">// 字符串拼接</span><br>
+                <span class="code-keyword">const</span> greeting = <span class="code-string">"Hello"</span> + <span class="code-string">" "</span> + <span class="code-string">"World"</span>;<br>
+                <span class="code-keyword">const</span> templateGreeting = <span class="code-string">`Hello ${<span class="code-string">"World"</span>}`</span>;<br>
+                <span class="code-keyword">const</span> concatGreeting = <span class="code-string">"Hello"</span>.concat(<span class="code-string">" "</span>, <span class="code-string">"World"</span>);<br><br>
+                
+                <span class="code-comment">// 截取字符串</span><br>
+                console.log(str.slice(<span class="code-number">0</span>, <span class="code-number">5</span>)); <span class="code-comment">// "Hello" (从索引0到5，不包括5)</span><br>
+                console.log(str.substring(<span class="code-number">0</span>, <span class="code-number">5</span>)); <span class="code-comment">// "Hello" (与slice类似，但参数可以交换)</span><br>
+                console.log(str.substr(<span class="code-number">0</span>, <span class="code-number">5</span>)); <span class="code-comment">// "Hello" (从索引0开始，取5个字符，已废弃)</span><br><br>
+                
+                <span class="code-comment">// 使用slice()的负索引</span><br>
+                console.log(str.slice(-<span class="code-number">5</span>)); <span class="code-comment">// "World" (从倒数第5个字符到末尾)</span><br>
+                console.log(str.slice(-<span class="code-number">5</span>, -<span class="code-number">1</span>)); <span class="code-comment">// "Worl" (从倒数第5个到倒数第1个，不包括)</span><br><br>
+                
+                <span class="code-comment">// 大小写转换</span><br>
+                console.log(str.toUpperCase()); <span class="code-comment">// "HELLO, JAVASCRIPT WORLD!"</span><br>
+                console.log(str.toLowerCase()); <span class="code-comment">// "hello, javascript world!"</span><br><br>
+                
+                <span class="code-comment">// 去除空白字符</span><br>
+                <span class="code-keyword">const</span> spacedStr = <span class="code-string">"  Hello, World!  "</span>;<br>
+                console.log(spacedStr.trim()); <span class="code-comment">// "Hello, World!"</span><br>
+                console.log(spacedStr.trimStart()); <span class="code-comment">// "Hello, World!  "</span><br>
+                console.log(spacedStr.trimEnd()); <span class="code-comment">// "  Hello, World!"</span><br><br>
+                
+                <span class="code-comment">// 替换字符串</span><br>
+                console.log(str.replace(<span class="code-string">"JavaScript"</span>, <span class="code-string">"TypeScript"</span>)); <span class="code-comment">// "Hello, TypeScript World!"</span><br>
+                console.log(str.replace(<span class="code-regexp">/o/g</span>, <span class="code-string">"0"</span>)); <span class="code-comment">// "Hell0, Javascr ipt W0rld!" (全局替换)</span><br><br>
+                <span class="code-comment">// ES2021的replaceAll()方法</span><br>
+                console.log(str.replaceAll(<span class="code-string">'o'</span>, <span class="code-string">'0'</span>)); <span class="code-comment">// "Hell0, Javascr ipt W0rld!"</span>
+            </div>
+            
+            <h2>字符串搜索方法</h2>
+            <p>JavaScript提供了多种方法来搜索和检测字符串中的内容：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> text = <span class="code-string">"JavaScript is a programming language"</span>;<br><br>
+                
+                <span class="code-comment">// indexOf() - 查找子字符串第一次出现的位置</span><br>
+                console.log(text.indexOf(<span class="code-string">"a"</span>)); <span class="code-comment">// 1 (从0开始的索引)</span><br>
+                console.log(text.indexOf(<span class="code-string">"a"</span>, <span class="code-number">2</span>)); <span class="code-comment">// 3 (从索引2开始查找)</span><br>
+                console.log(text.indexOf(<span class="code-string">"Python"</span>)); <span class="code-comment">// -1 (未找到)</span><br><br>
+                
+                <span class="code-comment">// lastIndexOf() - 查找子字符串最后一次出现的位置</span><br>
+                console.log(text.lastIndexOf(<span class="code-string">"a"</span>)); <span class="code-comment">// 30</span><br><br>
+                
+                <span class="code-comment">// includes() - 检查字符串是否包含子字符串</span><br>
+                console.log(text.includes(<span class="code-string">"JavaScript"</span>)); <span class="code-comment">// true</span><br>
+                console.log(text.includes(<span class="code-string">"Python"</span>)); <span class="code-comment">// false</span><br>
+                console.log(text.includes(<span class="code-string">"a"</span>, <span class="code-number">10</span>)); <span class="code-comment">// true (从索引10开始查找)</span><br><br>
+                
+                <span class="code-comment">// startsWith() - 检查字符串是否以特定子字符串开始</span><br>
+                console.log(text.startsWith(<span class="code-string">"JavaScript"</span>)); <span class="code-comment">// true</span><br>
+                console.log(text.startsWith(<span class="code-string">"a"</span>, <span class="code-number">1</span>)); <span class="code-comment">// true (从索引1开始检查)</span><br><br>
+                
+                <span class="code-comment">// endsWith() - 检查字符串是否以特定子字符串结束</span><br>
+                console.log(text.endsWith(<span class="code-string">"language"</span>)); <span class="code-comment">// true</span><br>
+                console.log(text.endsWith(<span class="code-string">"programming"</span>, <span class="code-number">20</span>)); <span class="code-comment">// true (检查前20个字符是否以"programming"结束)</span><br><br>
+                
+                <span class="code-comment">// search() - 使用正则表达式搜索</span><br>
+                console.log(text.search(<span class="code-regexp">/JAVA/i</span>)); <span class="code-comment">// 0 (找到匹配项的索引)</span><br><br>
+                
+                <span class="code-comment">// match() - 使用正则表达式匹配</span><br>
+                <span class="code-keyword">const</span> matches = text.match(<span class="code-regexp">/a/g</span>); <span class="code-comment">// 全局匹配所有'a'</span><br>
+                console.log(matches); <span class="code-comment">// ['a', 'a', 'a', 'a', 'a']</span>
+            </div>
+            
+            <table class="string-methods-table">
+                <thead>
+                    <tr>
+                        <th>方法</th>
+                        <th>描述</th>
+                        <th>返回值</th>
+                        <th>示例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>charAt(index)</td>
+                        <td>返回指定索引处的字符</td>
+                        <td>字符</td>
+                        <td>str.charAt(0)</td>
+                    </tr>
+                    <tr>
+                        <td>indexOf(searchValue)</td>
+                        <td>查找子字符串第一次出现的位置</td>
+                        <td>索引或-1</td>
+                        <td>str.indexOf('a')</td>
+                    </tr>
+                    <tr>
+                        <td>substring(start, end)</td>
+                        <td>提取子字符串</td>
+                        <td>新字符串</td>
+                        <td>str.substring(0, 5)</td>
+                    </tr>
+                    <tr>
+                        <td>slice(start, end)</td>
+                        <td>提取子字符串（支持负索引）</td>
+                        <td>新字符串</td>
+                        <td>str.slice(-5)</td>
+                    </tr>
+                    <tr>
+                        <td>toUpperCase()</td>
+                        <td>转换为大写</td>
+                        <td>新字符串</td>
+                        <td>str.toUpperCase()</td>
+                    </tr>
+                    <tr>
+                        <td>toLowerCase()</td>
+                        <td>转换为小写</td>
+                        <td>新字符串</td>
+                        <td>str.toLowerCase()</td>
+                    </tr>
+                    <tr>
+                        <td>trim()</td>
+                        <td>去除首尾空白字符</td>
+                        <td>新字符串</td>
+                        <td>str.trim()</td>
+                    </tr>
+                    <tr>
+                        <td>split(separator)</td>
+                        <td>按分隔符分割为数组</td>
+                        <td>数组</td>
+                        <td>str.split(' ')</td>
+                    </tr>
+                    <tr>
+                        <td>replace(search, replacement)</td>
+                        <td>替换子字符串</td>
+                        <td>新字符串</td>
+                        <td>str.replace('old', 'new')</td>
+                    </tr>
+                    <tr>
+                        <td>concat(str1, str2, ...)</td>
+                        <td>连接字符串</td>
+                        <td>新字符串</td>
+                        <td>str.concat(' more', ' text')</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>字符串分割与连接</h2>
+            <p>将字符串分割成数组或将数组连接成字符串：</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> sentence = <span class="code-string">"JavaScript is a powerful programming language"</span>;<br><br>
+                
+                <span class="code-comment">// split() - 按分隔符分割字符串</span><br>
+                <span class="code-keyword">const</span> words = sentence.split(<span class="code-string">' '</span>);<br>
+                console.log(words); <span class="code-comment">// ["JavaScript", "is", "a", "powerful", "programming", "language"]</span><br><br>
+                
+                <span class="code-comment">// 按多个分隔符分割</span><br>
+                <span class="code-keyword">const</span> complexStr = <span class="code-string">"apple,banana;orange:grape"</span>;<br>
+                <span class="code-keyword">const</span> fruits = complexStr.split(<span class="code-regexp">/[,;:]/</span>);<br>
+                console.log(fruits); <span class="code-comment">// ["apple", "banana", "orange", "grape"]</span><br><br>
+                
+                <span class="code-comment">// 按字符分割</span><br>
+                <span class="code-keyword">const</span> chars = sentence.split(<span class="code-string">''</span>);<br>
+                console.log(chars.length); <span class="code-comment">// 42 (字符数量)</span><br><br>
+                
+                <span class="code-comment">// 限制分割数量</span><br>
+                <span class="code-keyword">const</span> limitedWords = sentence.split(<span class="code-string">' '</span>, <span class="code-number">3</span>);<br>
+                console.log(limitedWords); <span class="code-comment">// ["JavaScript", "is", "a"]</span><br><br>
+                
+                <span class="code-comment">// join() - 将数组元素连接为字符串</span><br>
+                <span class="code-keyword">const</span> fruitsArray = [<span class="code-string">"apple"</span>, <span class="code-string">"banana"</span>, <span class="code-string">"orange"</span>];<br>
+                <span class="code-keyword">const</span> fruitsString = fruitsArray.join(<span class="code-string">', '</span>);<br>
+                console.log(fruitsString); <span class="code-comment">// "apple, banana, orange"</span><br><br>
+                
+                <span class="code-comment">// 无分隔符连接</span><br>
+                <span class="code-keyword">const</span> joinedWithoutSeparator = fruitsArray.join(<span class="code-string">''</span>);<br>
+                console.log(joinedWithoutSeparator); <span class="code-comment">// "applebananaorange"</span>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">slice() vs substring() vs substr()</div>
+                    <ul>
+                        <li><strong>slice(start, end)</strong>：支持负索引，end参数不包含在结果中</li>
+                        <li><strong>substring(start, end)</strong>：不支持负索引，参数会自动交换（如果start > end）</li>
+                        <li><strong>substr(start, length)</strong>：第二个参数是长度，已废弃，推荐使用slice()</li>
+                        <li>推荐使用slice()，因为它功能最全面且行为最可预测</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">字符串方法的不可变性</div>
+                    <ul>
+                        <li>所有字符串方法都不会修改原字符串</li>
+                        <li>所有操作都会返回新字符串</li>
+                        <li>这符合函数式编程原则，避免副作用</li>
+                        <li>如果需要修改原字符串，需要将结果重新赋值给变量</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>字符串格式化和填充</h2>
+            <p>格式化字符串以满足特定的显示要求：</p>
+            
+            <div class="code-block">
+                <span class="code-comment">// padStart() 和 padEnd() - 字符串填充</span><br>
+                console.log(<span class="code-string">'5'</span>.padStart(<span class="code-number">3</span>, <span class="code-string">'0'</span>)); <span class="code-comment">// "005"</span><br>
+                console.log(<span class="code-string">'5'</span>.padEnd(<span class="code-number">3</span>, <span class="code-string">'0'</span>)); <span class="code-comment">// "500"</span><br>
+                console.log(<span class="code-string">'Hello'</span>.padStart(<span class="code-number">10</span>, <span class="code-string">'*'</span>)); <span class="code-comment">// "*****Hello"</span><br><br>
+                
+                <span class="code-comment">// repeat() - 重复字符串</span><br>
+                console.log(<span class="code-string">'abc'</span>.repeat(<span class="code-number">3</span>)); <span class="code-comment">// "abcabcabc"</span><br><br>
+                
+                <span class="code-comment">// 模板字符串（ES6）</span><br>
+                <span class="code-keyword">const</span> name = <span class="code-string">"Alice"</span>;<br>
+                <span class="code-keyword">const</span> age = <span class="code-number">30</span>;<br>
+                <span class="code-keyword">const</span> profile = <span class="code-string">`Name: ${name}, Age: ${age}`</span>;<br>
+                console.log(profile); <span class="code-comment">// "Name: Alice, Age: 30"</span><br><br>
+                
+                <span class="code-comment">// 模板字符串中的表达式</span><br>
+                <span class="code-keyword">const</span> calculation = <span class="code-string">`2 + 2 = ${<span class="code-number">2</span> + <span class="code-number">2</span>}`</span>;<br>
+                console.log(calculation); <span class="code-comment">// "2 + 2 = 4"</span><br><br>
+                
+                <span class="code-comment">// 多行字符串（模板字符串）</span><br>
+                <span class="code-keyword">const</span> multiline = <span class="code-string">`<br>                    这是第一行<br>                    这是第二行<br>                    这是第三行<br>                    `</span>;<br>
+                console.log(multiline);<br><br>
+                
+                <span class="code-comment">// 标签模板（高级用法）</span><br>
+                <span class="code-keyword">function</span> highlight(strings, ...values) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">let</span> result = <span class="code-string">''</span>;<br>
+                &nbsp;&nbsp;strings.forEach((string, i) => {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;result += string;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (i < values.length) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result += <span class="code-string">`<mark>${values[i]}</mark>`</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;});<br>
+                &nbsp;&nbsp;<span class="code-keyword">return</span> result;<br>
+                }<br><br>
+                
+                <span class="code-keyword">const</span> highlighted = highlight<span class="code-string">`Hello, ${name}! You are ${age} years old.`</span>;<br>
+                console.log(highlighted); <span class="code-comment">// "Hello, <mark>Alice</mark>! You are <mark>30</mark> years old."</span>
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个函数，将句子中的每个单词首字母大写</li>
+                    <li>实现一个字符串截断函数，超过指定长度则添加省略号</li>
+                    <li>编写一个函数，统计字符串中每个字符出现的次数</li>
+                    <li>创建一个模板引擎函数，将模板中的占位符替换为实际值</li>
+                    <li>实现一个简单的字符串加密/解密函数</li>
+                </ul>
+            </div>
+            
+            <h2>实际应用示例</h2>
+            <p>以下是字符串在实际开发中的应用示例：</p>
+            
+            <div class="string-example">
+                <div class="string-example-title">URL处理示例</div>
+                <div class="code-block">
+                    <span class="code-comment">// URL处理函数</span><br>
+                    <span class="code-keyword">function</span> parseURL(url) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// 移除末尾的斜杠</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">if</span> (url.endsWith(<span class="code-string">'/'</span>)) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;url = url.slice(<span class="code-number">0</span>, -<span class="code-number">1</span>);<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> parts = url.split(<span class="code-string">'/'</span>);<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> protocol = parts[<span class="code-number">0</span>].includes(<span class="code-string">':'</span>) ? parts[<span class="code-number">0</span>].replace(<span class="code-string">':'</span>, <span class="code-string">''</span>) : <span class="code-boolean">null</span>;<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> host = protocol ? parts[<span class="code-number">2</span>] : parts[<span class="code-number">0</span>] || <span class="code-string">''</span>;<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> path = protocol ? parts.slice(<span class="code-number">3</span>).join(<span class="code-string">'/'</span>) : parts.slice(<span class="code-number">1</span>).join(<span class="code-string">'/'</span>) || <span class="code-string">''</span>;<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> { protocol, host, path };<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">const</span> urlInfo = parseURL(<span class="code-string">'https://example.com/users/profile'</span>);<br>
+                    console.log(urlInfo); <span class="code-comment">// {protocol: "https", host: "example.com", path: "users/profile"}</span><br><br>
+                    
+                    <span class="code-comment">// 构建查询字符串</span><br>
+                    <span class="code-keyword">function</span> buildQueryString(params) {<br>
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> Object.entries(params)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.map(([key, value]) => <span class="code-string">`${encodeURIComponent(key)}=${encodeURIComponent(value)}`</span>)<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.join(<span class="code-string">'&'</span>);<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">const</span> query = buildQueryString({ name: <span class="code-string">'Alice'</span>, age: <span class="code-number">30</span>, city: <span class="code-string">'New York'</span> });<br>
+                    console.log(query); <span class="code-comment">// "name=Alice&age=30&city=New%20York"</span>
+                </div>
+            </div>
+            
+            <div class="string-example">
+                <div class="string-example-title">文本处理示例</div>
+                <div class="code-block">
+                    <span class="code-comment">// 文本处理工具函数</span><br>
+                    <span class="code-keyword">function</span> processText(text) {<br>
+                    &nbsp;&nbsp;<span class="code-comment">// 清理文本 - 去除多余空格并标准化换行</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> cleaned = text<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.replace(<span class="code-regexp">/\s+/g</span>, <span class="code-string">' '</span>) <span class="code-comment">// 多个空白字符替换为单个空格</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;.trim(); <span class="code-comment">// 去除首尾空格</span><br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-comment">// 统计单词</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> words = cleaned.split(<span class="code-regexp">/\s+/</span>).filter(word => word.length > <span class="code-number">0</span>);<br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> wordCount = words.length;<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-comment">// 统计字符（不包括空格）</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> charCount = cleaned.replace(<span class="code-regexp">/\s/g</span>, <span class="code-string">''</span>).length;<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-comment">// 找出最长的单词</span><br>
+                    &nbsp;&nbsp;<span class="code-keyword">const</span> longestWord = words.reduce((longest, current) =><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;current.length > longest.length ? current : longest, <span class="code-string">''</span>);<br><br>
+                    
+                    &nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;original: text,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cleaned: cleaned,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;wordCount: wordCount,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;charCount: charCount,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;longestWord: longestWord,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;longestWordLength: longestWord.length<br>
+                    &nbsp;&nbsp;};<br>
+                    }<br><br>
+                    
+                    <span class="code-keyword">const</span> textStats = processText(<span class="code-string">`<br>                    JavaScript is a versatile programming language<br>                    that is widely used for web development.<br>                    `</span>);<br><br>
+                    
+                    console.log(textStats);<br>
+                    <span class="code-comment">/*<br                    {<br                        original: "...",<br                        cleaned: "JavaScript is a versatile programming language that is widely used for web development.",<br                        wordCount: 12,<br                        charCount: 57,<br                        longestWord: "programming",<br                        longestWordLength: 11<br                    }<br                    */</span>
+                </div>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="objects.html" class="nav-link">← 上一课：对象基础与属性操作</a>
+            <a href="../advanced/index.html" class="nav-link">下一课：进阶特性 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .project-steps {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #42b983;
+            margin: 10px 0;
+        }
+        
+        .stat-title {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>管理后台</h1>
+            <p class="subtitle">后台管理系统开发</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./ecommerce.html" class="nav-link">上一课：电商项目</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./crm.html" class="nav-link">下一课：CRM系统</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>管理后台项目目标</h3>
+                <ul>
+                    <li><strong>数据可视化</strong>：图表展示关键业务数据</li>
+                    <li><strong>用户管理</strong>：用户列表、权限控制、用户编辑</li>
+                    <li><strong>内容管理</strong>：文章、产品等内容的增删改查</li>
+                    <li><strong>权限系统</strong>：角色权限管理与访问控制</li>
+                    <li><strong>响应式布局</strong>：适配不同设备屏幕</li>
+                    <li><strong>实时数据</strong>：WebSocket数据更新</li>
+                </ul>
+            </div>
+            
+            <h2>项目概述</h2>
+            <p>我们将构建一个功能完整的管理后台系统，包含数据可视化、用户管理、内容管理、权限控制等核心功能。这个项目将综合运用Vue 3的高级特性、状态管理、路由、组件通信、API集成等知识。</p>
+            
+            <h2>项目结构规划</h2>
+            <div class="code-block">
+dashboard-app/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/           # 可复用组件
+│   │   ├── Sidebar.vue      # 侧边栏组件
+│   │   ├── Header.vue       # 顶部导航组件
+│   │   ├── StatCard.vue     # 统计卡片组件
+│   │   ├── UserTable.vue    # 用户表格组件
+│   │   ├── DataTable.vue    # 数据表格组件
+│   │   └── Chart.vue        # 图表组件
+│   ├── views/               # 页面组件
+│   │   ├── Dashboard.vue    # 仪表盘页
+│   │   ├── Users.vue        # 用户管理页
+│   │   ├── Products.vue     # 产品管理页
+│   │   ├── Orders.vue       # 订单管理页
+│   │   ├── Settings.vue     # 系统设置页
+│   │   └── Login.vue        # 登录页
+│   ├── stores/              # Pinia状态管理
+│   │   ├── auth.js          # 认证状态
+│   │   ├── users.js         # 用户状态
+│   │   ├── products.js      # 产品状态
+│   │   └── dashboard.js     # 仪表盘状态
+│   ├── composables/         # 可复用逻辑
+│   │   ├── useApi.js        # API请求逻辑
+│   │   └── usePermissions.js # 权限控制逻辑
+│   ├── services/            # API服务
+│   │   └── api.js           # API请求封装
+│   ├── router/              # 路由配置
+│   │   └── index.js         # 路由配置
+│   ├── styles/              # 样式文件
+│   │   └── main.css
+│   ├── utils/               # 工具函数
+│   │   └── helpers.js       # 辅助函数
+│   ├── App.vue              # 根组件
+│   └── main.js              # 入口文件
+├── package.json
+└── vite.config.js
+</div>
+            
+            <h2>创建项目和安装依赖</h2>
+            <div class="code-block">
+# 创建项目
+npm create vue@latest dashboard-app
+cd dashboard-app
+
+# 选择特性：TypeScript, Router, Pinia, ESLint, Prettier
+# 安装依赖
+npm install
+
+# 安装额外依赖
+npm install axios vue-router@4 chart.js vue-chartjs
+</div>
+            
+            <h2>创建认证状态管理(store)</h2>
+            <p>首先创建管理用户认证状态的store：</p>
+            
+            <div class="code-block">
+// src/stores/auth.js
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref(null)
+  const isAuthenticated = ref(false)
+  const token = ref(localStorage.getItem('token') || null)
+  
+  const login = async (credentials) => {
+    // 模拟API调用
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials)
+    })
+    
+    const data = await response.json()
+    
+    if (response.ok) {
+      user.value = data.user
+      token.value = data.token
+      isAuthenticated.value = true
+      localStorage.setItem('token', data.token)
+      return { success: true }
+    } else {
+      return { success: false, message: data.message }
+    }
+  }
+  
+  const logout = () => {
+    user.value = null
+    isAuthenticated.value = false
+    token.value = null
+    localStorage.removeItem('token')
+  }
+  
+  const checkAuth = () => {
+    if (token.value) {
+      // 验证token有效性（实际项目中需要调用API）
+      isAuthenticated.value = true
+      // 模拟获取用户信息
+      user.value = { id: 1, name: 'Admin', email: 'admin@example.com', role: 'admin' }
+    }
+  }
+  
+  return {
+    user,
+    isAuthenticated,
+    token,
+    login,
+    logout,
+    checkAuth
+  }
+})
+</div>
+            
+            <h2>创建仪表盘状态管理</h2>
+            <p>创建管理仪表盘数据的状态store：</p>
+            
+            <div class="code-block">
+// src/stores/dashboard.js
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+
+export const useDashboardStore = defineStore('dashboard', () => {
+  const stats = ref({
+    totalUsers: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+    activeUsers: 0
+  })
+  
+  const recentOrders = ref([])
+  const userGrowth = ref([])
+  
+  const loading = ref(false)
+  
+  // 模拟数据获取
+  const fetchDashboardData = async () => {
+    loading.value = true
+    try {
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      stats.value = {
+        totalUsers: 1240,
+        totalOrders: 2450,
+        totalRevenue: 124560,
+        activeUsers: 320
+      }
+      
+      recentOrders.value = [
+        { id: 1, user: '张三', amount: 299, date: '2026-01-01', status: 'completed' },
+        { id: 2, user: '李四', amount: 199, date: '2026-01-01', status: 'pending' },
+        { id: 3, user: '王五', amount: 499, date: '2025-12-31', status: 'completed' },
+        { id: 4, user: '赵六', amount: 149, date: '2025-12-31', status: 'cancelled' },
+        { id: 5, user: '钱七', amount: 399, date: '2025-12-30', status: 'completed' }
+      ]
+      
+      userGrowth.value = [
+        { month: '1月', users: 120 },
+        { month: '2月', users: 180 },
+        { month: '3月', users: 250 },
+        { month: '4月', users: 320 },
+        { month: '5月', users: 410 },
+        { month: '6月', users: 530 },
+        { month: '7月', users: 620 },
+        { month: '8月', users: 750 },
+        { month: '9月', users: 890 },
+        { month: '10月', users: 1020 },
+        { month: '11月', users: 1150 },
+        { month: '12月', users: 1240 }
+      ]
+    } finally {
+      loading.value = false
+    }
+  }
+  
+  return {
+    stats,
+    recentOrders,
+    userGrowth,
+    loading,
+    fetchDashboardData
+  }
+})
+</div>
+            
+            <h2>创建统计卡片组件</h2>
+            <p>创建显示统计数据的卡片组件：</p>
+            
+            <div class="code-block">
+// src/components/StatCard.vue
+&lt;template&gt;
+  &lt;div class="stat-card"&gt;
+    &lt;div class="stat-icon"&gt;
+      &lt;slot name="icon"&gt;&lt;/slot&gt;
+    &lt;/div&gt;
+    &lt;div class="stat-content"&gt;
+      &lt;div class="stat-value"&gt;{{ formatValue(value) }}&lt;/div&gt;
+      &lt;div class="stat-title"&gt;{{ title }}&lt;/div&gt;
+      &lt;div class="stat-change" :class="changeClass"&gt;
+        &lt;span&gt;{{ changeText }}&lt;/span&gt;
+        &lt;span&gt;{{ changePercent }}&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { computed } from 'vue'
+
+const props = defineProps({
+  title: {
+    type: String,
+    required: true
+  },
+  value: {
+    type: Number,
+    required: true
+  },
+  change: {
+    type: Number,
+    default: 0
+  },
+  prefix: {
+    type: String,
+    default: ''
+  },
+  suffix: {
+    type: String,
+    default: ''
+  }
+})
+
+const changeClass = computed(() => {
+  return props.change >= 0 ? 'positive' : 'negative'
+})
+
+const changeText = computed(() => {
+  return props.change >= 0 ? '↑' : '↓'
+})
+
+const changePercent = computed(() => {
+  return `${Math.abs(props.change)}%`
+})
+
+const formatValue = (value) => {
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(1)}M`
+  }
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(1)}K`
+  }
+  return value.toString()
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #e8f5e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-size: 24px;
+  color: #42b983;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stat-title {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.stat-change {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.stat-change.positive {
+  color: #28a745;
+}
+
+.stat-change.negative {
+  color: #dc3545;
+}
+
+.stat-change span:first-child {
+  margin-right: 5px;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建仪表盘页面</h2>
+            <p>创建仪表盘页面组件：</p>
+            
+            <div class="code-block">
+// src/views/Dashboard.vue
+&lt;template&gt;
+  &lt;div class="dashboard"&gt;
+    &lt;h2&gt;仪表盘&lt;/h2&gt;
+    
+    &lt;div v-if="dashboardStore.loading" class="loading"&gt;
+      加载中...
+    &lt;/div&gt;
+    
+    &lt;div v-else&gt;
+      &lt;div class="stats-grid"&gt;
+        &lt;StatCard 
+          title="总用户数" 
+          :value="dashboardStore.stats.totalUsers" 
+          :change="12.5"
+          suffix="用户"
+        &gt;
+          &lt;template #icon&gt;
+            👥
+          &lt;/template&gt;
+        &lt;/StatCard&gt;
+        
+        &lt;StatCard 
+          title="总订单数" 
+          :value="dashboardStore.stats.totalOrders" 
+          :change="8.2"
+          suffix="订单"
+        &gt;
+          &lt;template #icon&gt;
+            📦
+          &lt;/template&gt;
+        &lt;/StatCard&gt;
+        
+        &lt;StatCard 
+          title="总收入" 
+          :value="dashboardStore.stats.totalRevenue" 
+          :change="15.7"
+          prefix="¥"
+        &gt;
+          &lt;template #icon&gt;
+            💰
+          &lt;/template&gt;
+        &lt;/StatCard&gt;
+        
+        &lt;StatCard 
+          title="活跃用户" 
+          :value="dashboardStore.stats.activeUsers" 
+          :change="5.3"
+          suffix="用户"
+        &gt;
+          &lt;template #icon&gt;
+            👨‍💻
+          &lt;/template&gt;
+        &lt;/StatCard&gt;
+      &lt;/div&gt;
+      
+      &lt;div class="charts-section"&gt;
+        &lt;div class="chart-card"&gt;
+          &lt;h3&gt;用户增长趋势&lt;/h3&gt;
+          &lt;!-- 这里可以使用Chart.js组件 --&gt;
+          &lt;div class="chart-placeholder"&gt;
+            用户增长图表
+          &lt;/div&gt;
+        &lt;/div&gt;
+        
+        &lt;div class="chart-card"&gt;
+          &lt;h3&gt;订单状态分布&lt;/h3&gt;
+          &lt;div class="chart-placeholder"&gt;
+            订单分布图表
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      &lt;div class="recent-orders"&gt;
+        &lt;h3&gt;最近订单&lt;/h3&gt;
+        &lt;table class="orders-table"&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;
+              &lt;th&gt;订单ID&lt;/th&gt;
+              &lt;th&gt;用户&lt;/th&gt;
+              &lt;th&gt;金额&lt;/th&gt;
+              &lt;th&gt;日期&lt;/th&gt;
+              &lt;th&gt;状态&lt;/th&gt;
+            &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;tr 
+              v-for="order in dashboardStore.recentOrders" 
+              :key="order.id"
+              :class="order.status"
+            &gt;
+              &lt;td&gt;#{{ order.id }}&lt;/td&gt;
+              &lt;td&gt;{{ order.user }}&lt;/td&gt;
+              &lt;td&gt;¥{{ order.amount }}&lt;/td&gt;
+              &lt;td&gt;{{ order.date }}&lt;/td&gt;
+              &lt;td&gt;
+                &lt;span class="status-badge" :class="order.status"&gt;
+                  {{ getStatusText(order.status) }}
+                &lt;/span&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/tbody&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { onMounted } from 'vue'
+import { useDashboardStore } from '@/stores/dashboard'
+import StatCard from '@/components/StatCard.vue'
+
+const dashboardStore = useDashboardStore()
+
+onMounted(() => {
+  dashboardStore.fetchDashboardData()
+})
+
+const getStatusText = (status) => {
+  const statusMap = {
+    completed: '已完成',
+    pending: '待处理',
+    cancelled: '已取消'
+  }
+  return statusMap[status] || status
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.dashboard {
+  padding: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #6c757d;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.charts-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.chart-card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.chart-placeholder {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 4px;
+  color: #6c757d;
+}
+
+.recent-orders {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.recent-orders h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.orders-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status-badge.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+@media (max-width: 768px) {
+  .charts-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .orders-table {
+    font-size: 0.8rem;
+  }
+  
+  .orders-table th,
+  .orders-table td {
+    padding: 8px;
+  }
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建侧边栏组件</h2>
+            <p>创建管理后台的侧边栏导航组件：</p>
+            
+            <div class="code-block">
+// src/components/Sidebar.vue
+&lt;template&gt;
+  &lt;div class="sidebar"&gt;
+    &lt;div class="logo"&gt;
+      &lt;h2&gt;管理后台&lt;/h2&gt;
+    &lt;/div&gt;
+    
+    &lt;nav class="menu"&gt;
+      &lt;router-link 
+        v-for="item in menuItems" 
+        :key="item.path"
+        :to="item.path"
+        class="menu-item"
+        active-class="active"
+      &gt;
+        &lt;span class="icon"&gt;{{ item.icon }}&lt;/span&gt;
+        &lt;span class="title"&gt;{{ item.title }}&lt;/span&gt;
+      &lt;/router-link&gt;
+    &lt;/nav&gt;
+    
+    &lt;div class="user-section"&gt;
+      &lt;div class="user-info"&gt;
+        &lt;div class="user-avatar"&gt;{{ userInitials }}&lt;/div&gt;
+        &lt;div class="user-details"&gt;
+          &lt;div class="user-name"&gt;{{ authStore.user?.name }}&lt;/div&gt;
+          &lt;div class="user-role"&gt;{{ authStore.user?.role }}&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+      
+      &lt;button @click="logout" class="logout-btn"&gt;
+        退出登录
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const router = useRouter()
+const authStore = useAuthStore()
+
+const menuItems = [
+  { path: '/', title: '仪表盘', icon: '📊' },
+  { path: '/users', title: '用户管理', icon: '👥' },
+  { path: '/products', title: '产品管理', icon: '📦' },
+  { path: '/orders', title: '订单管理', icon: '📋' },
+  { path: '/settings', title: '系统设置', icon: '⚙️' }
+]
+
+const userInitials = computed(() => {
+  if (authStore.user?.name) {
+    return authStore.user.name.charAt(0).toUpperCase()
+  }
+  return 'U'
+})
+
+const logout = () => {
+  authStore.logout()
+  router.push('/login')
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.sidebar {
+  width: 250px;
+  background: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.logo {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.logo h2 {
+  margin: 0;
+  color: #42b983;
+  font-size: 1.3rem;
+}
+
+.menu {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #495057;
+  transition: all 0.3s;
+  margin: 0 10px;
+  border-radius: 4px;
+}
+
+.menu-item:hover {
+  background: #f8f9fa;
+  color: #42b983;
+}
+
+.menu-item.active {
+  background: #e8f5e9;
+  color: #42b983;
+}
+
+.icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+  width: 24px;
+}
+
+.user-section {
+  padding: 20px;
+  border-top: 1px solid #eee;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #42b983;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+.user-role {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+  }
+  
+  .title {
+    display: none;
+  }
+  
+  .user-details,
+  .user-role {
+    display: none;
+  }
+  
+  .menu-item {
+    justify-content: center;
+  }
+  
+  .icon {
+    margin-right: 0;
+  }
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建主应用组件</h2>
+            <p>整合所有组件到主应用：</p>
+            
+            <div class="code-block">
+// src/App.vue
+&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;Sidebar v-if="showSidebar" /&gt;
+    &lt;div :class="mainClass"&gt;
+      &lt;Header v-if="showHeader" /&gt;
+      &lt;main&gt;
+        &lt;router-view /&gt;
+      &lt;/main&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import Sidebar from '@/components/Sidebar.vue'
+import Header from '@/components/Header.vue'
+
+const route = useRoute()
+const authStore = useAuthStore()
+
+// 检查是否需要显示侧边栏和头部
+const showSidebar = computed(() => {
+  return !['/login'].includes(route.path) && authStore.isAuthenticated
+})
+
+const showHeader = computed(() => {
+  return !['/login'].includes(route.path) && authStore.isAuthenticated
+})
+
+const mainClass = computed(() => {
+  return {
+    'main-content': true,
+    'with-sidebar': showSidebar.value
+  }
+})
+
+// 检查认证状态
+authStore.checkAuth()
+&lt;/script&gt;
+
+&lt;style&gt;
+#app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.main-content.with-sidebar {
+  margin-left: 250px;
+}
+
+@media (max-width: 768px) {
+  .main-content.with-sidebar {
+    margin-left: 70px;
+  }
+}
+
+main {
+  margin-top: 20px;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>路由守卫实现权限控制</h2>
+            <p>实现路由级别的权限控制：</p>
+            
+            <div class="code-block">
+// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const routes = [
+  { 
+    path: '/', 
+    name: 'Dashboard', 
+    component: () => import('@/views/Dashboard.vue'),
+    meta: { requiresAuth: true }
+  },
+  { 
+    path: '/users', 
+    name: 'Users', 
+    component: () => import('@/views/Users.vue'),
+    meta: { requiresAuth: true }
+  },
+  { 
+    path: '/products', 
+    name: 'Products', 
+    component: () => import('@/views/Products.vue'),
+    meta: { requiresAuth: true }
+  },
+  { 
+    path: '/orders', 
+    name: 'Orders', 
+    component: () => import('@/views/Orders.vue'),
+    meta: { requiresAuth: true }
+  },
+  { 
+    path: '/settings', 
+    name: 'Settings', 
+    component: () => import('@/views/Settings.vue'),
+    meta: { requiresAuth: true }
+  },
+  { 
+    path: '/login', 
+    name: 'Login', 
+    component: () => import('@/views/Login.vue'),
+    meta: { requiresGuest: true }
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+  
+  // 检查是否需要认证
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next('/login')
+  } 
+  // 检查是否需要访客状态
+  else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    next('/')
+  }
+  else {
+    next()
+  }
+})
+
+export default router
+</div>
+            
+            <div class="project-steps">
+                <h3>项目扩展建议</h3>
+                <ul>
+                    <li><strong>数据可视化</strong>：集成ECharts或Chart.js创建丰富的数据图表</li>
+                    <li><strong>权限管理</strong>：实现细粒度的RBAC权限控制</li>
+                    <li><strong>国际化</strong>：支持多语言界面</li>
+                    <li><strong>主题切换</strong>：实现亮色/暗色主题切换</li>
+                    <li><strong>实时通知</strong>：集成WebSocket实现实时消息推送</li>
+                    <li><strong>操作日志</strong>：记录管理员操作历史</li>
+                    <li><strong>API接口文档</strong>：集成Swagger文档系统</li>
+                    <li><strong>性能监控</strong>：添加前端性能监控功能</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="./ecommerce.html" class="nav-link">上一课：电商项目</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./crm.html" class="nav-link">下一课：CRM系统</a>
+        </div>
+        
+        <footer>
+            <p>管理后台 - Vue.js实战项目</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级组件 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高级组件</h1>
+            <p class="subtitle">异步组件、动态组件、边界组件</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="./communication.html" class="nav-link">上一课：组件通信</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../advanced/composition-api.html" class="nav-link">下一课：组合式API</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>高级组件核心概念</h3>
+                <ul>
+                    <li><strong>异步组件</strong>：按需加载组件</li>
+                    <li><strong>动态组件</strong>：根据条件切换组件</li>
+                    <li><strong>Suspense组件</strong>：处理异步组件加载状态</li>
+                    <li><strong>Teleport组件</strong>：将内容传送至DOM任意位置</li>
+                    <li><strong>Keep-alive组件</strong>：缓存组件状态</li>
+                    <li><strong>边界组件</strong>：错误处理和调试</li>
+                </ul>
+            </div>
+            
+            <h2>异步组件</h2>
+            <p>在大型应用中，我们可能需要将应用分割成更小的块，并且只在需要的时候才从服务器加载组件。为了实现这一点，Vue提供了[defineAsyncComponent](file:///e:\FrontendTeach\VUE快速上手\api\global-api.html#L14-L14)函数来定义异步加载的组件。</p>
+            
+            <div class="code-block">
+// Vue 3中使用异步组件
+import { defineAsyncComponent } from 'vue'
+
+// 基本用法
+const AsyncComponent = defineAsyncComponent(() => import('./components/MyComponent.vue'))
+
+// 高级用法 - 带有加载和错误状态
+const AsyncComponentWithStatus = defineAsyncComponent({
+  // 加载组件的函数
+  loader: () => import('./components/MyComponent.vue'),
+  
+  // 加载异步组件时要使用的组件
+  loadingComponent: LoadingComponent,
+  
+  // 加载失败时要使用的组件
+  errorComponent: ErrorComponent,
+  
+  // 展示加载组件的延迟时间，默认为 200ms
+  delay: 200,
+  
+  // 如果提供了一个超时时间且组件加载也超时了，
+  // 则使用错误组件
+  timeout: 3000,
+  
+  // 定义组件是否可挂起
+  suspensible: false
+})
+
+// 在模板中使用
+export default {
+  components: {
+    AsyncComponent
+  }
+}
+            </div>
+            
+            <h2>动态组件</h2>
+            <p>动态组件允许我们在运行时根据数据切换不同的组件。通过使用[component](file:///e:\FrontendTeach\VUE快速上手\api\built-ins.html#L1-L1)元素和[is](file:///e:\FrontendTeach\VUE快速上手\basics\template-syntax.html#L37-L37)属性，我们可以实现组件的动态切换。</p>
+            
+            <div class="code-block">
+// 定义多个组件
+const Home = { template: '&lt;div&gt;首页内容&lt;/div&gt;' }
+const About = { template: '&lt;div&gt;关于页面&lt;/div&gt;' }
+const Contact = { template: '&lt;div&gt;联系方式&lt;/div&gt;' }
+
+// 动态组件使用
+export default {
+  components: {
+    Home,
+    About,
+    Contact
+  },
+  data() {
+    return {
+      currentView: 'Home' // 当前显示的组件
+    }
+  },
+  template: `
+    &lt;div&gt;
+      &lt;!-- 导航按钮 --&gt;
+      &lt;button @click="currentView = 'Home'"&gt;首页&lt;/button&gt;
+      &lt;button @click="currentView = 'About'"&gt;关于&lt;/button&gt;
+      &lt;button @click="currentView = 'Contact'"&gt;联系&lt;/button&gt;
+      
+      &lt;!-- 动态组件 --&gt;
+      &lt;component :is="currentView" /&gt;
+    &lt;/div&gt;
+  `
+}
+            </div>
+            
+            <h2>Suspense组件</h2>
+            <p>Suspense是Vue 3.0引入的新组件，用于在组件树中协调对异步依赖的处理。它可以让组件在等待异步组件解析时保持挂起状态，并显示加载状态。</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;!-- Suspense组件 --&gt;
+    &lt;suspense&gt;
+      &lt;template #default&gt;
+        &lt;async-component /&gt;
+      &lt;/template&gt;
+      &lt;template #fallback&gt;
+        &lt;div&gt;加载中...&lt;/div&gt;
+      &lt;/template&gt;
+    &lt;/suspense&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { defineAsyncComponent } from 'vue'
+
+// 异步组件
+const AsyncComponent = defineAsyncComponent(() => import('./AsyncComponent.vue'))
+&lt;/script&gt;
+            </div>
+            
+            <h2>Teleport组件</h2>
+            <p>Teleport是一种能够将组件模板渲染到DOM树的任何位置的技术，而不是组件的直接父元素中。这对于模态框、弹窗、提示框等需要脱离父容器限制的场景非常有用。</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div class="app"&gt;
+    &lt;h1&gt;应用主内容&lt;/h1&gt;
+    
+    &lt;!-- 模态框内容将被传送到body下 --&gt;
+    &lt;teleport to="body"&gt;
+      &lt;div v-if="showModal" class="modal"&gt;
+        &lt;div class="modal-content"&gt;
+          &lt;h2&gt;模态框&lt;/h2&gt;
+          &lt;p&gt;这个内容实际上被渲染在body元素下&lt;/p&gt;
+          &lt;button @click="showModal = false"&gt;关闭&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/teleport&gt;
+    
+    &lt;button @click="showModal = true"&gt;打开模态框&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue'
+
+const showModal = ref(false)
+&lt;/script&gt;
+
+&lt;style&gt;
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 300px;
+}
+&lt;/style&gt;
+            </div>
+            
+            <h2>Keep-alive组件</h2>
+            <p>Keep-alive是一个内置组件，可以缓存组件实例，避免重复创建和销毁。当组件在[router-view](file:///e:\FrontendTeach\VUE快速上手\api\built-ins.html#L21-L21)或动态组件中切换时，Keep-alive可以保留组件状态。</p>
+            
+            <div class="code-block">
+&lt;template&gt;
+  &lt;div&gt;
+    &lt;!-- 使用keep-alive缓存组件 --&gt;
+    &lt;keep-alive&gt;
+      &lt;component :is="currentView" /&gt;
+    &lt;/keep-alive&gt;
+    
+    &lt;!-- 或者在路由中使用 --&gt;
+    &lt;keep-alive&gt;
+      &lt;router-view /&gt;
+    &lt;/keep-alive&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue'
+import Home from './Home.vue'
+import About from './About.vue'
+
+const currentView = ref('Home')
+&lt;/script&gt;
+
+// 带条件的缓存
+&lt;template&gt;
+  &lt;!-- 只缓存名为a或b的组件 --&gt;
+  &lt;keep-alive include="a,b"&gt;
+    &lt;component :is="currentView" /&gt;
+  &lt;/keep-alive&gt;
+  
+  &lt;!-- 根据组件名匹配缓存 --&gt;
+  &lt;keep-alive :include="/a|b/"&gt;
+    &lt;component :is="currentView" /&gt;
+  &lt;/keep-alive&gt;
+  
+  &lt;!-- 使用数组匹配 --&gt;
+  &lt;keep-alive :include="['a', 'b']"&gt;
+    &lt;component :is="currentView" /&gt;
+  &lt;/keep-alive&gt;
+&lt;/template&gt;
+            </div>
+            
+            <h2>错误边界组件</h2>
+            <p>错误边界是Vue 3中处理组件树中错误的机制，通过errorCaptured钩子可以捕获子组件的错误。</p>
+            
+            <div class="code-block">
+// 错误边界组件
+const ErrorBoundary = {
+  data() {
+    return {
+      hasError: false,
+      error: null
+    }
+  },
+  errorCaptured(err, instance, info) {
+    // 捕获子组件错误
+    console.error('Error captured:', err, info)
+    this.hasError = true
+    this.error = err
+    return false // 阻止错误继续传播
+  },
+  template: `
+    &lt;div&gt;
+      &lt;div v-if="hasError" class="error"&gt;
+        &lt;h2&gt;发生错误&lt;/h2&gt;
+        &lt;p&gt;{{ error.toString() }}&lt;/p&gt;
+        &lt;button @click="hasError = false; error = null"&gt;重试&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div v-else&gt;
+        &lt;slot&gt;&lt;/slot&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `
+}
+
+// 在组合式API中使用
+&lt;script setup&gt;
+import { onErrorCaptured, ref } from 'vue'
+
+const hasError = ref(false)
+const error = ref(null)
+
+onErrorCaptured((err, instance, info) => {
+  console.error('组合式API中捕获错误:', err, info)
+  hasError.value = true
+  error.value = err
+  return false
+})
+&lt;/script&gt;
+            </div>
+            
+            <h2>异步组件加载状态处理</h2>
+            <p>在使用异步组件时，我们通常需要处理加载状态，给用户更好的体验：</p>
+            
+            <div class="code-block">
+// 自定义异步组件工厂函数
+function createAsyncComponent(importFunc, options = {}) {
+  const { loadingComponent, errorComponent, delay = 200, timeout = 10000 } = options
+  
+  return defineAsyncComponent({
+    loader: importFunc,
+    loadingComponent,
+    errorComponent,
+    delay,
+    timeout,
+    onError(error, retry, fail, attempts) {
+      if (error.message.match(/fetch/) && attempts <= 3) {
+        // 请求失败，重试
+        retry()
+      } else {
+        // 重试失败，放弃
+        fail()
+      }
+    }
+  })
+}
+
+// 使用
+const MyAsyncComponent = createAsyncComponent(
+  () => import('./MyComponent.vue'),
+  {
+    loadingComponent: LoadingSpinner,
+    errorComponent: ErrorDisplay
+  }
+)
+            </div>
+            
+            <div class="example-container">
+                <h3>完整示例：博客系统</h3>
+                <p>以下是一个使用多种高级组件特性的完整示例：</p>
+                
+                <div class="code-block">
+&lt;template&gt;
+  &lt;div class="blog-app"&gt;
+    &lt;header&gt;
+      &lt;h1&gt;我的博客&lt;/h1&gt;
+      &lt;nav&gt;
+        &lt;button 
+          v-for="tab in tabs" 
+          :key="tab.name"
+          @click="currentTab = tab.name"
+          :class="{ active: currentTab === tab.name }"
+        &gt;
+          {{ tab.label }}
+        &lt;/button&gt;
+      &lt;/nav&gt;
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+      &lt;!-- 动态组件结合Keep-alive --&gt;
+      &lt;keep-alive&gt;
+        &lt;component :is="currentTabComponent" /&gt;
+      &lt;/keep-alive&gt;
+    &lt;/main&gt;
+    
+    &lt;!-- 模态框使用Teleport --&gt;
+    &lt;teleport to="body"&gt;
+      &lt;div v-if="showModal" class="modal-overlay"&gt;
+        &lt;div class="modal"&gt;
+          &lt;h2&gt;新增文章&lt;/h2&gt;
+          &lt;form @submit.prevent="createPost"&gt;
+            &lt;input v-model="newPost.title" placeholder="标题" required /&gt;
+            &lt;textarea v-model="newPost.content" placeholder="内容" required&gt;&lt;/textarea&gt;
+            &lt;button type="submit"&gt;发布&lt;/button&gt;
+            &lt;button type="button" @click="showModal = false"&gt;取消&lt;/button&gt;
+          &lt;/form&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/teleport&gt;
+    
+    &lt;button @click="showModal = true"&gt;写文章&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, computed, defineAsyncComponent } from 'vue'
+
+// 定义同步组件
+const Home = { 
+  name: 'Home',
+  template: `
+    &lt;div class="tab-content"&gt;
+      &lt;h2&gt;首页&lt;/h2&gt;
+      &lt;p&gt;欢迎来到我的博客首页&lt;/p&gt;
+    &lt;/div&gt;
+  ` 
+}
+
+// 使用异步组件
+const About = defineAsyncComponent(() => import('./About.vue'))
+const Posts = defineAsyncComponent({
+  loader: () => import('./Posts.vue'),
+  loadingComponent: {
+    template: '&lt;div&gt;加载文章列表中...&lt;/div&gt;'
+  },
+  errorComponent: {
+    template: '&lt;div&gt;加载失败，请稍后重试&lt;/div&gt;'
+  },
+  delay: 200
+})
+
+const tabs = [
+  { name: 'Home', label: '首页' },
+  { name: 'Posts', label: '文章' },
+  { name: 'About', label: '关于' }
+]
+
+const currentTab = ref('Home')
+const showModal = ref(false)
+
+const newPost = ref({
+  title: '',
+  content: ''
+})
+
+// 动态组件计算
+const currentTabComponent = computed(() => {
+  switch(currentTab.value) {
+    case 'Home': return Home
+    case 'Posts': return Posts
+    case 'About': return About
+    default: return Home
+  }
+})
+
+const createPost = () => {
+  // 创建文章逻辑
+  console.log('创建文章:', newPost.value)
+  showModal.value = false
+  newPost.value = { title: '', content: '' }
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+.blog-app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+nav {
+  margin-top: 20px;
+}
+
+nav button {
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+nav button.active {
+  background: #42b983;
+  color: white;
+}
+
+.tab-content {
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  min-height: 300px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 400px;
+}
+
+.modal input, .modal textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.modal button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal button[type="submit"] {
+  background: #42b983;
+  color: white;
+}
+
+.modal button[type="button"] {
+  background: #95a5a6;
+  color: white;
+}
+&lt;/style&gt;
+                </div>
+            </div>
+            
+            <h2>性能优化考虑</h2>
+            <p>使用高级组件时需要考虑性能优化：</p>
+            
+            <ul>
+                <li><strong>异步组件</strong>：只在需要时加载，减少初始包大小</li>
+                <li><strong>Keep-alive</strong>：合理使用缓存，避免过度缓存导致内存占用</li>
+                <li><strong>Teleport</strong>：避免在频繁更新的组件中使用</li>
+                <li><strong>动态组件</strong>：考虑使用v-if/v-else-if代替动态组件以获得更好的性能</li>
+            </ul>
+        </div>
+        
+        <div class="navigation">
+            <a href="./communication.html" class="nav-link">上一课：组件通信</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="../advanced/composition-api.html" class="nav-link">下一课：组合式API</a>
+        </div>
+        
+        <footer>
+            <p>高级组件 - Vue.js应用开发的进阶技巧</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

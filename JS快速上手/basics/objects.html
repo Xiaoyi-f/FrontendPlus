@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对象基础与属性操作 - JavaScript快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .object-types-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .object-types-table th, .object-types-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .object-types-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .object-types-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #0d47a1;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .object-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .object-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">JavaScript快速上手 > 基础语法 > 对象基础与属性操作</div>
+            <h1>对象基础与属性操作</h1>
+        </header>
+        
+        <div class="content">
+            <p>对象是JavaScript中最核心的概念之一，是存储键值对的数据结构。对象可以包含属性和方法，是JavaScript编程的基础。</p>
+            
+            <div class="key-features">
+                <h3>对象概览</h3>
+                <ul>
+                    <li><strong>对象创建</strong>：多种创建方式（字面量、构造函数等）</li>
+                    <li><strong>属性访问</strong>：点表示法和括号表示法</li>
+                    <li><strong>属性操作</strong>：添加、修改、删除属性</li>
+                    <li><strong>对象方法</strong>：对象中的函数属性</li>
+                    <li><strong>对象遍历</strong>：for...in循环和Object方法</li>
+                    <li><strong>对象解构</strong>：ES6解构赋值</li>
+                </ul>
+            </div>
+            
+            <h2>创建对象</h2>
+            <p>JavaScript提供了多种创建对象的方式，每种方式都有其适用场景。</p>
+            
+            <table class="object-types-table">
+                <thead>
+                    <tr>
+                        <th>创建方式</th>
+                        <th>语法</th>
+                        <th>特点</th>
+                        <th>适用场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>对象字面量</td>
+                        <td>{key: value}</td>
+                        <td>最常用，简洁</td>
+                        <td>通用创建方式</td>
+                    </tr>
+                    <tr>
+                        <td>构造函数</td>
+                        <td>new Object()</td>
+                        <td>传统方式</td>
+                        <td>动态创建</td>
+                    </tr>
+                    <tr>
+                        <td>Object.create()</td>
+                        <td>Object.create(proto)</td>
+                        <td>指定原型创建</td>
+                        <td>继承场景</td>
+                    </tr>
+                    <tr>
+                        <td>类语法</td>
+                        <td>class MyClass {}</td>
+                        <td>ES6+语法糖</td>
+                        <td>面向对象编程</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="code-block">
+                <span class="code-comment">// 对象字面量（推荐方式）</span><br>
+                <span class="code-keyword">const</span> person = {<br>
+                &nbsp;&nbsp;name: <span class="code-string">"张三"</span>,<br>
+                &nbsp;&nbsp;age: <span class="code-number">30</span>,<br>
+                &nbsp;&nbsp;city: <span class="code-string">"北京"</span>,<br>
+                &nbsp;&nbsp;isMarried: <span class="code-boolean">false</span>,<br>
+                &nbsp;&nbsp;hobbies: [<span class="code-string">"阅读"</span>, <span class="code-string">"游泳"</span>, <span class="code-string">"编程"</span>]<br>
+                };<br><br>
+                
+                <span class="code-comment">// 使用构造函数创建对象</span><br>
+                <span class="code-keyword">const</span> car = <span class="code-keyword">new</span> Object();<br>
+                car.brand = <span class="code-string">"丰田"</span>;<br>
+                car.model = <span class="code-string">"卡罗拉"</span>;<br>
+                car.year = <span class="code-number">2022</span>;<br><br>
+                
+                <span class="code-comment">// 使用Object.create()创建对象</span><br>
+                <span class="code-keyword">const</span> animal = Object.create(<span class="code-boolean">null</span>);<br>
+                animal.name = <span class="code-string">"老虎"</span>;<br>
+                animal.type = <span class="code-string">"哺乳动物"</span>;<br><br>
+                
+                <span class="code-comment">// 从已有对象创建新对象</span><br>
+                <span class="code-keyword">const</span> student = Object.create(person);<br>
+                student.grade = <span class="code-string">"高一"</span>;<br>
+                student.school = <span class="code-string">"一中"</span>;<br><br>
+                
+                console.log(person); <span class="code-comment">// {name: "张三", age: 30, city: "北京", isMarried: false, hobbies: Array(3)}</span><br>
+                console.log(car); <span class="code-comment">// {brand: "丰田", model: "卡罗拉", year: 2022}</span><br>
+                console.log(animal); <span class="code-comment">// {name: "老虎", type: "哺乳动物"}</span>
+            </div>
+            
+            <h2>属性访问和修改</h2>
+            <p>对象属性可以通过两种方式访问：点表示法和括号表示法。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> user = {<br>
+                &nbsp;&nbsp;firstName: <span class="code-string">"李"</span>,<br>
+                &nbsp;&nbsp;lastName: <span class="code-string">"四"</span>,<br>
+                &nbsp;&nbsp;age: <span class="code-number">25</span>,<br>
+                &nbsp;&nbsp;<span class="code-string">"full-name"</span>: <span class="code-string">"李四"</span>, <span class="code-comment">// 包含特殊字符的键名</span><br>
+                &nbsp;&nbsp;preferences: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;theme: <span class="code-string">"dark"</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;language: <span class="code-string">"zh-CN"</span><br>
+                &nbsp;&nbsp;}<br>
+                };<br><br>
+                
+                <span class="code-comment">// 点表示法访问属性</span><br>
+                console.log(user.firstName); <span class="code-comment">// "李"</span><br>
+                console.log(user.age); <span class="code-comment">// 25</span><br><br>
+                
+                <span class="code-comment">// 括号表示法访问属性</span><br>
+                console.log(user[<span class="code-string">'lastName'</span>]); <span class="code-comment">// "四"</span><br>
+                console.log(user[<span class="code-string">"full-name"</span>]); <span class="code-comment">// "李四" - 只能用括号表示法访问</span><br><br>
+                
+                <span class="code-comment">// 访问嵌套属性</span><br>
+                console.log(user.preferences.theme); <span class="code-comment">// "dark"</span><br>
+                console.log(user.preferences[<span class="code-string">'language'</span>]); <span class="code-comment">// "zh-CN"</span><br><br>
+                
+                <span class="code-comment">// 修改属性值</span><br>
+                user.age = <span class="code-number">26</span>;<br>
+                user[<span class="code-string">'firstName'</span>] = <span class="code-string">"王"</span>;<br><br>
+                
+                <span class="code-comment">// 添加新属性</span><br>
+                user.email = <span class="code-string">"wang@example.com"</span>;<br>
+                user[<span class="code-string">'phone'</span>] = <span class="code-string">"13800138000"</span>;<br><br>
+                
+                <span class="code-comment">// 使用变量作为属性名（ES6计算属性名）</span><br>
+                <span class="code-keyword">const</span> dynamicKey = <span class="code-string">'location'</span>;<br>
+                user[dynamicKey] = <span class="code-string">"上海"</span>;<br><br>
+                
+                console.log(user); <span class="code-comment">// 更新后的对象</span>
+            </div>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">点表示法 vs 括号表示法</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> obj = {<br>
+                        &nbsp;&nbsp;<span class="code-string">"first-name"</span>: <span class="code-string">"张"</span>,<br>
+                        &nbsp;&nbsp;age: <span class="code-number">30</span>,<br>
+                        &nbsp;&nbsp;city: <span class="code-string">"北京"</span><br>
+                        };<br><br>
+                        
+                        <span class="code-comment">// 点表示法 - 适用于标准标识符</span><br>
+                        console.log(obj.age); <span class="code-comment">// 30</span><br>
+                        console.log(obj.city); <span class="code-comment">// "北京"</span><br><br>
+                        
+                        <span class="code-comment">// 括号表示法 - 适用于所有情况</span><br>
+                        console.log(obj[<span class="code-string">"first-name"</span>]); <span class="code-comment">// "张" - 包含特殊字符的键名</span><br>
+                        console.log(obj[<span class="code-string">'age'</span>]); <span class="code-comment">// 30</span><br><br>
+                        
+                        <span class="code-comment">// 使用变量作为键名</span><br>
+                        <span class="code-keyword">const</span> key = <span class="code-string">'city'</span>;<br>
+                        console.log(obj[key]); <span class="code-comment">// "北京"</span>
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">属性访问方式对比</div>
+                    <ul>
+                        <li><strong>点表示法</strong>：简洁，适用于标准标识符</li>
+                        <li><strong>括号表示法</strong>：灵活，适用于所有键名，支持动态键名</li>
+                        <li><strong>安全访问</strong>：使用可选链操作符?.避免错误</li>
+                        <li><strong>默认值</strong>：结合空值合并操作符??设置默认值</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>对象方法</h2>
+            <p>对象中的函数属性称为方法，方法可以访问对象的属性并执行操作。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> calculator = {<br>
+                &nbsp;&nbsp;value: <span class="code-number">0</span>,<br><br>
+                
+                &nbsp;&nbsp;<span class="code-comment">// ES5方法定义</span><br>
+                &nbsp;&nbsp;add: <span class="code-keyword">function</span>(num) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.value += num;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>; <span class="code-comment">// 返回this以支持链式调用</span><br>
+                &nbsp;&nbsp;},<br><br>
+                
+                &nbsp;&nbsp;<span class="code-comment">// ES6简写方法定义</span><br>
+                &nbsp;&nbsp;subtract(num) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.value -= num;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>;<br>
+                &nbsp;&nbsp;},<br><br>
+                
+                &nbsp;&nbsp;multiply(num) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.value *= num;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>;<br>
+                &nbsp;&nbsp;},<br><br>
+                
+                &nbsp;&nbsp;getValue() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.value;<br>
+                &nbsp;&nbsp;},<br><br>
+                
+                &nbsp;&nbsp;reset() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.value = <span class="code-number">0</span>;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>;<br>
+                &nbsp;&nbsp;}<br>
+                };<br><br>
+                
+                <span class="code-comment">// 使用计算器</span><br>
+                calculator.add(<span class="code-number">10</span>).multiply(<span class="code-number">2</span>).subtract(<span class="code-number">5</span>);<br>
+                console.log(calculator.getValue()); <span class="code-comment">// 15</span><br>
+                calculator.reset();<br>
+                console.log(calculator.getValue()); <span class="code-comment">// 0</span>
+            </div>
+            
+            <div class="object-example">
+                <div class="object-example-title">对象属性操作</div>
+                <div class="code-block">
+                    <span class="code-keyword">const</span> book = {<br>
+                    &nbsp;&nbsp;title: <span class="code-string">"JavaScript高级程序设计"</span>,<br>
+                    &nbsp;&nbsp;author: <span class="code-string">"Nicholas C. Zakas"</span>,<br>
+                    &nbsp;&nbsp;year: <span class="code-number">2020</span><br>
+                    };<br><br>
+                    
+                    <span class="code-comment">// 检查属性是否存在</span><br>
+                    console.log(<span class="code-string">'title'</span> <span class="code-keyword">in</span> book); <span class="code-comment">// true</span><br>
+                    console.log(book.hasOwnProperty(<span class="code-string">'title'</span>)); <span class="code-comment">// true</span><br><br>
+                    
+                    <span class="code-comment">// 获取对象的所有属性名</span><br>
+                    <span class="code-keyword">const</span> keys = Object.keys(book);<br>
+                    console.log(keys); <span class="code-comment">// ["title", "author", "year"]</span><br><br>
+                    
+                    <span class="code-comment">// 获取对象的所有属性值</span><br>
+                    <span class="code-keyword">const</span> values = Object.values(book);<br>
+                    console.log(values); <span class="code-comment">// ["JavaScript高级程序设计", "Nicholas C. Zakas", 2020]</span><br><br>
+                    
+                    <span class="code-comment">// 获取属性名和值的键值对</span><br>
+                    <span class="code-keyword">const</span> entries = Object.entries(book);<br>
+                    console.log(entries); <span class="code-comment">// [["title", "JavaScript高级程序设计"], ["author", "Nicholas C. Zakas"], ["year", 2020]]</span><br><br>
+                    
+                    <span class="code-comment">// 删除属性</span><br>
+                    <span class="code-keyword">delete</span> book.year;<br>
+                    console.log(book); <span class="code-comment">// {title: "JavaScript高级程序设计", author: "Nicholas C. Zakas"}</span><br><br>
+                    
+                    <span class="code-comment">// 防止对象被修改</span><br>
+                    Object.freeze(book); <span class="code-comment">// 冻结对象，无法添加、删除或修改属性</span><br>
+                    book.pages = <span class="code-number">800</span>; <span class="code-comment">// 无效操作</span><br>
+                    console.log(book.pages); <span class="code-comment">// undefined</span><br><br>
+                    
+                    <span class="code-comment">// 防止添加新属性（但仍可修改现有属性）</span><br>
+                    <span class="code-keyword">const</span> config = {<br>
+                    &nbsp;&nbsp;debug: <span class="code-boolean">true</span>,<br>
+                    &nbsp;&nbsp;timeout: <span class="code-number">5000</span><br>
+                    };<br>
+                    Object.preventExtensions(config);<br>
+                    config.newProp = <span class="code-string">'value'</span>; <span class="code-comment">// 无效操作（在严格模式下会报错）</span>
+                </div>
+            </div>
+            
+            <h2>对象遍历</h2>
+            <p>有多种方法可以遍历对象的属性。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> laptop = {<br>
+                &nbsp;&nbsp;brand: <span class="code-string">"Apple"</span>,<br>
+                &nbsp;&nbsp;model: <span class="code-string">"MacBook Pro"</span>,<br>
+                &nbsp;&nbsp;year: <span class="code-number">2021</span>,<br>
+                &nbsp;&nbsp;specifications: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cpu: <span class="code-string">"M1"</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;ram: <span class="code-string">"16GB"</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;storage: <span class="code-string">"512GB SSD"</span><br>
+                &nbsp;&nbsp;}<br>
+                };<br><br>
+                
+                <span class="code-comment">// for...in循环遍历对象的可枚举属性</span><br>
+                <span class="code-keyword">for</span> (<span class="code-keyword">let</span> key <span class="code-keyword">in</span> laptop) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">if</span> (laptop.hasOwnProperty(key)) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`${key}: ${laptop[key]}`</span>);<br>
+                &nbsp;&nbsp;}<br>
+                }<br><br>
+                
+                <span class="code-comment">// 使用Object.keys()遍历</span><br>
+                Object.keys(laptop).forEach(key => {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`Key: ${key}, Value: ${laptop[key]}`</span>);<br>
+                });<br><br>
+                
+                <span class="code-comment">// 使用Object.entries()遍历</span><br>
+                Object.entries(laptop).forEach(([key, value]) => {<br>
+                &nbsp;&nbsp;console.log(<span class="code-string">`${key} = ${value}`</span>);<br>
+                });<br><br>
+                
+                <span class="code-comment">// 深度遍历嵌套对象</span><br>
+                <span class="code-keyword">function</span> deepLog(obj, prefix = <span class="code-string">''</span>) {<br>
+                &nbsp;&nbsp;<span class="code-keyword">for</span> (<span class="code-keyword">let</span> key <span class="code-keyword">in</span> obj) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (<span class="code-keyword">typeof</span> obj[key] === <span class="code-string">'object'</span> && obj[key] !== <span class="code-boolean">null</span> && !Array.isArray(obj[key])) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deepLog(obj[key], `${prefix}${key}.`);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;} <span class="code-keyword">else</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">`${prefix}${key}: ${obj[key]}`</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;}<br>
+                }<br>
+                deepLog(laptop);
+            </div>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个表示学生的对象，包含姓名、年龄、成绩等属性，并添加计算平均分的方法</li>
+                    <li>创建一个购物车对象，包含添加商品、删除商品、计算总价等方法</li>
+                    <li>编写一个函数，将两个对象合并，相同的属性以第二个对象的值为准</li>
+                    <li>创建一个对象，使用getter和setter来控制属性的访问和修改</li>
+                    <li>实现一个函数，深度遍历一个嵌套对象并返回所有叶子节点的路径</li>
+                </ul>
+            </div>
+            
+            <h2>ES6+对象特性</h2>
+            <p>ES6及后续版本引入了许多对象相关的特性，使对象操作更加便捷。</p>
+            
+            <div class="code-block">
+                <span class="code-keyword">const</span> name = <span class="code-string">"张三"</span>;<br>
+                <span class="code-keyword">const</span> age = <span class="code-number">25</span>;<br>
+                <span class="code-keyword">const</span> city = <span class="code-string">"上海"</span>;<br><br>
+                
+                <span class="code-comment">// 属性简写</span><br>
+                <span class="code-keyword">const</span> person = {<br>
+                &nbsp;&nbsp;name, <span class="code-comment">// 等价于 name: name</span><br>
+                &nbsp;&nbsp;age,  <span class="code-comment">// 等价于 age: age</span><br>
+                &nbsp;&nbsp;city  <span class="code-comment">// 等价于 city: city</span><br>
+                };<br><br>
+                
+                <span class="code-comment">// 方法简写</span><br>
+                <span class="code-keyword">const</span> user = {<br>
+                &nbsp;&nbsp;name: <span class="code-string">"李四"</span>,<br>
+                &nbsp;&nbsp;getName() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-keyword">this</span>.name;<br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;setName(newName) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.name = newName;<br>
+                &nbsp;&nbsp;}<br>
+                };<br><br>
+                
+                <span class="code-comment">// 计算属性名</span><br>
+                <span class="code-keyword">const</span> keyPrefix = <span class="code-string">'user'</span>;<br>
+                <span class="code-keyword">const</span> dynamicObj = {<br>
+                &nbsp;&nbsp;[`${keyPrefix}_name`]: <span class="code-string">"王五"</span>,<br>
+                &nbsp;&nbsp;[`${keyPrefix}_age`]: <span class="code-number">30</span>,<br>
+                &nbsp;&nbsp;[<span class="code-string">'computed_'</span> + <span class="code-keyword">new</span> Date().getDay()]: <span class="code-string">'Today'</span><br>
+                };<br>
+                console.log(dynamicObj); <span class="code-comment">// {user_name: "王五", user_age: 30, computed_1: "Today"}</span><br><br>
+                
+                <span class="code-comment">// 对象展开运算符</span><br>
+                <span class="code-keyword">const</span> defaults = {<br>
+                &nbsp;&nbsp;theme: <span class="code-string">'light'</span>,<br>
+                &nbsp;&nbsp;language: <span class="code-string">'en'</span>,<br>
+                &nbsp;&nbsp;notifications: <span class="code-boolean">true</span><br>
+                };<br><br>
+                
+                <span class="code-keyword">const</span> userSettings = {<br>
+                &nbsp;&nbsp;language: <span class="code-string">'zh-CN'</span>,<br>
+                &nbsp;&nbsp;autoSave: <span class="code-boolean">false</span><br>
+                };<br><br>
+                
+                <span class="code-comment">// 合并对象</span><br>
+                <span class="code-keyword">const</span> finalSettings = { ...defaults, ...userSettings };<br>
+                console.log(finalSettings); <span class="code-comment">// {theme: "light", language: "zh-CN", notifications: true, autoSave: false}</span><br><br>
+                
+                <span class="code-comment">// 对象解构</span><br>
+                <span class="code-keyword">const</span> product = {<br>
+                &nbsp;&nbsp;id: <span class="code-number">1</span>,<br>
+                &nbsp;&nbsp;name: <span class="code-string">"笔记本电脑"</span>,<br>
+                &nbsp;&nbsp;price: <span class="code-number">5999</span>,<br>
+                &nbsp;&nbsp;category: <span class="code-string">"电子产品"</span><br>
+                };<br><br>
+                
+                <span class="code-keyword">const</span> { id, name, price } = product;<br>
+                console.log(id, name, price); <span class="code-comment">// 1 "笔记本电脑" 5999</span><br><br>
+                
+                <span class="code-comment">// 解构时重命名</span><br>
+                <span class="code-keyword">const</span> { name: productName, price: productPrice } = product;<br>
+                console.log(productName, productPrice); <span class="code-comment">// "笔记本电脑" 5999</span><br><br>
+                
+                <span class="code-comment">// 解构时设置默认值</span><br>
+                <span class="code-keyword">const</span> { name: n, warranty = <span class="code-string">'1年'</span> } = product;<br>
+                console.log(n, warranty); <span class="code-comment">// "笔记本电脑" "1年"</span><br><br>
+                
+                <span class="code-comment">// 嵌套解构</span><br>
+                <span class="code-keyword">const</span> company = {<br>
+                &nbsp;&nbsp;name: <span class="code-string">"科技有限公司"</span>,<br>
+                &nbsp;&nbsp;address: {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;city: <span class="code-string">"北京"</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;district: <span class="code-string">"海淀区"</span>,<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;street: <span class="code-string">"中关村大街"</span><br>
+                &nbsp;&nbsp;},<br>
+                &nbsp;&nbsp;employees: <span class="code-number">50</span><br>
+                };<br><br>
+                
+                <span class="code-keyword">const</span> { address: { city, district } } = company;<br>
+                console.log(city, district); <span class="code-comment">// "北京" "海淀区"</span>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="arrays.html" class="nav-link">← 上一课：数组操作与方法</a>
+            <a href="strings.html" class="nav-link">下一课：字符串处理 →</a>
+        </nav>
+        
+        <footer>
+            <p>JavaScript快速上手 - 从零到大神，成为JS高手</p>
+        </footer>
+    </div>
+</body>
+</html>

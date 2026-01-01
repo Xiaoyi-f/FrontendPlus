@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>待办事项应用 - Vue.js教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 8px 16px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .vue-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .vue-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .vue-features ul {
+            padding-left: 25px;
+        }
+        
+        .vue-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .example-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .project-steps {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>待办事项应用</h1>
+            <p class="subtitle">入门级项目实践</p>
+        </header>
+        
+        <div class="navigation">
+            <a href="../tooling/typescript.html" class="nav-link">上一课：TypeScript集成</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./ecommerce.html" class="nav-link">下一课：电商项目</a>
+        </div>
+        
+        <div class="content">
+            <div class="vue-features">
+                <h3>项目目标</h3>
+                <ul>
+                    <li><strong>功能完整</strong>：实现待办事项的增删改查</li>
+                    <li><strong>响应式设计</strong>：适配不同设备屏幕</li>
+                    <li><strong>状态管理</strong>：使用Pinia管理应用状态</li>
+                    <li><strong>本地存储</strong>：数据持久化到浏览器本地存储</li>
+                    <li><strong>用户体验</strong>：提供良好的交互体验</li>
+                    <li><strong>代码组织</strong>：合理的组件结构和代码组织</li>
+                </ul>
+            </div>
+            
+            <h2>项目概述</h2>
+            <p>我们将构建一个功能完整的待办事项应用，包含添加、编辑、删除、标记完成等功能。这个项目将综合运用Vue 3的组合式API、组件系统、状态管理等核心概念。</p>
+            
+            <h2>项目结构规划</h2>
+            <div class="code-block">
+todo-app/
+├── public/
+│   └── index.html
+├── src/
+│   ├── components/           # 可复用组件
+│   │   ├── TodoItem.vue      # 单个待办事项组件
+│   │   ├── TodoList.vue      # 待办事项列表组件
+│   │   ├── TodoForm.vue      # 添加/编辑待办事项表单
+│   │   └── FilterButtons.vue # 过滤按钮组件
+│   ├── stores/              # Pinia状态管理
+│   │   └── todos.js         # 待办事项状态
+│   ├── composables/         # 可复用逻辑
+│   │   └── useLocalStorage.js # 本地存储逻辑
+│   ├── styles/              # 样式文件
+│   │   └── main.css
+│   ├── App.vue              # 根组件
+│   └── main.js              # 入口文件
+├── package.json
+└── vite.config.js
+</div>
+            
+            <h2>创建项目和安装依赖</h2>
+            <div class="code-block">
+# 创建项目
+npm create vue@latest todo-app
+cd todo-app
+
+# 选择特性：TypeScript, Router, Pinia, ESLint, Prettier
+# 安装依赖
+npm install
+
+# 安装额外依赖（如果需要）
+npm install --save-dev @types/node
+</div>
+            
+            <h2>创建状态管理(store)</h2>
+            <p>首先创建Pinia store来管理待办事项状态：</p>
+            
+            <div class="code-block">
+// src/stores/todos.js
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+
+export const useTodosStore = defineStore('todos', () => {
+  // 定义状态
+  const todos = ref([
+    { id: 1, text: '学习Vue 3', completed: false },
+    { id: 2, text: '学习Pinia', completed: false },
+    { id: 3, text: '构建项目', completed: true }
+  ])
+  
+  const filter = ref('all') // all, active, completed
+  
+  // 计算属性
+  const filteredTodos = computed(() => {
+    if (filter.value === 'active') {
+      return todos.value.filter(todo => !todo.completed)
+    } else if (filter.value === 'completed') {
+      return todos.value.filter(todo => todo.completed)
+    }
+    return todos.value
+  })
+  
+  const activeCount = computed(() => {
+    return todos.value.filter(todo => !todo.completed).length
+  })
+  
+  // 方法
+  const addTodo = (text) => {
+    todos.value.push({
+      id: Date.now(),
+      text,
+      completed: false
+    })
+  }
+  
+  const removeTodo = (id) => {
+    const index = todos.value.findIndex(todo => todo.id === id)
+    if (index !== -1) {
+      todos.value.splice(index, 1)
+    }
+  }
+  
+  const toggleTodo = (id) => {
+    const todo = todos.value.find(todo => todo.id === id)
+    if (todo) {
+      todo.completed = !todo.completed
+    }
+  }
+  
+  const editTodo = (id, text) => {
+    const todo = todos.value.find(todo => todo.id === id)
+    if (todo) {
+      todo.text = text
+    }
+  }
+  
+  const setFilter = (newFilter) => {
+    filter.value = newFilter
+  }
+  
+  const clearCompleted = () => {
+    todos.value = todos.value.filter(todo => !todo.completed)
+  }
+  
+  return {
+    todos,
+    filter,
+    filteredTodos,
+    activeCount,
+    addTodo,
+    removeTodo,
+    toggleTodo,
+    editTodo,
+    setFilter,
+    clearCompleted
+  }
+})
+</div>
+            
+            <h2>创建待办事项组件</h2>
+            <p>创建单个待办事项组件：</p>
+            
+            <div class="code-block">
+// src/components/TodoItem.vue
+&lt;template&gt;
+  &lt;div class="todo-item" :class="{ completed: todo.completed }"&gt;
+    &lt;div class="todo-content"&gt;
+      &lt;input 
+        type="checkbox" 
+        :checked="todo.completed"
+        @change="toggleTodo(todo.id)"
+        class="todo-checkbox"
+      /&gt;
+      
+      &lt;div v-if="!isEditing" class="todo-text" @dblclick="startEditing"&gt;
+        {{ todo.text }}
+      &lt;/div&gt;
+      
+      &lt;input
+        v-else
+        v-model="editText"
+        @keyup.enter="finishEditing"
+        @blur="finishEditing"
+        @keyup.escape="cancelEditing"
+        class="edit-input"
+        ref="editInputRef"
+        type="text"
+      /&gt;
+    &lt;/div&gt;
+    
+    &lt;div class="todo-actions"&gt;
+      &lt;button @click="removeTodo(todo.id)" class="delete-btn"&gt;删除&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, nextTick } from 'vue'
+import { useTodosStore } from '@/stores/todos'
+
+const props = defineProps({
+  todo: {
+    type: Object,
+    required: true
+  }
+})
+
+const todosStore = useTodosStore()
+const { removeTodo, toggleTodo, editTodo } = todosStore
+
+const isEditing = ref(false)
+const editText = ref('')
+const editInputRef = ref(null)
+
+const startEditing = () => {
+  isEditing.value = true
+  editText.value = props.todo.text
+  nextTick(() => {
+    editInputRef.value.focus()
+  })
+}
+
+const finishEditing = () => {
+  if (editText.value.trim()) {
+    editTodo(props.todo.id, editText.value.trim())
+  }
+  isEditing.value = false
+}
+
+const cancelEditing = () => {
+  isEditing.value = false
+  editText.value = props.todo.text
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  background: white;
+}
+
+.todo-item.completed {
+  opacity: 0.6;
+}
+
+.todo-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.todo-checkbox {
+  margin-right: 12px;
+}
+
+.todo-text {
+  flex: 1;
+  cursor: pointer;
+}
+
+.todo-text:hover {
+  text-decoration: underline;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.delete-btn {
+  padding: 4px 8px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #c82333;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建待办事项列表组件</h2>
+            <p>创建显示待办事项列表的组件：</p>
+            
+            <div class="code-block">
+// src/components/TodoList.vue
+&lt;template&gt;
+  &lt;div class="todo-list"&gt;
+    &lt;div v-if="filteredTodos.length === 0" class="no-todos"&gt;
+      没有待办事项
+    &lt;/div&gt;
+    &lt;div v-else&gt;
+      &lt;TodoItem 
+        v-for="todo in filteredTodos" 
+        :key="todo.id" 
+        :todo="todo" 
+      /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { useTodosStore } from '@/stores/todos'
+import TodoItem from './TodoItem.vue'
+
+const todosStore = useTodosStore()
+const { filteredTodos } = storeToRefs(todosStore)
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.todo-list {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.no-todos {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-style: italic;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建添加待办事项表单</h2>
+            <p>创建用于添加新待办事项的表单组件：</p>
+            
+            <div class="code-block">
+// src/components/TodoForm.vue
+&lt;template&gt;
+  &lt;form @submit.prevent="addNewTodo" class="todo-form"&gt;
+    &lt;input
+      v-model="newTodo"
+      @keyup.enter="addNewTodo"
+      placeholder="添加新的待办事项..."
+      class="todo-input"
+      ref="inputRef"
+    /&gt;
+    &lt;button type="submit" class="add-btn" :disabled="!newTodo.trim()"&gt;
+      添加
+    &lt;/button&gt;
+  &lt;/form&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from 'vue'
+import { useTodosStore } from '@/stores/todos'
+
+const newTodo = ref('')
+const inputRef = ref(null)
+
+const todosStore = useTodosStore()
+const { addTodo } = todosStore
+
+const addNewTodo = () => {
+  if (newTodo.value.trim()) {
+    addTodo(newTodo.value.trim())
+    newTodo.value = ''
+    inputRef.value.focus()
+  }
+}
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.todo-form {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.todo-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.todo-input:focus {
+  outline: none;
+  border-color: #42b983;
+  box-shadow: 0 0 0 2px rgba(66, 185, 131, 0.2);
+}
+
+.add-btn {
+  padding: 12px 20px;
+  background: #42b983;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-btn:hover:not(:disabled) {
+  background: #359c6d;
+}
+
+.add-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>创建过滤按钮组件</h2>
+            <p>创建用于过滤待办事项的按钮组件：</p>
+            
+            <div class="code-block">
+// src/components/FilterButtons.vue
+&lt;template&gt;
+  &lt;div class="filter-buttons"&gt;
+    &lt;button
+      v-for="filterOption in filters"
+      :key="filterOption.key"
+      @click="setFilter(filterOption.key)"
+      :class="{ active: filter === filterOption.key }"
+      class="filter-btn"
+    &gt;
+      {{ filterOption.label }}
+    &lt;/button&gt;
+    
+    &lt;button @click="clearCompleted" class="clear-btn" v-if="completedCount &gt; 0"&gt;
+      清除已完成 ({{ completedCount }})
+    &lt;/button&gt;
+    
+    &lt;div class="todo-count"&gt;
+      {{ activeCount }} 项待完成
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { computed } from 'vue'
+import { useTodosStore } from '@/stores/todos'
+
+const todosStore = useTodosStore()
+const { filter, todos, setFilter, clearCompleted } = todosStore
+
+const filters = [
+  { key: 'all', label: '全部' },
+  { key: 'active', label: '待办' },
+  { key: 'completed', label: '已完成' }
+]
+
+const completedCount = computed(() => {
+  return todos.value.filter(todo => todo.completed).length
+})
+
+const activeCount = computed(() => {
+  return todos.value.filter(todo => !todo.completed).length
+})
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+.filter-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.filter-btn.active {
+  background: #42b983;
+  color: white;
+  border-color: #42b983;
+}
+
+.clear-btn {
+  padding: 6px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.todo-count {
+  color: #6c757d;
+  font-size: 14px;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>整合所有组件到App.vue</h2>
+            <p>在根组件中整合所有组件：</p>
+            
+            <div class="code-block">
+// src/App.vue
+&lt;template&gt;
+  &lt;div id="app"&gt;
+    &lt;div class="container"&gt;
+      &lt;header&gt;
+        &lt;h1&gt;待办事项&lt;/h1&gt;
+      &lt;/header&gt;
+      
+      &lt;main&gt;
+        &lt;TodoForm /&gt;
+        &lt;TodoList /&gt;
+        &lt;FilterButtons /&gt;
+      &lt;/main&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import TodoForm from './components/TodoForm.vue'
+import TodoList from './components/TodoList.vue'
+import FilterButtons from './components/FilterButtons.vue'
+&lt;/script&gt;
+
+&lt;style&gt;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+&lt;/style&gt;
+</div>
+            
+            <h2>数据持久化</h2>
+            <p>为了让数据在页面刷新后依然存在，我们需要实现本地存储。创建一个可复用的组合函数：</p>
+            
+            <div class="code-block">
+// src/composables/useLocalStorage.js
+import { ref, watch } from 'vue'
+
+export function useLocalStorage(key, defaultValue) {
+  const storedValue = localStorage.getItem(key)
+  const value = ref(storedValue ? JSON.parse(storedValue) : defaultValue)
+
+  watch(value, (newValue) => {
+    localStorage.setItem(key, JSON.stringify(newValue))
+  }, { deep: true })
+
+  return value
+}
+</div>
+            
+            <p>然后修改store以使用本地存储：</p>
+            
+            <div class="code-block">
+// 修改后的 src/stores/todos.js
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { useLocalStorage } from '@/composables/useLocalStorage'
+
+export const useTodosStore = defineStore('todos', () => {
+  // 使用本地存储
+  const todos = useLocalStorage('todos', [
+    { id: 1, text: '学习Vue 3', completed: false },
+    { id: 2, text: '学习Pinia', completed: false },
+    { id: 3, text: '构建项目', completed: true }
+  ])
+  
+  const filter = ref('all')
+  
+  // ... 其他代码保持不变
+})
+</div>
+            
+            <h2>样式美化</h2>
+            <p>添加一些CSS样式来美化应用：</p>
+            
+            <div class="code-block">
+/* src/styles/main.css */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f5f7f8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header h1 {
+  color: #42b983;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</div>
+            
+            <div class="project-steps">
+                <h3>项目扩展建议</h3>
+                <ul>
+                    <li><strong>添加分类功能</strong>：为待办事项添加标签或分类</li>
+                    <li><strong>添加截止日期</strong>：为待办事项设置截止日期</li>
+                    <li><strong>优先级设置</strong>：为待办事项设置优先级</li>
+                    <li><strong>搜索功能</strong>：添加搜索和过滤功能</li>
+                    <li><strong>导入导出</strong>：支持导入导出待办事项数据</li>
+                    <li><strong>用户认证</strong>：添加用户系统，实现数据云端同步</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="../tooling/typescript.html" class="nav-link">上一课：TypeScript集成</a>
+            <a href="../index.html" class="nav-link">返回首页</a>
+            <a href="./ecommerce.html" class="nav-link">下一课：电商项目</a>
+        </div>
+        
+        <footer>
+            <p>待办事项应用 - Vue.js实战项目</p>
+            <p>© 2026 Vue.js学习网 - 专业的Vue.js教程平台</p>
+        </footer>
+    </div>
+</body>
+</html>

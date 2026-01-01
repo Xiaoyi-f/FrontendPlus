@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件事件 - Vue.js快速上手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #42b983;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .breadcrumb {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .content {
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h3 {
+            color: #555;
+            margin: 20px 0 12px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: #2d3648;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-comment {
+            color: #637777;
+        }
+        
+        .code-keyword {
+            color: #c792ea;
+        }
+        
+        .code-variable {
+            color: #ffcb6b;
+        }
+        
+        .code-string {
+            color: #c3e88d;
+        }
+        
+        .code-number {
+            color: #f78c6c;
+        }
+        
+        .code-function {
+            color: #82aaff;
+        }
+        
+        .code-boolean {
+            color: #ff5874;
+        }
+        
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .event-table th, .event-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .event-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .event-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .key-features {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .key-features h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .key-features ul {
+            padding-left: 25px;
+        }
+        
+        .key-features li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .comparison-item {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #42b983;
+        }
+        
+        .comparison-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .practice {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .practice h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .practice ul {
+            padding-left: 25px;
+        }
+        
+        .practice li {
+            margin-bottom: 10px;
+        }
+        
+        .vue-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .vue-example-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #42b983;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            background: #359c6d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">Vue.js快速上手 > 组件系统篇 > 组件事件</div>
+            <h1>组件事件</h1>
+        </header>
+        
+        <div class="content">
+            <p>组件事件是Vue.js中子组件向父组件传递数据和通信的重要方式。通过自定义事件，子组件可以向父组件发送消息，通知父组件发生了某些变化或需要执行某些操作。</p>
+            
+            <div class="key-features">
+                <h3>组件事件核心概念</h3>
+                <ul>
+                    <li><strong>$emit方法</strong>：子组件触发自定义事件</li>
+                    <li><strong>v-on监听</strong>：父组件监听子组件事件</li>
+                    <li><strong>事件参数</strong>：传递数据给父组件</li>
+                    <li><strong>事件修饰符</strong>：处理特定事件行为</li>
+                    <li><strong>事件验证</strong>：声明组件可以触发的事件</li>
+                    <li><strong>事件总线</strong>：非父子组件间通信</li>
+                </ul>
+            </div>
+            
+            <h2>基本组件事件</h2>
+            <p>子组件通过$emit方法触发自定义事件，父组件通过v-on监听这些事件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">基本组件事件示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;p&gt;子组件计数: {{ childCount }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;button-counter @increment=<span class="code-string">"handleIncrement"</span>&gt;&lt;/button-counter&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> childCount = ref(<span class="code-number">0</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleIncrement = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;childCount.value++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;childCount,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleIncrement<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ButtonCounter: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-number">0</span><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'increment'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"increment"</span>&gt;点击: {{ count }}&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>事件参数</h2>
+            <p>子组件可以通过$emit方法传递参数给父组件，这些参数将作为事件处理函数的参数。</p>
+            
+            <table class="event-table">
+                <thead>
+                    <tr>
+                        <th>参数类型</th>
+                        <th>说明</th>
+                        <th>示例</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>基本类型</td>
+                        <td>传递字符串、数字、布尔值等</td>
+                        <td>$emit('event', 'value', 123, true)</td>
+                    </tr>
+                    <tr>
+                        <td>对象</td>
+                        <td>传递复杂数据结构</td>
+                        <td>$emit('event', { id: 1, name: 'John' })</td>
+                    </tr>
+                    <tr>
+                        <td>数组</td>
+                        <td>传递多个值</td>
+                        <td>$emit('event', [1, 2, 3, 4])</td>
+                    </tr>
+                    <tr>
+                        <td>函数</td>
+                        <td>传递回调函数</td>
+                        <td>$emit('event', callbackFunction)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">事件参数示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;user-card <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;v-for=<span class="code-string">"user in users"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:key=<span class="code-string">"user.id"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:user=<span class="code-string">"user"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@user-updated=<span class="code-string">"updateUser"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@user-deleted=<span class="code-string">"deleteUser"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/user-card&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> users = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'张三'</span>, email: <span class="code-string">'zhangsan@example.com'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'李四'</span>, email: <span class="code-string">'lisi@example.com'</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'王五'</span>, email: <span class="code-string">'wangwu@example.com'</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> updateUser = <span class="code-function">(userId, updatedData)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'更新用户'</span>, userId, updatedData);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> userIndex = users.value.findIndex(<span class="code-function">u</span> =&gt; u.id === userId);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (userIndex !== -<span class="code-number">1</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;users.value[userIndex] = { ...users.value[userIndex], ...updatedData };<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> deleteUser = <span class="code-function">(userId)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'删除用户'</span>, userId);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;users.value = users.value.filter(<span class="code-function">u</span> =&gt; u.id !== userId);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;users,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateUser,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deleteUser<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;UserCard: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'user'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;editUser() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'user-updated'</span>, <span class="code-keyword">this</span>.user.id, { name: <span class="code-string">'编辑后的用户'</span> });<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeUser() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'user-deleted'</span>, <span class="code-keyword">this</span>.user.id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"user-card"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;{{ user.name }}&lt;/h3&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ user.email }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"editUser"</span>&gt;编辑&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"removeUser"</span>&gt;删除&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>事件修饰符</h2>
+            <p>Vue提供了事件修饰符来处理常见的事件行为，这些修饰符同样适用于组件事件。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">事件修饰符示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;form-component <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@submit.prevent=<span class="code-string">"handleSubmit"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@submit.once=<span class="code-string">"handleOnceSubmit"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/form-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleSubmit = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'表单提交被阻止默认行为'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleOnceSubmit = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="code-string">'仅触发一次的提交事件'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleSubmit,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleOnceSubmit<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FormComponent: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;form&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type=<span class="code-string">"text"</span> placeholder=<span class="code-string">"输入数据"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type=<span class="code-string">"submit"</span>&gt;提交&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/form&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mounted() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'submit'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>使用emits选项</h2>
+            <p>Vue 3中可以使用emits选项声明组件会触发的事件，这有助于提高代码的可读性和维护性。</p>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">emits选项示例</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;counter-component <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:initial-value=<span class="code-string">"10"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@count-changed=<span class="code-string">"handleCountChange"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@reset=<span class="code-string">"handleReset"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/counter-component&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> message = ref(<span class="code-string">''</span>);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleCountChange = <span class="code-function">(newCount)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.value = <span class="code-string">`计数改变为: ${newCount}`</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> handleReset = <span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message.value = <span class="code-string">'计数器已重置'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleCountChange,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleReset<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CounterComponent: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'initialValue'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emits: [<span class="code-string">'count-changed'</span>, <span class="code-string">'reset'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count: <span class="code-keyword">this</span>.initialValue<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;increment() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count++;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'count-changed'</span>, <span class="code-keyword">this</span>.count);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decrement() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count--;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'count-changed'</span>, <span class="code-keyword">this</span>.count);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reset() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.count = <span class="code-keyword">this</span>.initialValue;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'reset'</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;计数: {{ count }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"increment"</span>&gt;+&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"decrement"</span>&gt;-&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"reset"</span>&gt;重置&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;
+                </div>
+            </div>
+            
+            <h2>事件与组合式API</h2>
+            <p>在组合式API中，事件的处理方式略有不同，但核心概念保持一致。</p>
+            
+            <div class="comparison">
+                <div class="comparison-item">
+                    <div class="comparison-title">选项式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> ChildComponent = {<br>
+                        &nbsp;&nbsp;emits: [<span class="code-string">'update-value'</span>, <span class="code-string">'click'</span>],<br>
+                        &nbsp;&nbsp;methods: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;updateValue(newValue) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'update-value'</span>, newValue);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}<br>
+                        };
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <div class="comparison-title">组合式API</div>
+                    <div class="code-block">
+                        <span class="code-keyword">const</span> ChildComponent = {<br>
+                        &nbsp;&nbsp;emits: [<span class="code-string">'update-value'</span>, <span class="code-string">'click'</span>],<br>
+                        &nbsp;&nbsp;setup(props, { emit }) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> updateValue = <span class="code-function">(newValue)</span> =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emit(<span class="code-string">'update-value'</span>, newValue);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateValue<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;}<br>
+                        };
+                    </div>
+                </div>
+            </div>
+            
+            <h2>实际应用场景</h2>
+            <p>组件事件在实际开发中有很多应用场景：</p>
+            
+            <div class="key-features">
+                <h3>常见应用场景</h3>
+                <ul>
+                    <li><strong>表单组件</strong>：提交表单、验证错误、值变更</li>
+                    <li><strong>按钮组件</strong>：点击、双击、长按等事件</li>
+                    <li><strong>列表组件</strong>：选择、删除、编辑等操作</li>
+                    <li><strong>模态框组件</strong>：打开、关闭、确认等事件</li>
+                    <li><strong>输入组件</strong>：值改变、失焦、输入等事件</li>
+                    <li><strong>卡片组件</strong>：展开、收起、操作等事件</li>
+                </ul>
+            </div>
+            
+            <div class="vue-example">
+                <div class="vue-example-title">实际应用示例 - 购物车组件</div>
+                <div class="code-block">
+                    &lt;div id=<span class="code-string">"app"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;div class=<span class="code-string">"cart-summary"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;购物车 ({{ cartItems.length }} 件商品)&lt;/h2&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;总计: ¥{{ cartTotal.toFixed(<span class="code-number">2</span>) }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&lt;cart-item <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;v-for=<span class="code-string">"item in cartItems"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:key=<span class="code-string">"item.id"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;:item=<span class="code-string">"item"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@quantity-changed=<span class="code-string">"updateQuantity"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;@item-removed=<span class="code-string">"removeItem"</span>&gt;<br>
+                    &nbsp;&nbsp;&lt;/cart-item&gt;<br>
+                    &lt;/div&gt;<br><br>
+                    
+                    &lt;script&gt;<br>
+                    <span class="code-keyword">const</span> { createApp, ref, computed } = Vue;<br><br>
+                    
+                    createApp({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;setup() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> cartItems = ref([<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">1</span>, name: <span class="code-string">'iPhone 13'</span>, price: <span class="code-number">6999</span>, quantity: <span class="code-number">1</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">2</span>, name: <span class="code-string">'MacBook Pro'</span>, price: <span class="code-number">12999</span>, quantity: <span class="code-number">1</span> },<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="code-number">3</span>, name: <span class="code-string">'iPad Air'</span>, price: <span class="code-number">4399</span>, quantity: <span class="code-number">2</span> }<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> cartTotal = computed(<span class="code-function">()</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> cartItems.value.reduce(<span class="code-function">(total, item)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> total + (item.price * item.quantity);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, <span class="code-number">0</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> updateQuantity = <span class="code-function">(itemId, newQuantity)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> item = cartItems.value.find(<span class="code-function">i</span> =&gt; i.id === itemId);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> (item) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;item.quantity = newQuantity;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">const</span> removeItem = <span class="code-function">(itemId)</span> =&gt; {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cartItems.value = cartItems.value.filter(<span class="code-function">item</span> =&gt; item.id !== itemId);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br><br>
+                    
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cartItems,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cartTotal,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateQuantity,<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeItem<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;components: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CartItem: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;props: [<span class="code-string">'item'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;emits: [<span class="code-string">'quantity-changed'</span>, <span class="code-string">'item-removed'</span>],<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;methods: {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;updateQuantity(newQuantity) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'quantity-changed'</span>, <span class="code-keyword">this</span>.item.id, newQuantity);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;removeItem() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">this</span>.$emit(<span class="code-string">'item-removed'</span>, <span class="code-keyword">this</span>.item.id);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template: `<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"cart-item"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h4&gt;{{ item.name }}&lt;/h4&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;单价: ¥{{ item.price }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class=<span class="code-string">"quantity-control"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;数量:&lt;/label&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type=<span class="code-string">"number"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:value=<span class="code-string">"item.quantity"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min=<span class="code-string">"1"</span> <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@input=<span class="code-string">"updateQuantity($event.target.value)"</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;小计: ¥{{ (item.price * item.quantity).toFixed(2) }}&lt;/p&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button @click=<span class="code-string">"removeItem"</span>&gt;删除&lt;/button&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    }).mount(<span class="code-string">'#app'</span>);<br>
+                    &lt;/script&gt;<br><br>
+                    
+                    &lt;style&gt;<br>
+                    .cart-summary {<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;margin-bottom: <span class="code-number">20</span>px;<br>
+                    &nbsp;&nbsp;background-color: #f8f9fa;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">5</span>px;<br>
+                    }<br><br>
+                    
+                    .cart-item {<br>
+                    &nbsp;&nbsp;border: <span class="code-number">1</span>px solid #ddd;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">15</span>px;<br>
+                    &nbsp;&nbsp;margin-bottom: <span class="code-number">10</span>px;<br>
+                    }<br><br>
+                    
+                    .quantity-control {<br>
+                    &nbsp;&nbsp;margin: <span class="code-number">10</span>px <span class="code-number">0</span>;<br>
+                    }<br><br>
+                    
+                    .quantity-control input {<br>
+                    &nbsp;&nbsp;width: <span class="code-number">60</span>px;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">5</span>px;<br>
+                    &nbsp;&nbsp;margin-left: <span class="code-number">5</span>px;<br>
+                    }<br><br>
+                    
+                    .cart-item button {<br>
+                    &nbsp;&nbsp;background-color: #e74c3c;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;border: none;<br>
+                    &nbsp;&nbsp;padding: <span class="code-number">5</span>px <span class="code-number">10</span>px;<br>
+                    &nbsp;&nbsp;border-radius: <span class="code-number">3</span>px;<br>
+                    &nbsp;&nbsp;cursor: pointer;<br>
+                    }<br>
+                    &lt;/style&gt;
+                </div>
+            </div>
+            
+            <h3>最佳实践建议</h3>
+            <p>在使用组件事件时，有一些最佳实践建议：</p>
+            
+            <ul>
+                <li>使用emits选项声明组件会触发的事件，提高代码可读性</li>
+                <li>事件名称使用kebab-case格式（短横线分隔）</li>
+                <li>为事件传递有意义的参数</li>
+                <li>避免在事件处理中进行复杂计算，尽量只做状态更新</li>
+                <li>合理使用事件修饰符</li>
+                <li>对于复杂的组件通信，考虑使用状态管理工具</li>
+            </ul>
+            
+            <div class="practice">
+                <h3>实践练习</h3>
+                <ul>
+                    <li>创建一个评论组件，允许用户提交评论并通过事件通知父组件</li>
+                    <li>创建一个评分组件，用户点击星星评分并通过事件传递评分值</li>
+                    <li>创建一个选项卡组件，切换标签页时触发事件</li>
+                    <li>创建一个文件上传组件，上传时触发进度和完成事件</li>
+                    <li>创建一个搜索组件，输入时触发搜索事件</li>
+                    <li>创建一个分页组件，页码改变时触发事件</li>
+                </ul>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="props.html" class="nav-link">← 上一课：Props详解</a>
+            <a href="slots.html" class="nav-link">下一课：插槽(Slots) →</a>
+        </nav>
+        
+        <footer>
+            <p>Vue.js快速上手 - 从零到大神，成为前端大拿，胜任大厂专家职位</p>
+        </footer>
+    </div>
+</body>
+</html>
