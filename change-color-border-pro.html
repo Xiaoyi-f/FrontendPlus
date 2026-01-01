@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS @property --angle 小白教程</title>
+  <style>
+    /* ========== 全局基础样式 ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+
+    body {
+      padding: 30px;
+      background-color: #f8f9fa;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 24px;
+    }
+
+    /* 知识点卡片样式 */
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      color: #2196F3;
+      font-weight: bold;
+    }
+
+    .card-title span {
+      font-size: 20px;
+      color: #666;
+    }
+
+    /* 详情内容样式（默认隐藏） */
+    .card-content {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #eee;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #555;
+      display: none;
+    }
+
+    .card-content.active {
+      display: block;
+    }
+
+    /* 核心演示区样式（结合渐变边框） */
+    .demo-area {
+      margin: 30px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .demo-card {
+      margin: 0 auto;
+      padding: 2em;
+      width: 200px;
+      height: 200px;
+      background: #1c1f2b;
+      text-align: center;
+      border-radius: 10px;
+      position: relative;
+      color: white;
+    }
+
+    /* 核心：@property 定义--angle */
+    @property --angle {
+      syntax: "<angle>";
+      /* 值类型：角度 */
+      initial-value: 0deg;
+      /* 初始值：0度 */
+      inherits: false;
+      /* 不继承 */
+    }
+
+    .demo-card::after {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-image: conic-gradient(from var(--angle), transparent 90%, blue);
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+      z-index: -1;
+      padding: 3px;
+      border-radius: 10px;
+      animation: 3s spin linear infinite;
+    }
+
+    .demo-card::before {
+      filter: blur(1.5rem);
+      opacity: 0.5;
+    }
+
+    @keyframes spin {
+      from {
+        --angle: 0deg;
+      }
+
+      to {
+        --angle: 360deg;
+      }
+    }
+
+    /* 小白提示样式 */
+    .tip {
+      background-color: #ffebee;
+      padding: 10px;
+      border-left: 4px solid #f44336;
+      margin: 15px 0;
+      font-size: 13px;
+      color: #d32f2f;
+    }
+
+    .code-block {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-family: "Consolas", monospace;
+      font-size: 13px;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>CSS @property --angle 小白完全讲解</h1>
+
+  <!-- 核心演示区 -->
+  <div class="demo-area">
+    <div class="demo-card">
+      <div class="card-title">滕王阁序</div>
+    </div>
+  </div>
+
+  <!-- 知识点卡片1：@property 是什么？ -->
+  <div class="card" onclick="toggleContent('content1')">
+    <div class="card-title">
+      1. @property 核心定义
+      <span>▼</span>
+    </div>
+    <div id="content1" class="card-content">
+      <div class="tip">小白核心：@property 是CSS的“自定义属性注册器”，给自定义变量（比如--angle）定规则！</div>
+      <p><strong>通俗理解</strong>：普通的CSS自定义变量（如 --color: red）是“无规则的”，@property 能给变量加“身份证”——规定它能存什么值、默认值是多少、是否继承。</p>
+      <p><strong>你的代码核心</strong>：</p>
+      <div class="code-block">
+        @property --angle {<br>
+        &nbsp;&nbsp;syntax: "&lt;angle&gt;"; /* 只能存“角度”值（比如0deg、90deg、360deg） */<br>
+        &nbsp;&nbsp;initial-value: 0deg; /* 默认值是0度 */<br>
+        &nbsp;&nbsp;inherits: false; /* 子元素不会继承这个变量的值 */<br>
+        }
+      </div>
+      <p><strong>对比普通变量</strong>：如果不用@property，直接写 --angle: 0deg，变量可以随便赋值（比如--angle:
+        red），浏览器不会报错，但动画会失效；用@property后，变量只能存角度值，动画才能正常运行。</p>
+    </div>
+  </div>
+
+  <!-- 知识点卡片2：syntax 详解 -->
+  <div class="card" onclick="toggleContent('content2')">
+    <div class="card-title">
+      2. syntax: "&lt;angle&gt;" 是什么？
+      <span>▼</span>
+    </div>
+    <div id="content2" class="card-content">
+      <div class="tip">小白核心：syntax 规定“自定义变量能存什么类型的值”，写错类型变量会失效！</div>
+      <p><strong>核心含义</strong>：syntax = syntax（语法），用来定义 --angle 变量的“值类型”，只能填CSS支持的类型。</p>
+      <p><strong>&lt;angle&gt; 重点</strong>：</p>
+      <ul>
+        <li>含义：角度类型，只能存“数字+角度单位”的值；</li>
+        <li>支持的单位：deg（度，最常用）、rad（弧度）、grad（梯度）、turn（圈，1turn=360deg）；</li>
+        <li>合法值：0deg、90deg、180deg、360deg、0.5turn 等；</li>
+        <li>非法值：red、100px、50%（填这些值，--angle 会失效）。</li>
+      </ul>
+      <p><strong>小白常用的syntax类型（拓展）</strong>：</p>
+      <div class="code-block">
+        syntax: "&lt;color&gt;"; /* 只能存颜色（red、#fff、rgb(255,0,0)） */<br>
+        syntax: "&lt;length&gt;"; /* 只能存长度（10px、2em、3rem） */<br>
+        syntax: "&lt;percentage&gt;"; /* 只能存百分比（50%、100%） */
+      </div>
+    </div>
+  </div>
+
+  <!-- 知识点卡片3：initial-value 详解 -->
+  <div class="card" onclick="toggleContent('content3')">
+    <div class="card-title">
+      3. initial-value: 0deg 是什么？
+      <span>▼</span>
+    </div>
+    <div id="content3" class="card-content">
+      <div class="tip">小白核心：initial-value 是变量的“默认值”，没给变量赋值时，就用这个值！</div>
+      <p><strong>通俗理解</strong>：就像你买手机，默认壁纸是系统自带的——--angle 变量如果没手动赋值，就默认是 0deg。</p>
+      <p><strong>你的代码里的作用</strong>：</p>
+      <ul>
+        <li>initial-value: 0deg → --angle 默认是0度；</li>
+        <li>动画里 from { --angle: 0deg; } 其实和默认值一样，写不写都可以；</li>
+        <li>如果改成 initial-value: 90deg → 动画开始时，渐变边框会从90度开始旋转。</li>
+      </ul>
+      <p><strong>小白注意</strong>：initial-value 的值必须符合 syntax 规定的类型！比如 syntax: &lt;angle&gt;，initial-value 就不能写 red，否则变量失效。
+      </p>
+    </div>
+  </div>
+
+  <!-- 知识点卡片4：inherits: false 详解 -->
+  <div class="card" onclick="toggleContent('content4')">
+    <div class="card-title">
+      4. inherits: false 是什么？
+      <span>▼</span>
+    </div>
+    <div id="content4" class="card-content">
+      <div class="tip">小白核心：inherits 控制“子元素是否继承父元素的变量值”，false=不继承，true=继承！</div>
+      <p><strong>CSS继承通俗理解</strong>：父元素设置 color: red，子元素的文字默认也是红色（继承）；如果设置 inherits: false，子元素就不会继承父元素的 --angle 值。</p>
+      <p><strong>你的代码里设为false的原因</strong>：</p>
+      <ul>
+        <li>--angle 是用来控制渐变边框旋转的，只给 .demo-card 用；</li>
+        <li>子元素（比如 .demo-card 里的文字）不需要这个变量，设为 false 能避免不必要的继承，减少性能消耗；</li>
+        <li>如果设为 true：子元素也会有 --angle: 0deg，但对你的代码没影响，只是没必要。</li>
+      </ul>
+      <p><strong>小白总结</strong>：自定义属性如果是“局部使用”（比如只给某个元素用），inherits 设为 false；如果是“全局通用”（比如全局颜色变量），可以设为 true。</p>
+    </div>
+  </div>
+
+  <!-- 知识点卡片5：@property 的核心作用（为什么要用？） -->
+  <div class="card" onclick="toggleContent('content5')">
+    <div class="card-title">
+      5. @property 为什么必须用？（小白必懂）
+      <span>▼</span>
+    </div>
+    <div id="content5" class="card-content">
+      <div class="tip">小白核心：不用@property，你的渐变边框动画会失效！这是最关键的作用！</div>
+      <p><strong>普通变量的问题</strong>：如果直接写 --angle: 0deg（不用@property），CSS动画无法识别“角度变量的变化”，渐变边框不会旋转——因为浏览器不知道 --angle
+        是“角度类型”，无法计算动画的中间值。</p>
+      <p><strong>@property 的核心价值</strong>：</p>
+      <ol>
+        <li>给变量“定类型”：告诉浏览器 --angle 是角度，动画能计算从0deg到360deg的每一步中间值；</li>
+        <li>保证变量合法：避免误赋值（比如把--angle设为red）导致样式失效；</li>
+        <li>支持动画过渡：只有注册过的变量，才能用在CSS动画/过渡中，实现平滑变化。</li>
+      </ol>
+      <p><strong>小白实战验证</strong>：把代码里的 @property 部分删掉，保存后刷新页面——渐变边框不会旋转了！这就是@property的必要性。</p>
+    </div>
+  </div>
+
+  <!-- 知识点卡片6：小白上手实战（改代码） -->
+  <div class="card" onclick="toggleContent('content6')">
+    <div class="card-title">
+      6. 小白实战：改代码玩懂--angle
+      <span>▼</span>
+    </div>
+    <div id="content6" class="card-content">
+      <div class="tip">小白核心：改3个地方，直观看到效果变化，马上掌握！</div>
+      <p><strong>修改1：改初始值</strong>：</p>
+      <div class="code-block">
+        @property --angle {<br>
+        &nbsp;&nbsp;syntax: "&lt;angle&gt;";<br>
+        &nbsp;&nbsp;initial-value: 90deg; /* 把0deg改成90deg */<br>
+        &nbsp;&nbsp;inherits: false;<br>
+        }
+      </div>
+      <p>效果：动画开始时，渐变边框从90度（右上角）开始旋转。</p>
+
+      <p><strong>修改2：改动画时长</strong>：</p>
+      <div class="code-block">
+        animation: 5s spin linear infinite; /* 把3s改成5s */
+      </div>
+      <p>效果：边框旋转速度变慢（5秒转一圈）。</p>
+
+      <p><strong>修改3：改角度单位（用turn）</strong>：</p>
+      <div class="code-block">
+        @keyframes spin {<br>
+        &nbsp;&nbsp;from { --angle: 0turn; } /* 0圈 */<br>
+        &nbsp;&nbsp;to { --angle: 1turn; } /* 1圈=360deg */<br>
+        }
+      </div>
+      <p>效果：和360deg一样，但更直观（1turn=整圈），推荐新手用deg（度），更容易理解。</p>
+    </div>
+  </div>
+
+  <script>
+    // 点击展开/收起详情的函数
+    function toggleContent(id) {
+      const content = document.getElementById(id);
+      // 切换active类（显示/隐藏）
+      content.classList.toggle('active');
+      // 切换箭头方向
+      const span = content.previousElementSibling.querySelector('span');
+      span.textContent = content.classList.contains('active') ? '▲' : '▼';
+    }
+  </script>
+</body>
+
+</html>

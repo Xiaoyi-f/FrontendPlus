@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>书写方向</title>
+  <style>
+    /* ========== 全局基础样式 ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+
+    body {
+      padding: 30px;
+      background-color: #f8f9fa;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .demo-card {
+      width: 350px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: all 0.3s;
+    }
+
+    .demo-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .tip {
+      font-size: 12px;
+      color: #f44336;
+      margin-bottom: 15px;
+      padding: 8px;
+      background-color: #ffebee;
+      border-radius: 4px;
+      line-height: 1.4;
+      /* 优化行高，避免溢出 */
+    }
+
+    /* ========== 核心：逻辑属性演示容器 ========== */
+    /* 通用演示容器样式（统一优化，避免溢出） */
+    .demo-box {
+      width: 100%;
+      padding: 15px !important;
+      /* 增加内边距，避免内容贴边 */
+      color: #333;
+      line-height: 1.5;
+      /* 优化行高，文字更紧凑 */
+      font-size: 14px;
+      /* 缩小字体，避免溢出 */
+      border-radius: 4px;
+      /* 增加圆角，更美观 */
+      overflow: hidden;
+      /* 强制隐藏溢出内容（兜底） */
+    }
+
+    /* 容器1：默认书写方向（左到右，上到下） */
+    .demo-box-ltr {
+      /* 逻辑属性核心代码 */
+      margin-inline-start: 10px;
+      /* 行内起始边距 → 左外边距（LTR） */
+      margin-block-end: 15px;
+      /* 块级结束边距 → 下外边距 */
+      padding-inline: 10px 20px;
+      /* 行内左右内边距 → 左10px，右20px */
+      border-inline-start: 2px solid red;
+      /* 行内起始边框 → 左边框（红） */
+
+      /* 基础样式（优化高度，适配内容） */
+      height: auto;
+      /* 改为自动高度，随内容自适应 */
+      background-color: #e8f4f8;
+    }
+
+    /* 容器2：书写方向改为右到左（RTL） */
+    .demo-box-rtl {
+      /* 关键：修改书写方向（模拟阿拉伯语/希伯来语等场景） */
+      direction: rtl;
+      /* 行内方向：右到左 */
+      writing-mode: horizontal-tb;
+      /* 块级方向：上到下（默认） */
+
+      /* 同样的逻辑属性代码（和LTR容器完全一样） */
+      margin-inline-start: 10px;
+      /* 行内起始边距 → 右外边距（RTL） */
+      margin-block-end: 15px;
+      /* 块级结束边距 → 下外边距（不变） */
+      padding-inline: 10px 20px;
+      /* 行内左右内边距 → 右10px，左20px */
+      border-inline-start: 2px solid red;
+      /* 行内起始边框 → 右边框（红） */
+
+      /* 基础样式（优化高度，适配内容） */
+      height: auto;
+      background-color: #fdf2f8;
+      text-align: right;
+      /* 文字右对齐，适配RTL方向 */
+    }
+
+    /* 容器3：书写方向改为垂直（上到下，右到左） */
+    .demo-box-vertical {
+      /* 关键：垂直书写（模拟竖排文字场景） */
+      writing-mode: vertical-rl;
+      /* 块级方向：右到左，行内方向：上到下 */
+
+      /* 同样的逻辑属性代码 */
+      margin-inline-start: 10px;
+      /* 行内起始边距 → 上外边距（垂直） */
+      margin-block-end: 15px;
+      /* 块级结束边距 → 左外边距（垂直） */
+      padding-inline: 10px 20px;
+      /* 行内上下内边距 → 上10px，下20px */
+      border-inline-start: 2px solid red;
+      /* 行内起始边框 → 上边框（红） */
+
+      /* 基础样式（优化尺寸，避免溢出） */
+      width: auto;
+      /* 自动宽度 */
+      height: 220px;
+      /* 适配垂直文字高度 */
+      background-color: #f5f5f5;
+      display: inline-block;
+      /* 避免宽度占满 */
+      margin: 0 auto;
+      /* 居中显示 */
+    }
+
+    /* ========== 对比：物理属性（固定方向） ========== */
+    .demo-box-physical {
+      /* 物理属性（固定左/右/上/下，不随书写方向变） */
+      margin-left: 10px;
+      margin-bottom: 15px;
+      padding-left: 10px;
+      padding-right: 20px;
+      border-left: 2px solid red;
+
+      /* 基础样式（优化高度，适配内容） */
+      height: auto;
+      background-color: #f0f8fb;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 演示1：默认书写方向（左到右 LTR） -->
+  <div class="demo-card">
+    <div class="card-title">1. 默认书写方向（左→右）</div>
+    <div class="tip">逻辑属性对应：左/下/左右/左边框</div>
+    <div class="demo-box-ltr demo-box">
+      margin-inline-start: 10px → 左外边距<br>
+      margin-block-end: 15px → 下外边距<br>
+      padding-inline: 10px 20px → 左内边距10px，右内边距20px<br>
+      border-inline-start: 2px solid red → 左边框（红）
+    </div>
+  </div>
+
+  <!-- 演示2：书写方向改为右到左（RTL） -->
+  <div class="demo-card">
+    <div class="card-title">2. 书写方向（右→左）</div>
+    <div class="tip">逻辑属性对应：右/下/右左/右边框（代码和上面完全一样！）</div>
+    <div class="demo-box-rtl demo-box">
+      margin-inline-start: 10px → 右外边距<br>
+      margin-block-end: 15px → 下外边距（不变）<br>
+      padding-inline: 10px 20px → 右内边距10px，左内边距20px<br>
+      border-inline-start: 2px solid red → 右边框（红）
+    </div>
+  </div>
+
+  <!-- 演示3：垂直书写方向（上→下） -->
+  <div class="demo-card" style="text-align: center;">
+    <div class="card-title">3. 垂直书写方向（上→下）</div>
+    <div class="tip" style="display: inline-block; text-align: left;">逻辑属性对应：上/左/上下/上边框（代码仍不变！）</div>
+    <div class="demo-box-vertical demo-box">
+      margin-inline-start: 10px → 上外边距<br>
+      margin-block-end: 15px → 左外边距<br>
+      padding-inline: 10px 20px → 上内边距10px，下内边距20px<br>
+      border-inline-start: 2px solid red → 上边框（红）
+    </div>
+  </div>
+
+  <!-- 演示4：物理属性对比（固定方向） -->
+  <div class="demo-card">
+    <div class="card-title">4. 物理属性（固定左/下）</div>
+    <div class="tip">margin-left/ border-left 永远是左边，不随书写方向变</div>
+    <div class="demo-box-physical demo-box">
+      margin-left: 10px → 永远左外边距<br>
+      margin-bottom: 15px → 永远下外边距<br>
+      padding-left: 10px → 永远左内边距<br>
+      border-left: 2px solid red → 永远左边框
+    </div>
+  </div>
+</body>
+
+</html>
